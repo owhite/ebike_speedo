@@ -1,0 +1,6 @@
+(fp_lib_table
+  (lib (name DEV-14058)(type Legacy)(uri ${KIPRJMOD}/DEV-14058.mod)(options "")(descr ""))
+  (lib (name L6234PD)(type Legacy)(uri ${KIPRJMOD}/L6234PD.mod)(options "")(descr ""))
+  (lib (name teensy)(type KiCad)(uri ${KIPRJMOD}/teensy.pretty)(options "")(descr ""))
+  (lib (name USB)(type KiCad)(uri ${KIPRJMOD}/USB.pretty)(options "")(descr ""))
+)

@@ -1,0 +1,644 @@
+EESchema Schematic File Version 4
+LIBS:balanceBot-cache
+EELAYER 30 0
+EELAYER END
+$Descr User 9000 6000
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+Text GLabel 1045 1030 0    50   Input ~ 0
+GND
+Text GLabel 1045 1130 0    50   Input ~ 0
+M1_IN1
+Text GLabel 1045 1230 0    50   Input ~ 0
+M1_IN2
+Text GLabel 1045 1730 0    50   Input ~ 0
+M2_IN2
+Text GLabel 1045 1630 0    50   Input ~ 0
+M2_IN1
+Text GLabel 1045 1830 0    50   Input ~ 0
+M2_IN3
+Wire Wire Line
+	1120 1330 1045 1330
+Wire Wire Line
+	1120 1130 1045 1130
+Wire Wire Line
+	1120 1230 1045 1230
+Text GLabel 7540 1010 2    50   Input ~ 0
+GND
+Text GLabel 6560 1010 0    50   Input ~ 0
+GND
+Wire Wire Line
+	6645 1010 6595 1010
+Wire Wire Line
+	6645 1110 6595 1110
+Wire Wire Line
+	6595 1110 6595 1010
+Connection ~ 6595 1010
+Wire Wire Line
+	6595 1010 6560 1010
+Wire Wire Line
+	7445 1010 7490 1010
+Wire Wire Line
+	7445 1110 7490 1110
+Wire Wire Line
+	7490 1110 7490 1010
+Connection ~ 7490 1010
+Wire Wire Line
+	7490 1010 7540 1010
+Wire Wire Line
+	1120 1030 1045 1030
+Wire Wire Line
+	1120 1730 1045 1730
+Wire Wire Line
+	1120 1630 1045 1630
+Wire Wire Line
+	1120 1830 1045 1830
+Text GLabel 6555 1410 0    50   Input ~ 0
+Vcc
+Text GLabel 7540 1410 2    50   Input ~ 0
++3.3v
+Wire Wire Line
+	7540 1410 7490 1410
+Wire Wire Line
+	7445 1310 7490 1310
+Wire Wire Line
+	7490 1310 7490 1410
+Connection ~ 7490 1410
+Wire Wire Line
+	7490 1410 7445 1410
+Wire Wire Line
+	6555 1410 6600 1410
+Wire Wire Line
+	6600 1310 6600 1410
+Connection ~ 6600 1410
+Wire Wire Line
+	6600 1410 6645 1410
+Text GLabel 1045 1330 0    50   Input ~ 0
+M1_IN3
+$Comp
+L Connector:Barrel_Jack BJ1
+U 1 1 5E03F070
+P 5525 1110
+F 0 "BJ1" H 5582 1435 50  0000 C CNN
+F 1 "Barrel_Jack" H 5582 1344 50  0000 C CNN
+F 2 "Connector_BarrelJack:BarrelJack_CUI_PJ-063AH_Horizontal" H 5575 1070 50  0001 C CNN
+F 3 "https://www.mouser.com/datasheet/2/670/pj-063ah-1312496.pdf" H 5575 1070 50  0001 C CNN
+F 4 "490-PJ-063AH" H 5525 1110 50  0001 C CNN "P/N"
+F 5 "1" H 5525 1110 50  0001 C CNN "Group#"
+	1    5525 1110
+	1    0    0    1   
+$EndComp
+$Comp
+L Switch:SW_SPDT SW1
+U 1 1 5E042B52
+P 6095 1210
+F 0 "SW1" H 6095 1495 50  0000 C CNN
+F 1 "SW_SPDT" H 6095 1404 50  0000 C CNN
+F 2 "Button_Switch_THT:SW_NKK_BB15AH" H 6095 1210 50  0001 C CNN
+F 3 "https://www.digikey.com/product-detail/en/nkk-switches/BB16AH-FA/360-3705-ND/1057151" H 6095 1210 50  0001 C CNN
+	1    6095 1210
+	1    0    0    1   
+$EndComp
+Wire Wire Line
+	6600 1410 6600 1405
+Connection ~ 6595 1110
+Wire Wire Line
+	5895 1210 5825 1210
+Wire Wire Line
+	6295 1310 6600 1310
+Connection ~ 6600 1310
+Wire Wire Line
+	6600 1310 6645 1310
+$Comp
+L Regulator_Switching:my_buck_boost U5
+U 1 1 5DFB7316
+P 7045 1160
+F 0 "U5" H 7045 1535 50  0000 C CNN
+F 1 "my_buck_boost" H 7045 1444 50  0000 C CNN
+F 2 "Converter_DCDC:my_buck_boost" H 6445 810 50  0001 L CNN
+F 3 "~" V 6795 1560 50  0001 C CNN
+	1    7045 1160
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6595 1110 6345 1110
+Wire Wire Line
+	6345 1110 6345 1010
+Wire Wire Line
+	6345 1010 5825 1010
+Wire Wire Line
+	3195 3730 3120 3730
+Text GLabel 1040 3430 0    50   Input ~ 0
+SDA
+Text GLabel 1040 3530 0    50   Input ~ 0
+SCL
+Wire Wire Line
+	1120 3530 1040 3530
+Wire Wire Line
+	1120 3430 1040 3430
+Text GLabel 6105 2910 2    50   Input ~ 0
+MISO
+Text GLabel 5480 3010 0    50   Input ~ 0
+MOSI
+Text GLabel 6105 3010 2    50   Input ~ 0
+SCK
+Text GLabel 6105 3110 2    50   Input ~ 0
+CE
+Text GLabel 5480 3110 0    50   Input ~ 0
+CSN
+Text GLabel 6105 3210 2    50   Input ~ 0
+GND
+Text GLabel 5480 3210 0    50   Input ~ 0
++3.3v
+Text GLabel 5480 2910 0    50   Input ~ 0
+IRQ
+$Comp
+L Connector_Generic:Conn_02x04_Odd_Even nRF24L01
+U 1 1 5E41BBC4
+P 5735 3010
+F 0 "nRF24L01" H 5785 3327 50  0000 C CNN
+F 1 "Conn_02x04_Odd_Even" H 5785 3236 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:nRF24L01+" H 5735 3010 50  0001 C CNN
+F 3 "~" H 5735 3010 50  0001 C CNN
+	1    5735 3010
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5480 2910 5535 2910
+Wire Wire Line
+	5480 3010 5535 3010
+Wire Wire Line
+	5480 3110 5535 3110
+Wire Wire Line
+	5480 3210 5535 3210
+Wire Wire Line
+	6105 2910 6035 2910
+Wire Wire Line
+	6035 3010 6105 3010
+Wire Wire Line
+	6105 3110 6035 3110
+Wire Wire Line
+	6035 3210 6105 3210
+$Comp
+L Connector_Generic:Conn_01x08 J1
+U 1 1 5E4658B6
+P 4190 965
+F 0 "J1" V 4154 477 50  0000 R CNN
+F 1 "Conn_01x08" V 4063 477 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical" H 4190 965 50  0001 C CNN
+F 3 "~" H 4190 965 50  0001 C CNN
+	1    4190 965 
+	0    -1   -1   0   
+$EndComp
+Text GLabel 4390 1220 3    50   Input ~ 0
++3.3v
+Text GLabel 3990 1220 3    50   Input ~ 0
+GND
+Text GLabel 4090 1220 3    50   Input ~ 0
+M1_IN1
+Text GLabel 4190 1220 3    50   Input ~ 0
+M1_IN2
+Text GLabel 4290 1220 3    50   Input ~ 0
+M1_IN3
+Text GLabel 3890 1220 3    50   Input ~ 0
+Vcc
+Text GLabel 4490 1220 3    50   Input ~ 0
+A_1
+Text GLabel 4590 1220 3    50   Input ~ 0
+B_1
+Wire Wire Line
+	3890 1220 3890 1165
+Wire Wire Line
+	3990 1220 3990 1165
+Wire Wire Line
+	4090 1220 4090 1165
+Wire Wire Line
+	4190 1220 4190 1165
+Wire Wire Line
+	4290 1220 4290 1165
+Wire Wire Line
+	4390 1220 4390 1165
+Wire Wire Line
+	4490 1220 4490 1165
+Wire Wire Line
+	4590 1220 4590 1165
+$Comp
+L Connector_Generic:Conn_01x08 J2
+U 1 1 5E55E6AF
+P 4195 1670
+F 0 "J2" V 4159 1182 50  0000 R CNN
+F 1 "Conn_01x08" V 4068 1182 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x08_P2.54mm_Vertical" H 4195 1670 50  0001 C CNN
+F 3 "~" H 4195 1670 50  0001 C CNN
+	1    4195 1670
+	0    -1   -1   0   
+$EndComp
+Text GLabel 4395 1925 3    50   Input ~ 0
++3.3v
+Text GLabel 3995 1925 3    50   Input ~ 0
+GND
+Text GLabel 4095 1925 3    50   Input ~ 0
+M2_IN1
+Text GLabel 4195 1925 3    50   Input ~ 0
+M2_IN2
+Text GLabel 4295 1925 3    50   Input ~ 0
+M2_IN3
+Text GLabel 3895 1925 3    50   Input ~ 0
+Vcc
+Text GLabel 4495 1925 3    50   Input ~ 0
+A_2
+Text GLabel 4595 1925 3    50   Input ~ 0
+B_2
+Wire Wire Line
+	3895 1925 3895 1870
+Wire Wire Line
+	3995 1925 3995 1870
+Wire Wire Line
+	4095 1925 4095 1870
+Wire Wire Line
+	4195 1925 4195 1870
+Wire Wire Line
+	4295 1925 4295 1870
+Wire Wire Line
+	4395 1925 4395 1870
+Wire Wire Line
+	4495 1925 4495 1870
+Wire Wire Line
+	4595 1925 4595 1870
+Wire Wire Line
+	4195 3430 4195 3465
+Wire Wire Line
+	4065 3430 4195 3430
+Wire Wire Line
+	4065 3470 4065 3430
+Text GLabel 4195 3880 2    50   Input ~ 0
+Vcc
+Text GLabel 4065 3875 0    50   Input ~ 0
+GND
+Wire Wire Line
+	4065 3770 4065 3875
+$Comp
+L Device:R R1
+U 1 1 5E5954CC
+P 4065 3620
+F 0 "R1" H 3915 3665 50  0000 L CNN
+F 1 "50k" H 3880 3570 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 3995 3620 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF5102?qs=DyUWGjl%252BcVsMTSBF51O24w%3D%3D" H 4065 3620 50  0001 C CNN
+F 4 "755-ESR10EZPF5102" H 4065 3620 50  0001 C CNN "P/N"
+F 5 "11" H 4065 3620 50  0001 C CNN "Group#"
+	1    4065 3620
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4195 3765 4195 3880
+$Comp
+L Device:R R2
+U 1 1 5E590DE0
+P 4195 3615
+F 0 "R2" H 4045 3660 50  0000 L CNN
+F 1 "5k" H 4010 3565 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 4125 3615 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF5102?qs=DyUWGjl%252BcVsMTSBF51O24w%3D%3D" H 4195 3615 50  0001 C CNN
+F 4 "755-ESR10EZPF5102" H 4195 3615 50  0001 C CNN "P/N"
+F 5 "11" H 4195 3615 50  0001 C CNN "Group#"
+	1    4195 3615
+	-1   0    0    1   
+$EndComp
+Text GLabel 4245 3380 2    50   Input ~ 0
+BATT_IN
+Wire Wire Line
+	4245 3380 4195 3380
+Wire Wire Line
+	4195 3380 4195 3430
+Connection ~ 4195 3430
+Text GLabel 3195 3730 2    50   Input ~ 0
+BATT_IN
+$Comp
+L Device:R_POT RV1
+U 1 1 5E5BECF2
+P 995 4440
+F 0 "RV1" H 926 4486 50  0000 R CNN
+F 1 "R_POT" H 926 4395 50  0000 R CNN
+F 2 "Potentiometer_SMD:Potentiometer_Bourns_3314R-GM5_Vertical" H 995 4440 50  0001 C CNN
+F 3 "~" H 995 4440 50  0001 C CNN
+	1    995  4440
+	1    0    0    -1  
+$EndComp
+Text GLabel 1040 4645 2    50   Input ~ 0
+GND
+Text GLabel 1045 4230 2    50   Input ~ 0
++3.3v
+Wire Wire Line
+	1045 4230 995  4230
+Wire Wire Line
+	995  4230 995  4290
+Wire Wire Line
+	995  4590 995  4645
+Wire Wire Line
+	995  4645 1040 4645
+Text GLabel 1180 4440 2    50   Input ~ 0
+P_IN
+Wire Wire Line
+	1180 4440 1145 4440
+$Comp
+L Device:R_POT RV2
+U 1 1 5E5E73E9
+P 1780 4440
+F 0 "RV2" H 1711 4486 50  0000 R CNN
+F 1 "R_POT" H 1711 4395 50  0000 R CNN
+F 2 "Potentiometer_SMD:Potentiometer_Bourns_3314R-GM5_Vertical" H 1780 4440 50  0001 C CNN
+F 3 "~" H 1780 4440 50  0001 C CNN
+	1    1780 4440
+	1    0    0    -1  
+$EndComp
+Text GLabel 1825 4645 2    50   Input ~ 0
+GND
+Text GLabel 1830 4230 2    50   Input ~ 0
++3.3v
+Wire Wire Line
+	1830 4230 1780 4230
+Wire Wire Line
+	1780 4230 1780 4290
+Wire Wire Line
+	1780 4590 1780 4645
+Wire Wire Line
+	1780 4645 1825 4645
+Text GLabel 1965 4440 2    50   Input ~ 0
+I_IN
+Wire Wire Line
+	1965 4440 1930 4440
+$Comp
+L Device:R_POT RV3
+U 1 1 5E5EBACC
+P 2525 4440
+F 0 "RV3" H 2456 4486 50  0000 R CNN
+F 1 "R_POT" H 2456 4395 50  0000 R CNN
+F 2 "Potentiometer_SMD:Potentiometer_Bourns_3314R-GM5_Vertical" H 2525 4440 50  0001 C CNN
+F 3 "~" H 2525 4440 50  0001 C CNN
+	1    2525 4440
+	1    0    0    -1  
+$EndComp
+Text GLabel 2570 4645 2    50   Input ~ 0
+GND
+Text GLabel 2575 4230 2    50   Input ~ 0
++3.3v
+Wire Wire Line
+	2575 4230 2525 4230
+Wire Wire Line
+	2525 4230 2525 4290
+Wire Wire Line
+	2525 4590 2525 4645
+Wire Wire Line
+	2525 4645 2570 4645
+Text GLabel 2710 4440 2    50   Input ~ 0
+D_IN
+Wire Wire Line
+	2710 4440 2675 4440
+$Comp
+L Device:R_POT RV4
+U 1 1 5E5F1457
+P 3270 4440
+F 0 "RV4" H 3201 4486 50  0000 R CNN
+F 1 "R_POT" H 3201 4395 50  0000 R CNN
+F 2 "Potentiometer_SMD:Potentiometer_Bourns_3314R-GM5_Vertical" H 3270 4440 50  0001 C CNN
+F 3 "~" H 3270 4440 50  0001 C CNN
+	1    3270 4440
+	1    0    0    -1  
+$EndComp
+Text GLabel 3315 4645 2    50   Input ~ 0
+GND
+Text GLabel 3320 4230 2    50   Input ~ 0
++3.3v
+Wire Wire Line
+	3320 4230 3270 4230
+Wire Wire Line
+	3270 4230 3270 4290
+Wire Wire Line
+	3270 4590 3270 4645
+Wire Wire Line
+	3270 4645 3315 4645
+Text GLabel 3455 4440 2    50   Input ~ 0
+X_IN
+Wire Wire Line
+	3455 4440 3420 4440
+$Comp
+L Switch:SW_Push PB1
+U 1 1 5E615932
+P 7420 3175
+F 0 "PB1" H 7420 3460 50  0000 C CNN
+F 1 "SW_Push" H 7420 3369 50  0000 C CNN
+F 2 "Button_Switch_SMD:SW_SPST_TL3342" H 7420 3375 50  0001 C CNN
+F 3 "~" H 7420 3375 50  0001 C CNN
+	1    7420 3175
+	1    0    0    -1  
+$EndComp
+Text GLabel 7675 3175 2    50   Input ~ 0
+GND
+Wire Wire Line
+	7675 3175 7620 3175
+Wire Wire Line
+	7165 3175 7180 3175
+Text GLabel 7115 2830 0    50   Input ~ 0
++3.3v
+$Comp
+L Device:R R6
+U 1 1 5E6163C4
+P 7165 3025
+F 0 "R6" H 7015 3070 50  0000 L CNN
+F 1 "10k" H 6980 2975 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 7095 3025 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF5102?qs=DyUWGjl%252BcVsMTSBF51O24w%3D%3D" H 7165 3025 50  0001 C CNN
+F 4 "755-ESR10EZPF5102" H 7165 3025 50  0001 C CNN "P/N"
+F 5 "11" H 7165 3025 50  0001 C CNN "Group#"
+	1    7165 3025
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7165 2875 7165 2830
+Wire Wire Line
+	7165 2830 7115 2830
+Text GLabel 7110 3245 0    50   Input ~ 0
+PB_IN
+Wire Wire Line
+	7110 3245 7180 3245
+Wire Wire Line
+	7180 3245 7180 3175
+Connection ~ 7180 3175
+Wire Wire Line
+	7180 3175 7220 3175
+$Comp
+L Connector_Generic:Conn_01x05 MPU1
+U 1 1 5E6B7BFE
+P 4175 2545
+F 0 "MPU1" V 4139 2257 50  0000 R CNN
+F 1 "Conn_01x05" V 4048 2257 50  0000 R CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical" H 4175 2545 50  0001 C CNN
+F 3 "~" H 4175 2545 50  0001 C CNN
+	1    4175 2545
+	0    -1   -1   0   
+$EndComp
+Text GLabel 4075 2825 3    50   Input ~ 0
+GND
+Text GLabel 3975 2825 3    50   Input ~ 0
++3.3v
+Text GLabel 4175 2825 3    50   Input ~ 0
+SCL
+Text GLabel 4275 2825 3    50   Input ~ 0
+SDA
+Text GLabel 4375 2825 3    50   Input ~ 0
+INT
+Wire Wire Line
+	4375 2825 4375 2745
+Wire Wire Line
+	4275 2825 4275 2745
+Wire Wire Line
+	4175 2825 4175 2745
+Wire Wire Line
+	4075 2825 4075 2745
+Wire Wire Line
+	3975 2825 3975 2745
+Text GLabel 1050 3030 0    50   Input ~ 0
+INT
+Text GLabel 1060 2330 0    50   Input ~ 0
+MISO
+Text GLabel 1065 2230 0    50   Input ~ 0
+MOSI
+Text GLabel 1050 2930 0    50   Input ~ 0
+SCK
+Text GLabel 1050 2030 0    50   Input ~ 0
+CE
+Text GLabel 1065 2130 0    50   Input ~ 0
+CSN
+Wire Wire Line
+	1065 2230 1120 2230
+Wire Wire Line
+	1065 2130 1120 2130
+Wire Wire Line
+	1120 2930 1050 2930
+Wire Wire Line
+	1050 2030 1120 2030
+Wire Wire Line
+	1060 2330 1120 2330
+Text GLabel 1085 3230 0    50   Input ~ 0
+P_IN
+Wire Wire Line
+	1085 3230 1120 3230
+Text GLabel 1085 3330 0    50   Input ~ 0
+I_IN
+Wire Wire Line
+	1085 3330 1120 3330
+Text GLabel 1085 3630 0    50   Input ~ 0
+D_IN
+Wire Wire Line
+	1085 3630 1120 3630
+Text GLabel 1085 3730 0    50   Input ~ 0
+X_IN
+Wire Wire Line
+	1085 3730 1120 3730
+Wire Wire Line
+	1120 3030 1050 3030
+Text GLabel 1045 1430 0    50   Input ~ 0
+A_1
+Wire Wire Line
+	1120 1430 1045 1430
+Text GLabel 1045 1530 0    50   Input ~ 0
+B_1
+Wire Wire Line
+	1120 1530 1045 1530
+Text GLabel 1045 1930 0    50   Input ~ 0
+A_2
+Wire Wire Line
+	1120 1930 1045 1930
+Text GLabel 1045 3130 0    50   Input ~ 0
+B_2
+Wire Wire Line
+	1120 3130 1045 3130
+$Comp
+L teensy:Teensy3.2 U1
+U 1 1 5E2C5940
+P 2120 2380
+F 0 "U1" H 2120 4017 60  0000 C CNN
+F 1 "Teensy3.2" H 2120 3911 60  0000 C CNN
+F 2 "teensy:Teensy32" H 2120 1630 60  0000 C CNN
+F 3 "" H 2120 1630 60  0000 C CNN
+	1    2120 2380
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3120 3630 3180 3630
+Text GLabel 3180 3630 2    50   Input ~ 0
+PB_IN
+Text GLabel 7125 2290 0    50   Input ~ 0
+CSN
+Wire Wire Line
+	7125 2290 7180 2290
+$Comp
+L Device:R R3
+U 1 1 5E2EA6DF
+P 7180 2140
+F 0 "R3" H 7030 2185 50  0000 L CNN
+F 1 "10k" H 6995 2090 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 7110 2140 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF5102?qs=DyUWGjl%252BcVsMTSBF51O24w%3D%3D" H 7180 2140 50  0001 C CNN
+F 4 "755-ESR10EZPF5102" H 7180 2140 50  0001 C CNN "P/N"
+F 5 "11" H 7180 2140 50  0001 C CNN "Group#"
+	1    7180 2140
+	-1   0    0    1   
+$EndComp
+Text GLabel 7125 1990 0    50   Input ~ 0
++3.3v
+Wire Wire Line
+	7125 1990 7180 1990
+Text GLabel 5590 2030 0    50   Input ~ 0
+SCL
+Text GLabel 5590 2130 0    50   Input ~ 0
+SDA
+Wire Wire Line
+	5590 2130 5670 2130
+Wire Wire Line
+	5590 2030 5670 2030
+$Comp
+L Device:R R4
+U 1 1 5E39647A
+P 5820 2030
+F 0 "R4" H 5670 2075 50  0000 L CNN
+F 1 "4.7k" H 5635 1980 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 5750 2030 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF5102?qs=DyUWGjl%252BcVsMTSBF51O24w%3D%3D" H 5820 2030 50  0001 C CNN
+F 4 "755-ESR10EZPF5102" H 5820 2030 50  0001 C CNN "P/N"
+F 5 "11" H 5820 2030 50  0001 C CNN "Group#"
+	1    5820 2030
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:R R5
+U 1 1 5E39B165
+P 5820 2130
+F 0 "R5" H 5670 2175 50  0000 L CNN
+F 1 "4.7k" H 5635 2080 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 5750 2130 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF5102?qs=DyUWGjl%252BcVsMTSBF51O24w%3D%3D" H 5820 2130 50  0001 C CNN
+F 4 "755-ESR10EZPF5102" H 5820 2130 50  0001 C CNN "P/N"
+F 5 "11" H 5820 2130 50  0001 C CNN "Group#"
+	1    5820 2130
+	0    -1   -1   0   
+$EndComp
+Text GLabel 6010 2030 2    50   Input ~ 0
++3.3v
+Text GLabel 6010 2130 2    50   Input ~ 0
++3.3v
+Wire Wire Line
+	6010 2030 5970 2030
+Wire Wire Line
+	6010 2130 5970 2130
+$EndSCHEMATC

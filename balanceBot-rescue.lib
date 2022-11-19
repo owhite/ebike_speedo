@@ -1,0 +1,27 @@
+EESchema-LIBRARY Version 2.4
+#encoding utf-8
+#
+# my_buck_boost-Regulator_Switching
+#
+DEF my_buck_boost-Regulator_Switching U 0 20 Y Y 1 F N
+F0 "U" -250 250 50 H V C CNN
+F1 "my_buck_boost-Regulator_Switching" -200 300 50 H V L CNN
+F2 "Converter_DCDC:my_buck_boost" -600 -350 50 H I L CNN
+F3 "" -250 400 50 V I C CNN
+$FPLIST
+ MSOP*3x3mm*P0.65mm*
+$ENDFPLIST
+DRAW
+S -300 200 300 -300 0 1 10 f
+X IN_- 1 -400 150 100 R 50 50 1 1 E
+X IN_- 2 -400 50 100 R 50 50 1 1 W
+X IN_+ 3 -400 -150 100 R 50 50 1 1 w
+X IN_+ 4 -400 -250 100 R 50 50 1 1 W
+X Reg_GND 5 400 150 100 L 50 50 1 1 w
+X Reg_GND 6 400 50 100 L 50 50 1 1 w
+X Reg_out 7 400 -150 100 L 50 50 1 1 w
+X Reg_out 8 400 -250 100 L 50 50 1 1 w
+ENDDRAW
+ENDDEF
+#
+#End Library
