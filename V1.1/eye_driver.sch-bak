@@ -1,0 +1,2074 @@
+EESchema Schematic File Version 4
+LIBS:eye_driver-cache
+EELAYER 30 0
+EELAYER END
+$Descr User 10000 9055
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Diode:BAT54S D1
+U 1 1 5DF95C66
+P 1375 710
+F 0 "D1" H 1375 820 50  0000 C CNN
+F 1 "BAT54S" H 1375 844 50  0001 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 1450 835 50  0001 L CNN
+F 3 "https://www.mouser.com/ProductDetail/ON-Semiconductor/BAT54SLT1G?qs=sGAEpiMZZMtQ8nqTKtFS%2FCKUxMvjsmGzmkUbaMfK3Po%3D" H 1255 710 50  0001 C CNN
+F 4 "863-BAT54SLT1G" H 1375 710 50  0001 C CNN "P/N"
+F 5 "7" H 1375 710 50  0001 C CNN "Group#"
+	1    1375 710 
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:USB_A J1
+U 1 1 5DF97659
+P 8455 4245
+F 0 "J1" H 8512 4712 50  0000 C CNN
+F 1 "USB_A" H 8512 4621 50  0000 C CNN
+F 2 "Connector_USB:USB_A_Stewart_SS-52100-001_Horizontal" H 8605 4195 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/Stewart-Connector-Bel/SS-52100-001?qs=%2Fha2pyFaduiu17O4wXLNr2OKIOR4Wq1frM517idqWT0hGThxCAVq0W%252BbU8UACEoF" H 8605 4195 50  0001 C CNN
+F 4 "530-SS-52100-001" H 8455 4245 50  0001 C CNN "P/N"
+F 5 "9" H 8455 4245 50  0001 C CNN "Group#"
+	1    8455 4245
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C2
+U 1 1 5DF99AF7
+P 1375 1125
+F 0 "C2" H 1490 1171 50  0000 L CNN
+F 1 "10nF" H 1490 1080 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 1413 975 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/810-C2012X7R2E103K" H 1375 1125 50  0001 C CNN
+F 4 "810-C2012X7R2E103K" H 1375 1125 50  0001 C CNN "P/N"
+F 5 "3" H 1375 1125 50  0001 C CNN "Group#"
+	1    1375 1125
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1375 975  1375 910 
+Text GLabel 1010 710  0    50   Input ~ 0
+Vcc
+Wire Wire Line
+	1010 710  1075 710 
+Text GLabel 1740 710  2    50   Input ~ 0
+VBOOT1
+Wire Wire Line
+	1740 710  1675 710 
+Text GLabel 1295 1320 0    50   Input ~ 0
+VCP1
+Wire Wire Line
+	1295 1320 1375 1320
+Wire Wire Line
+	1375 1320 1375 1275
+$Comp
+L Device:C C1
+U 1 1 5E00C6E3
+P 850 2050
+F 0 "C1" H 965 2096 50  0000 L CNN
+F 1 ".22uF" H 965 2005 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 888 1900 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/810-C2012X7S2A224MST" H 850 2050 50  0001 C CNN
+F 4 "810-C2012X7S2A224MST" H 850 2050 50  0001 C CNN "P/N"
+F 5 "2" H 850 2050 50  0001 C CNN "Group#"
+	1    850  2050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C3
+U 1 1 5E00D18F
+P 1275 2050
+F 0 "C3" H 1390 2096 50  0000 L CNN
+F 1 "1uF" H 1390 2005 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 1313 1900 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/810-C2012X7R1V105KAE" H 1275 2050 50  0001 C CNN
+F 4 "810-C2012X7R1V105KAE" H 1275 2050 50  0001 C CNN "P/N"
+F 5 "4" H 1275 2050 50  0001 C CNN "Group#"
+	1    1275 2050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C4
+U 1 1 5E00D87B
+P 1650 2050
+F 0 "C4" H 1765 2096 50  0000 L CNN
+F 1 "100nF" H 1765 2005 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 1688 1900 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/810-C2012X7R2A104K" H 1650 2050 50  0001 C CNN
+F 4 "810-C2012X7R2A104K" H 1650 2050 50  0001 C CNN "P/N"
+F 5 "5" H 1650 2050 50  0001 C CNN "Group#"
+	1    1650 2050
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:CP C5
+U 1 1 5E012A52
+P 2125 2050
+F 0 "C5" H 2243 2096 50  0000 L CNN
+F 1 "100uF" H 2200 1975 50  0000 L CNN
+F 2 "Capacitor_SMD:C_1210_3225Metric" H 2163 1900 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/KEMET/C1210C107M4PACTU?qs=sGAEpiMZZMs0AnBnWHyRQCUMvL3P2ZlCADVJDTT4%252BXw%3D" H 2125 2050 50  0001 C CNN
+F 4 "80-C1210C107M4PACTU" H 2125 2050 50  0001 C CNN "P/N"
+F 5 "6" H 2125 2050 50  0001 C CNN "Group#"
+	1    2125 2050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2125 2200 2125 2275
+Wire Wire Line
+	2125 2275 1650 2275
+Wire Wire Line
+	850  2275 850  2200
+Wire Wire Line
+	1275 2200 1275 2275
+Connection ~ 1275 2275
+Wire Wire Line
+	1275 2275 850  2275
+Wire Wire Line
+	1650 2200 1650 2275
+Connection ~ 1650 2275
+Wire Wire Line
+	1650 2275 1275 2275
+$Comp
+L power:GND #PWR0101
+U 1 1 5E0155AC
+P 850 2325
+F 0 "#PWR0101" H 850 2075 50  0001 C CNN
+F 1 "GND" H 855 2152 50  0000 C CNN
+F 2 "" H 850 2325 50  0001 C CNN
+F 3 "" H 850 2325 50  0001 C CNN
+	1    850  2325
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	850  2325 850  2275
+Connection ~ 850  2275
+Text GLabel 850  1825 1    50   Input ~ 0
+VBOOT1
+Text GLabel 1275 1825 1    50   Input ~ 0
+VREF1
+Wire Wire Line
+	2125 1900 2125 1850
+Wire Wire Line
+	2125 1850 1650 1850
+Wire Wire Line
+	1650 1850 1650 1900
+Text GLabel 1650 1825 1    50   Input ~ 0
+Vcc
+Wire Wire Line
+	1650 1825 1650 1850
+Connection ~ 1650 1850
+Wire Wire Line
+	1275 1900 1275 1825
+Wire Wire Line
+	850  1900 850  1825
+$Comp
+L L6234PD:L6234PD U1
+U 1 1 5E024A9C
+P 2850 1375
+F 0 "U1" H 2850 2242 50  0000 C CNN
+F 1 "L6234PD" H 2850 2151 50  0000 C CNN
+F 2 "SOIC127P1420X360-21N" H 2600 2275 50  0001 L BNN
+F 3 "https://www.mouser.com/ProductDetail/STMicroelectronics/L6234PD013TR?qs=sGAEpiMZZMtKB4wrjsn3lQVvA8Fh1xC9w8nZHSqEsqw%3D" H 2600 2175 50  0001 L BNN
+F 4 "L6234PD" H 2600 2375 50  0001 L BNN "Field7"
+F 5 "511-L6234PD013TR" H 2850 1375 50  0001 C CNN "P/N"
+F 6 "14" H 2850 1375 50  0001 C CNN "Group#"
+	1    2850 1375
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3450 1575 3550 1575
+Wire Wire Line
+	3550 1575 3550 1675
+Wire Wire Line
+	3550 1875 3450 1875
+Wire Wire Line
+	3450 1775 3550 1775
+Connection ~ 3550 1775
+Wire Wire Line
+	3550 1775 3550 1875
+Wire Wire Line
+	3450 1675 3550 1675
+Connection ~ 3550 1675
+Wire Wire Line
+	3550 1675 3550 1775
+Wire Wire Line
+	3450 1375 3550 1375
+Wire Wire Line
+	3550 1375 3550 1475
+Connection ~ 3550 1575
+Wire Wire Line
+	3450 1475 3550 1475
+Connection ~ 3550 1475
+Wire Wire Line
+	3550 1475 3550 1575
+Wire Wire Line
+	3450 1975 3550 1975
+Wire Wire Line
+	3550 1975 3550 1875
+Connection ~ 3550 1875
+Text GLabel 3550 775  2    50   Input ~ 0
+Vcc
+Wire Wire Line
+	3450 775  3500 775 
+Wire Wire Line
+	3500 775  3500 875 
+Wire Wire Line
+	3500 875  3450 875 
+Wire Wire Line
+	3550 775  3500 775 
+Connection ~ 3500 775 
+Text GLabel 3550 975  2    50   Input ~ 0
+VCP1
+Text GLabel 3550 1075 2    50   Input ~ 0
+U1
+Text GLabel 3550 1175 2    50   Input ~ 0
+V1
+Text GLabel 3550 1275 2    50   Input ~ 0
+W1
+Text GLabel 2175 1475 0    50   Input ~ 0
+M1_IN1
+Text GLabel 2175 1575 0    50   Input ~ 0
+M1_IN2
+Text GLabel 2175 1675 0    50   Input ~ 0
+M1_IN3
+Wire Wire Line
+	2250 1475 2175 1475
+Wire Wire Line
+	2250 1575 2175 1575
+Wire Wire Line
+	2250 1675 2175 1675
+Wire Wire Line
+	3450 975  3550 975 
+Wire Wire Line
+	3450 1075 3550 1075
+Wire Wire Line
+	3450 1175 3550 1175
+Wire Wire Line
+	3450 1275 3550 1275
+Text GLabel 2175 1175 0    50   Input ~ 0
+M_EN
+Wire Wire Line
+	2250 1175 2200 1175
+Wire Wire Line
+	2200 1175 2200 1275
+Wire Wire Line
+	2200 1375 2250 1375
+Wire Wire Line
+	2250 1275 2200 1275
+Connection ~ 2200 1275
+Wire Wire Line
+	2200 1275 2200 1375
+Wire Wire Line
+	2175 1175 2200 1175
+Connection ~ 2200 1175
+Text GLabel 2175 1075 0    50   Input ~ 0
+VBOOT1
+Text GLabel 2175 925  0    50   Input ~ 0
+VREF1
+Wire Wire Line
+	2175 925  2250 925 
+Wire Wire Line
+	2175 1075 2250 1075
+$Comp
+L Diode:BAT54S D2
+U 1 1 5E0546FA
+P 1375 2660
+F 0 "D2" H 1375 2770 50  0000 C CNN
+F 1 "BAT54S" H 1375 2794 50  0001 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 1450 2785 50  0001 L CNN
+F 3 "https://www.mouser.com/ProductDetail/ON-Semiconductor/BAT54SLT1G?qs=sGAEpiMZZMtQ8nqTKtFS%2FCKUxMvjsmGzmkUbaMfK3Po%3D" H 1255 2660 50  0001 C CNN
+F 4 "863-BAT54SLT1G" H 1375 2660 50  0001 C CNN "P/N"
+F 5 "7" H 1375 2660 50  0001 C CNN "Group#"
+	1    1375 2660
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C7
+U 1 1 5E054700
+P 1375 3075
+F 0 "C7" H 1490 3121 50  0000 L CNN
+F 1 "10nF" H 1490 3030 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 1413 2925 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/810-C2012X7R2E103K" H 1375 3075 50  0001 C CNN
+F 4 "810-C2012X7R2E103K" H 1375 3075 50  0001 C CNN "P/N"
+F 5 "3" H 1375 3075 50  0001 C CNN "Group#"
+	1    1375 3075
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1375 2925 1375 2860
+Text GLabel 1010 2660 0    50   Input ~ 0
+Vcc
+Wire Wire Line
+	1010 2660 1075 2660
+Text GLabel 1740 2660 2    50   Input ~ 0
+VBOOT2
+Wire Wire Line
+	1740 2660 1675 2660
+Text GLabel 1295 3270 0    50   Input ~ 0
+VCP2
+Wire Wire Line
+	1295 3270 1375 3270
+Wire Wire Line
+	1375 3270 1375 3225
+$Comp
+L Device:C C6
+U 1 1 5E05470E
+P 850 4000
+F 0 "C6" H 965 4046 50  0000 L CNN
+F 1 ".22uF" H 965 3955 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 888 3850 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/810-C2012X7S2A224MST" H 850 4000 50  0001 C CNN
+F 4 "810-C2012X7S2A224MST" H 850 4000 50  0001 C CNN "P/N"
+F 5 "2" H 850 4000 50  0001 C CNN "Group#"
+	1    850  4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C8
+U 1 1 5E054714
+P 1275 4000
+F 0 "C8" H 1390 4046 50  0000 L CNN
+F 1 "1uF" H 1390 3955 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 1313 3850 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/810-C2012X7R1V105KAE" H 1275 4000 50  0001 C CNN
+F 4 "810-C2012X7R1V105KAE" H 1275 4000 50  0001 C CNN "P/N"
+F 5 "4" H 1275 4000 50  0001 C CNN "Group#"
+	1    1275 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C9
+U 1 1 5E05471A
+P 1650 4000
+F 0 "C9" H 1765 4046 50  0000 L CNN
+F 1 "100nF" H 1765 3955 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 1688 3850 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/810-C2012X7R2A104K" H 1650 4000 50  0001 C CNN
+F 4 "810-C2012X7R2A104K" H 1650 4000 50  0001 C CNN "P/N"
+F 5 "5" H 1650 4000 50  0001 C CNN "Group#"
+	1    1650 4000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:CP C10
+U 1 1 5E054720
+P 2125 4000
+F 0 "C10" H 2243 4046 50  0000 L CNN
+F 1 "100uF" H 2200 3925 50  0000 L CNN
+F 2 "Capacitor_SMD:C_1210_3225Metric" H 2163 3850 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/KEMET/C1210C107M4PACTU?qs=sGAEpiMZZMs0AnBnWHyRQCUMvL3P2ZlCADVJDTT4%252BXw%3D" H 2125 4000 50  0001 C CNN
+F 4 "80-C1210C107M4PACTU" H 2125 4000 50  0001 C CNN "P/N"
+F 5 "6" H 2125 4000 50  0001 C CNN "Group#"
+	1    2125 4000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2125 4150 2125 4225
+Wire Wire Line
+	2125 4225 1650 4225
+Wire Wire Line
+	850  4225 850  4150
+Wire Wire Line
+	1275 4150 1275 4225
+Connection ~ 1275 4225
+Wire Wire Line
+	1275 4225 850  4225
+Wire Wire Line
+	1650 4150 1650 4225
+Connection ~ 1650 4225
+Wire Wire Line
+	1650 4225 1275 4225
+$Comp
+L power:GND #PWR0102
+U 1 1 5E05472F
+P 850 4275
+F 0 "#PWR0102" H 850 4025 50  0001 C CNN
+F 1 "GND" H 855 4102 50  0000 C CNN
+F 2 "" H 850 4275 50  0001 C CNN
+F 3 "" H 850 4275 50  0001 C CNN
+	1    850  4275
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	850  4275 850  4225
+Connection ~ 850  4225
+Text GLabel 850  3775 1    50   Input ~ 0
+VBOOT2
+Text GLabel 1275 3775 1    50   Input ~ 0
+VREF2
+Wire Wire Line
+	2125 3850 2125 3800
+Wire Wire Line
+	2125 3800 1650 3800
+Wire Wire Line
+	1650 3800 1650 3850
+Text GLabel 1650 3775 1    50   Input ~ 0
+Vcc
+Wire Wire Line
+	1650 3775 1650 3800
+Connection ~ 1650 3800
+Wire Wire Line
+	1275 3850 1275 3775
+Wire Wire Line
+	850  3850 850  3775
+$Comp
+L L6234PD:L6234PD U2
+U 1 1 5E054742
+P 2850 3325
+F 0 "U2" H 2850 4192 50  0000 C CNN
+F 1 "L6234PD" H 2850 4101 50  0000 C CNN
+F 2 "SOIC127P1420X360-21N" H 2600 4225 50  0001 L BNN
+F 3 "https://www.mouser.com/ProductDetail/STMicroelectronics/L6234PD013TR?qs=sGAEpiMZZMtKB4wrjsn3lQVvA8Fh1xC9w8nZHSqEsqw%3D" H 2600 4125 50  0001 L BNN
+F 4 "L6234PD" H 2600 4325 50  0001 L BNN "Field7"
+F 5 "511-L6234PD013TR" H 2850 3325 50  0001 C CNN "P/N"
+F 6 "14" H 2850 3325 50  0001 C CNN "Group#"
+	1    2850 3325
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3450 3525 3550 3525
+Wire Wire Line
+	3550 3525 3550 3625
+Wire Wire Line
+	3550 3825 3450 3825
+Wire Wire Line
+	3450 3725 3550 3725
+Connection ~ 3550 3725
+Wire Wire Line
+	3550 3725 3550 3825
+Wire Wire Line
+	3450 3625 3550 3625
+Connection ~ 3550 3625
+Wire Wire Line
+	3550 3625 3550 3725
+Wire Wire Line
+	3450 3325 3550 3325
+Wire Wire Line
+	3550 3325 3550 3425
+Connection ~ 3550 3525
+Wire Wire Line
+	3450 3425 3550 3425
+Connection ~ 3550 3425
+Wire Wire Line
+	3550 3425 3550 3525
+Wire Wire Line
+	3450 3925 3550 3925
+Wire Wire Line
+	3550 3925 3550 3825
+Connection ~ 3550 3825
+Text GLabel 3550 2725 2    50   Input ~ 0
+Vcc
+Wire Wire Line
+	3450 2725 3500 2725
+Wire Wire Line
+	3500 2725 3500 2825
+Wire Wire Line
+	3500 2825 3450 2825
+Wire Wire Line
+	3550 2725 3500 2725
+Connection ~ 3500 2725
+Text GLabel 3550 2925 2    50   Input ~ 0
+VCP2
+Text GLabel 3550 3025 2    50   Input ~ 0
+U2
+Text GLabel 3550 3125 2    50   Input ~ 0
+V2
+Text GLabel 3550 3225 2    50   Input ~ 0
+W2
+Text GLabel 2175 3425 0    50   Input ~ 0
+M2_IN1
+Text GLabel 2175 3525 0    50   Input ~ 0
+M2_IN2
+Text GLabel 2175 3625 0    50   Input ~ 0
+M2_IN3
+Wire Wire Line
+	2250 3425 2175 3425
+Wire Wire Line
+	2250 3525 2175 3525
+Wire Wire Line
+	2250 3625 2175 3625
+Wire Wire Line
+	3450 2925 3550 2925
+Wire Wire Line
+	3450 3025 3550 3025
+Wire Wire Line
+	3450 3125 3550 3125
+Wire Wire Line
+	3450 3225 3550 3225
+Text GLabel 2175 3125 0    50   Input ~ 0
+M_EN
+Wire Wire Line
+	2250 3125 2200 3125
+Wire Wire Line
+	2200 3125 2200 3225
+Wire Wire Line
+	2200 3325 2250 3325
+Wire Wire Line
+	2250 3225 2200 3225
+Connection ~ 2200 3225
+Wire Wire Line
+	2200 3225 2200 3325
+Wire Wire Line
+	2175 3125 2200 3125
+Connection ~ 2200 3125
+Text GLabel 2175 3025 0    50   Input ~ 0
+VBOOT2
+Text GLabel 2175 2875 0    50   Input ~ 0
+VREF2
+Wire Wire Line
+	2175 2875 2250 2875
+Wire Wire Line
+	2175 3025 2250 3025
+$Comp
+L Diode:BAT54S D3
+U 1 1 5E09837B
+P 1375 4635
+F 0 "D3" H 1375 4745 50  0000 C CNN
+F 1 "BAT54S" H 1375 4769 50  0001 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 1450 4760 50  0001 L CNN
+F 3 "https://www.mouser.com/ProductDetail/ON-Semiconductor/BAT54SLT1G?qs=sGAEpiMZZMtQ8nqTKtFS%2FCKUxMvjsmGzmkUbaMfK3Po%3D" H 1255 4635 50  0001 C CNN
+F 4 "863-BAT54SLT1G" H 1375 4635 50  0001 C CNN "P/N"
+F 5 "7" H 1375 4635 50  0001 C CNN "Group#"
+	1    1375 4635
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C12
+U 1 1 5E098381
+P 1375 5050
+F 0 "C12" H 1490 5096 50  0000 L CNN
+F 1 "10nF" H 1490 5005 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 1413 4900 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/810-C2012X7R2E103K" H 1375 5050 50  0001 C CNN
+F 4 "810-C2012X7R2E103K" H 1375 5050 50  0001 C CNN "P/N"
+F 5 "3" H 1375 5050 50  0001 C CNN "Group#"
+	1    1375 5050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1375 4900 1375 4835
+Text GLabel 1010 4635 0    50   Input ~ 0
+Vcc
+Wire Wire Line
+	1010 4635 1075 4635
+Text GLabel 1740 4635 2    50   Input ~ 0
+VBOOT3
+Wire Wire Line
+	1740 4635 1675 4635
+Text GLabel 1295 5245 0    50   Input ~ 0
+VCP3
+Wire Wire Line
+	1295 5245 1375 5245
+Wire Wire Line
+	1375 5245 1375 5200
+$Comp
+L Device:C C11
+U 1 1 5E09838F
+P 850 5975
+F 0 "C11" H 965 6021 50  0000 L CNN
+F 1 ".22uF" H 965 5930 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 888 5825 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/810-C2012X7S2A224MST" H 850 5975 50  0001 C CNN
+F 4 "810-C2012X7S2A224MST" H 850 5975 50  0001 C CNN "P/N"
+F 5 "2" H 850 5975 50  0001 C CNN "Group#"
+	1    850  5975
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C13
+U 1 1 5E098395
+P 1275 5975
+F 0 "C13" H 1390 6021 50  0000 L CNN
+F 1 "1uF" H 1390 5930 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 1313 5825 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/810-C2012X7R1V105KAE" H 1275 5975 50  0001 C CNN
+F 4 "810-C2012X7R1V105KAE" H 1275 5975 50  0001 C CNN "P/N"
+F 5 "4" H 1275 5975 50  0001 C CNN "Group#"
+	1    1275 5975
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C14
+U 1 1 5E09839B
+P 1650 5975
+F 0 "C14" H 1765 6021 50  0000 L CNN
+F 1 "100nF" H 1765 5930 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 1688 5825 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/810-C2012X7R2A104K" H 1650 5975 50  0001 C CNN
+F 4 "810-C2012X7R2A104K" H 1650 5975 50  0001 C CNN "P/N"
+F 5 "5" H 1650 5975 50  0001 C CNN "Group#"
+	1    1650 5975
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:CP C15
+U 1 1 5E0983A1
+P 2125 5975
+F 0 "C15" H 2243 6021 50  0000 L CNN
+F 1 "100uF" H 2200 5900 50  0000 L CNN
+F 2 "Capacitor_SMD:C_1210_3225Metric" H 2163 5825 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/KEMET/C1210C107M4PACTU?qs=sGAEpiMZZMs0AnBnWHyRQCUMvL3P2ZlCADVJDTT4%252BXw%3D" H 2125 5975 50  0001 C CNN
+F 4 "80-C1210C107M4PACTU" H 2125 5975 50  0001 C CNN "P/N"
+F 5 "6" H 2125 5975 50  0001 C CNN "Group#"
+	1    2125 5975
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2125 6125 2125 6200
+Wire Wire Line
+	2125 6200 1650 6200
+Wire Wire Line
+	850  6200 850  6125
+Wire Wire Line
+	1275 6125 1275 6200
+Connection ~ 1275 6200
+Wire Wire Line
+	1275 6200 850  6200
+Wire Wire Line
+	1650 6125 1650 6200
+Connection ~ 1650 6200
+Wire Wire Line
+	1650 6200 1275 6200
+$Comp
+L power:GND #PWR0103
+U 1 1 5E0983B0
+P 850 6250
+F 0 "#PWR0103" H 850 6000 50  0001 C CNN
+F 1 "GND" H 855 6077 50  0000 C CNN
+F 2 "" H 850 6250 50  0001 C CNN
+F 3 "" H 850 6250 50  0001 C CNN
+	1    850  6250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	850  6250 850  6200
+Connection ~ 850  6200
+Text GLabel 850  5750 1    50   Input ~ 0
+VBOOT3
+Text GLabel 1275 5750 1    50   Input ~ 0
+VREF3
+Wire Wire Line
+	2125 5825 2125 5775
+Wire Wire Line
+	2125 5775 1650 5775
+Wire Wire Line
+	1650 5775 1650 5825
+Text GLabel 1650 5750 1    50   Input ~ 0
+Vcc
+Wire Wire Line
+	1650 5750 1650 5775
+Connection ~ 1650 5775
+Wire Wire Line
+	1275 5825 1275 5750
+Wire Wire Line
+	850  5825 850  5750
+$Comp
+L L6234PD:L6234PD U3
+U 1 1 5E0983C3
+P 2850 5300
+F 0 "U3" H 2850 6167 50  0000 C CNN
+F 1 "L6234PD" H 2850 6076 50  0000 C CNN
+F 2 "SOIC127P1420X360-21N" H 2600 6200 50  0001 L BNN
+F 3 "https://www.mouser.com/ProductDetail/STMicroelectronics/L6234PD013TR?qs=sGAEpiMZZMtKB4wrjsn3lQVvA8Fh1xC9w8nZHSqEsqw%3D" H 2600 6100 50  0001 L BNN
+F 4 "L6234PD" H 2600 6300 50  0001 L BNN "Field7"
+F 5 "511-L6234PD013TR" H 2850 5300 50  0001 C CNN "P/N"
+F 6 "14" H 2850 5300 50  0001 C CNN "Group#"
+	1    2850 5300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3450 5500 3550 5500
+Wire Wire Line
+	3550 5500 3550 5600
+Wire Wire Line
+	3550 5800 3450 5800
+Wire Wire Line
+	3450 5700 3550 5700
+Connection ~ 3550 5700
+Wire Wire Line
+	3550 5700 3550 5800
+Wire Wire Line
+	3450 5600 3550 5600
+Connection ~ 3550 5600
+Wire Wire Line
+	3550 5600 3550 5700
+Wire Wire Line
+	3450 5300 3550 5300
+Wire Wire Line
+	3550 5300 3550 5400
+Connection ~ 3550 5500
+Wire Wire Line
+	3450 5400 3550 5400
+Connection ~ 3550 5400
+Wire Wire Line
+	3550 5400 3550 5500
+Wire Wire Line
+	3450 5900 3550 5900
+Wire Wire Line
+	3550 5900 3550 5800
+Connection ~ 3550 5800
+Text GLabel 3550 4700 2    50   Input ~ 0
+Vcc
+Wire Wire Line
+	3450 4700 3500 4700
+Wire Wire Line
+	3500 4700 3500 4800
+Wire Wire Line
+	3500 4800 3450 4800
+Wire Wire Line
+	3550 4700 3500 4700
+Connection ~ 3500 4700
+Text GLabel 3550 4900 2    50   Input ~ 0
+VCP3
+Text GLabel 3550 5000 2    50   Input ~ 0
+U3
+Text GLabel 3550 5100 2    50   Input ~ 0
+V3
+Text GLabel 3550 5200 2    50   Input ~ 0
+W3
+Text GLabel 2175 5400 0    50   Input ~ 0
+M3_IN1
+Text GLabel 2175 5500 0    50   Input ~ 0
+M3_IN2
+Text GLabel 2175 5600 0    50   Input ~ 0
+M3_IN3
+Wire Wire Line
+	2250 5400 2175 5400
+Wire Wire Line
+	2250 5500 2175 5500
+Wire Wire Line
+	2250 5600 2175 5600
+Wire Wire Line
+	3450 4900 3550 4900
+Wire Wire Line
+	3450 5000 3550 5000
+Wire Wire Line
+	3450 5100 3550 5100
+Wire Wire Line
+	3450 5200 3550 5200
+Text GLabel 2175 5100 0    50   Input ~ 0
+M_EN
+Wire Wire Line
+	2250 5100 2200 5100
+Wire Wire Line
+	2200 5100 2200 5200
+Wire Wire Line
+	2200 5300 2250 5300
+Wire Wire Line
+	2250 5200 2200 5200
+Connection ~ 2200 5200
+Wire Wire Line
+	2200 5200 2200 5300
+Wire Wire Line
+	2175 5100 2200 5100
+Connection ~ 2200 5100
+Text GLabel 2175 5000 0    50   Input ~ 0
+VBOOT3
+Text GLabel 2175 4850 0    50   Input ~ 0
+VREF3
+Wire Wire Line
+	2175 4850 2250 4850
+Wire Wire Line
+	2175 5000 2250 5000
+$Comp
+L Diode:BAT54S D4
+U 1 1 5E0B74A1
+P 1375 6660
+F 0 "D4" H 1375 6770 50  0000 C CNN
+F 1 "BAT54S" H 1375 6794 50  0001 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 1450 6785 50  0001 L CNN
+F 3 "https://www.mouser.com/ProductDetail/ON-Semiconductor/BAT54SLT1G?qs=sGAEpiMZZMtQ8nqTKtFS%2FCKUxMvjsmGzmkUbaMfK3Po%3D" H 1255 6660 50  0001 C CNN
+F 4 "863-BAT54SLT1G" H 1375 6660 50  0001 C CNN "P/N"
+F 5 "7" H 1375 6660 50  0001 C CNN "Group#"
+	1    1375 6660
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C17
+U 1 1 5E0B74A7
+P 1375 7075
+F 0 "C17" H 1490 7121 50  0000 L CNN
+F 1 "10nF" H 1490 7030 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 1413 6925 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/810-C2012X7R2E103K" H 1375 7075 50  0001 C CNN
+F 4 "810-C2012X7R2E103K" H 1375 7075 50  0001 C CNN "P/N"
+F 5 "3" H 1375 7075 50  0001 C CNN "Group#"
+	1    1375 7075
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1375 6925 1375 6860
+Text GLabel 1010 6660 0    50   Input ~ 0
+Vcc
+Wire Wire Line
+	1010 6660 1075 6660
+Text GLabel 1740 6660 2    50   Input ~ 0
+VBOOT4
+Wire Wire Line
+	1740 6660 1675 6660
+Text GLabel 1295 7270 0    50   Input ~ 0
+VCP4
+Wire Wire Line
+	1295 7270 1375 7270
+Wire Wire Line
+	1375 7270 1375 7225
+$Comp
+L Device:C C16
+U 1 1 5E0B74B5
+P 850 8000
+F 0 "C16" H 965 8046 50  0000 L CNN
+F 1 ".22uF" H 965 7955 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 888 7850 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/810-C2012X7S2A224MST" H 850 8000 50  0001 C CNN
+F 4 "810-C2012X7S2A224MST" H 850 8000 50  0001 C CNN "P/N"
+F 5 "2" H 850 8000 50  0001 C CNN "Group#"
+	1    850  8000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C18
+U 1 1 5E0B74BB
+P 1275 8000
+F 0 "C18" H 1390 8046 50  0000 L CNN
+F 1 "1uF" H 1390 7955 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 1313 7850 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/810-C2012X7R1V105KAE" H 1275 8000 50  0001 C CNN
+F 4 "810-C2012X7R1V105KAE" H 1275 8000 50  0001 C CNN "P/N"
+F 5 "4" H 1275 8000 50  0001 C CNN "Group#"
+	1    1275 8000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C19
+U 1 1 5E0B74C1
+P 1650 8000
+F 0 "C19" H 1765 8046 50  0000 L CNN
+F 1 "100nF" H 1765 7955 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 1688 7850 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/810-C2012X7R2A104K" H 1650 8000 50  0001 C CNN
+F 4 "810-C2012X7R2A104K" H 1650 8000 50  0001 C CNN "P/N"
+F 5 "5" H 1650 8000 50  0001 C CNN "Group#"
+	1    1650 8000
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:CP C20
+U 1 1 5E0B74C7
+P 2125 8000
+F 0 "C20" H 2243 8046 50  0000 L CNN
+F 1 "100uF" H 2200 7925 50  0000 L CNN
+F 2 "Capacitor_SMD:C_1210_3225Metric" H 2163 7850 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/KEMET/C1210C107M4PACTU?qs=sGAEpiMZZMs0AnBnWHyRQCUMvL3P2ZlCADVJDTT4%252BXw%3D" H 2125 8000 50  0001 C CNN
+F 4 "80-C1210C107M4PACTU" H 2125 8000 50  0001 C CNN "P/N"
+F 5 "6" H 2125 8000 50  0001 C CNN "Group#"
+	1    2125 8000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2125 8150 2125 8225
+Wire Wire Line
+	2125 8225 1650 8225
+Wire Wire Line
+	850  8225 850  8150
+Wire Wire Line
+	1275 8150 1275 8225
+Connection ~ 1275 8225
+Wire Wire Line
+	1275 8225 850  8225
+Wire Wire Line
+	1650 8150 1650 8225
+Connection ~ 1650 8225
+Wire Wire Line
+	1650 8225 1275 8225
+$Comp
+L power:GND #PWR0104
+U 1 1 5E0B74D6
+P 850 8275
+F 0 "#PWR0104" H 850 8025 50  0001 C CNN
+F 1 "GND" H 855 8102 50  0000 C CNN
+F 2 "" H 850 8275 50  0001 C CNN
+F 3 "" H 850 8275 50  0001 C CNN
+	1    850  8275
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	850  8275 850  8225
+Connection ~ 850  8225
+Text GLabel 850  7775 1    50   Input ~ 0
+VBOOT4
+Text GLabel 1275 7775 1    50   Input ~ 0
+VREF4
+Wire Wire Line
+	2125 7850 2125 7800
+Wire Wire Line
+	2125 7800 1650 7800
+Wire Wire Line
+	1650 7800 1650 7850
+Text GLabel 1650 7775 1    50   Input ~ 0
+Vcc
+Wire Wire Line
+	1650 7775 1650 7800
+Connection ~ 1650 7800
+Wire Wire Line
+	1275 7850 1275 7775
+Wire Wire Line
+	850  7850 850  7775
+$Comp
+L L6234PD:L6234PD U4
+U 1 1 5E0B74E9
+P 2850 7325
+F 0 "U4" H 2850 8192 50  0000 C CNN
+F 1 "L6234PD" H 2850 8101 50  0000 C CNN
+F 2 "SOIC127P1420X360-21N" H 2600 8225 50  0001 L BNN
+F 3 "https://www.mouser.com/ProductDetail/STMicroelectronics/L6234PD013TR?qs=sGAEpiMZZMtKB4wrjsn3lQVvA8Fh1xC9w8nZHSqEsqw%3D" H 2600 8125 50  0001 L BNN
+F 4 "L6234PD" H 2600 8325 50  0001 L BNN "Field7"
+F 5 "511-L6234PD013TR" H 2850 7325 50  0001 C CNN "P/N"
+F 6 "14" H 2850 7325 50  0001 C CNN "Group#"
+	1    2850 7325
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3450 7525 3550 7525
+Wire Wire Line
+	3550 7525 3550 7625
+Wire Wire Line
+	3550 7825 3450 7825
+Wire Wire Line
+	3450 7725 3550 7725
+Connection ~ 3550 7725
+Wire Wire Line
+	3550 7725 3550 7825
+Wire Wire Line
+	3450 7625 3550 7625
+Connection ~ 3550 7625
+Wire Wire Line
+	3550 7625 3550 7725
+Wire Wire Line
+	3450 7325 3550 7325
+Wire Wire Line
+	3550 7325 3550 7425
+Connection ~ 3550 7525
+Wire Wire Line
+	3450 7425 3550 7425
+Connection ~ 3550 7425
+Wire Wire Line
+	3550 7425 3550 7525
+Wire Wire Line
+	3450 7925 3550 7925
+Wire Wire Line
+	3550 7925 3550 7825
+Connection ~ 3550 7825
+Text GLabel 3550 6725 2    50   Input ~ 0
+Vcc
+Wire Wire Line
+	3450 6725 3500 6725
+Wire Wire Line
+	3500 6725 3500 6825
+Wire Wire Line
+	3500 6825 3450 6825
+Wire Wire Line
+	3550 6725 3500 6725
+Connection ~ 3500 6725
+Text GLabel 3550 6925 2    50   Input ~ 0
+VCP4
+Text GLabel 3550 7025 2    50   Input ~ 0
+U4
+Text GLabel 3550 7125 2    50   Input ~ 0
+V4
+Text GLabel 3550 7225 2    50   Input ~ 0
+W4
+Text GLabel 2175 7425 0    50   Input ~ 0
+M4_IN1
+Text GLabel 2175 7525 0    50   Input ~ 0
+M4_IN2
+Text GLabel 2175 7625 0    50   Input ~ 0
+M4_IN3
+Wire Wire Line
+	2250 7425 2175 7425
+Wire Wire Line
+	2250 7525 2175 7525
+Wire Wire Line
+	2250 7625 2175 7625
+Wire Wire Line
+	3450 6925 3550 6925
+Wire Wire Line
+	3450 7025 3550 7025
+Wire Wire Line
+	3450 7125 3550 7125
+Wire Wire Line
+	3450 7225 3550 7225
+Text GLabel 2175 7125 0    50   Input ~ 0
+M_EN
+Wire Wire Line
+	2250 7125 2200 7125
+Wire Wire Line
+	2200 7125 2200 7225
+Wire Wire Line
+	2200 7325 2250 7325
+Wire Wire Line
+	2250 7225 2200 7225
+Connection ~ 2200 7225
+Wire Wire Line
+	2200 7225 2200 7325
+Wire Wire Line
+	2175 7125 2200 7125
+Connection ~ 2200 7125
+Text GLabel 2175 7025 0    50   Input ~ 0
+VBOOT4
+Text GLabel 2175 6875 0    50   Input ~ 0
+VREF4
+Wire Wire Line
+	2175 6875 2250 6875
+Wire Wire Line
+	2175 7025 2250 7025
+Text GLabel 7920 3550 2    50   Input ~ 0
+GND
+Text GLabel 7920 3450 2    50   Input ~ 0
+GND
+Wire Wire Line
+	7920 3450 7845 3450
+Text GLabel 4470 1650 0    50   Input ~ 0
+M1_IN1
+Text GLabel 4470 1750 0    50   Input ~ 0
+M1_IN2
+Text GLabel 7920 950  2    50   Input ~ 0
++3.3v
+Text GLabel 7920 1350 2    50   Input ~ 0
+M2_IN2
+Text GLabel 7920 1450 2    50   Input ~ 0
+M2_IN1
+Text GLabel 7920 1550 2    50   Input ~ 0
+M2_IN3
+Text GLabel 7920 2850 2    50   Input ~ 0
+M4_IN3
+Text GLabel 7920 3050 2    50   Input ~ 0
+M4_IN2
+Text GLabel 7920 3150 2    50   Input ~ 0
+M4_IN1
+Wire Wire Line
+	4545 1350 4470 1350
+Wire Wire Line
+	4545 1650 4470 1650
+Wire Wire Line
+	4545 1750 4470 1750
+Text GLabel 7275 6650 2    50   Input ~ 0
+GND
+Text GLabel 6295 6650 0    50   Input ~ 0
+GND
+Wire Wire Line
+	6380 6650 6330 6650
+Wire Wire Line
+	6380 6750 6330 6750
+Wire Wire Line
+	6330 6750 6330 6650
+Connection ~ 6330 6650
+Wire Wire Line
+	6330 6650 6295 6650
+Wire Wire Line
+	7180 6650 7225 6650
+Wire Wire Line
+	7180 6750 7225 6750
+Wire Wire Line
+	7225 6750 7225 6650
+Connection ~ 7225 6650
+Wire Wire Line
+	7225 6650 7275 6650
+Wire Wire Line
+	7845 3550 7920 3550
+Wire Wire Line
+	7845 1350 7920 1350
+Wire Wire Line
+	7845 1450 7920 1450
+Wire Wire Line
+	7845 1550 7920 1550
+Wire Wire Line
+	7845 2850 7920 2850
+Wire Wire Line
+	7845 3050 7920 3050
+Wire Wire Line
+	7845 3150 7920 3150
+Wire Wire Line
+	4545 1850 4470 1850
+Wire Wire Line
+	4545 3050 4470 3050
+Wire Wire Line
+	4545 3150 4470 3150
+Wire Wire Line
+	7845 950  7920 950 
+$Comp
+L DEV-14058:teensy3.6 U6
+U 1 1 5E069BA9
+P 6245 2150
+F 0 "U6" H 6195 3717 50  0000 C CNN
+F 1 "teensy3.6" H 6195 3626 50  0000 C CNN
+F 2 "MODULE_DEV-14058" H 6245 2150 50  0001 L BNN
+F 3 "https://www.mouser.com/ProductDetail/SparkFun/DEV-14057?qs=sGAEpiMZZMsB9HsreUc%252Bif7CFI6Fqc7uwiPlnsmOEYo%3D" H 6245 2150 50  0001 L BNN
+F 4 "None" H 6245 2150 50  0001 L BNN "Field4"
+F 5 "" H 6245 2150 50  0001 L BNN "Field5"
+F 6 "" H 6245 2150 50  0001 L BNN "Field6"
+F 7 "None" H 6245 2150 50  0001 L BNN "Field7"
+F 8 "Teensy 3.6 _Headers_" H 6245 2150 50  0001 L BNN "Field8"
+F 9 "474-DEV-14057" H 6245 2150 50  0001 C CNN "P/N"
+	1    6245 2150
+	1    0    0    -1  
+$EndComp
+Text GLabel 9225 4245 2    50   Input ~ 0
+SCL
+Text GLabel 9225 4345 2    50   Input ~ 0
+SDA
+Text GLabel 8815 3875 1    50   Input ~ 0
++3.3v
+Text GLabel 8495 4700 2    50   Input ~ 0
+GND
+Wire Wire Line
+	8495 4700 8455 4700
+Wire Wire Line
+	8455 4700 8455 4645
+Text GLabel 6290 7050 0    50   Input ~ 0
+Vcc
+Text GLabel 7275 7050 2    50   Input ~ 0
++3.3v
+Wire Wire Line
+	7275 7050 7225 7050
+Wire Wire Line
+	7180 6950 7225 6950
+Wire Wire Line
+	7225 6950 7225 7050
+Connection ~ 7225 7050
+Wire Wire Line
+	7225 7050 7180 7050
+Wire Wire Line
+	6290 7050 6335 7050
+Wire Wire Line
+	6335 6950 6335 7050
+Connection ~ 6335 7050
+Wire Wire Line
+	6335 7050 6380 7050
+$Comp
+L Device:hall_effect_three_wire HS1
+U 1 1 5E185754
+P 4560 4675
+F 0 "HS1" H 4785 4750 50  0000 R CNN
+F 1 "hall_effect_three_wire" H 4490 4630 50  0001 R CNN
+F 2 "Sensor_Current:Diodes_SIP-3_4.1x1.5mm_P1.27mm" H 4560 4675 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/621-AH183-PG-B" H 4560 4675 50  0001 C CNN
+F 4 "621-AH183-PG-B" H 4560 4675 50  0001 C CNN "P/N"
+F 5 "8" H 4560 4675 50  0001 C CNN "Group#"
+	1    4560 4675
+	1    0    0    -1  
+$EndComp
+Text GLabel 4620 4410 2    50   Input ~ 0
++3.3v
+$Comp
+L power:GND #PWR0105
+U 1 1 5E1A561A
+P 4770 4715
+F 0 "#PWR0105" H 4770 4465 50  0001 C CNN
+F 1 "GND" H 4865 4715 50  0000 C CNN
+F 2 "" H 4770 4715 50  0001 C CNN
+F 3 "" H 4770 4715 50  0001 C CNN
+	1    4770 4715
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4620 4410 4560 4410
+Wire Wire Line
+	4560 4410 4560 4475
+Wire Wire Line
+	4710 4675 4770 4675
+Wire Wire Line
+	4770 4675 4770 4715
+Text GLabel 4620 4930 2    50   Input ~ 0
+HS1
+Wire Wire Line
+	4620 4930 4560 4930
+Wire Wire Line
+	4560 4930 4560 4875
+$Comp
+L Device:R R1
+U 1 1 5E1E6C2F
+P 4395 4675
+F 0 "R1" H 4245 4720 50  0000 L CNN
+F 1 "50k" H 4210 4625 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 4325 4675 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF5102?qs=DyUWGjl%252BcVsMTSBF51O24w%3D%3D" H 4395 4675 50  0001 C CNN
+F 4 "755-ESR10EZPF5102" H 4395 4675 50  0001 C CNN "P/N"
+F 5 "11" H 4395 4675 50  0001 C CNN "Group#"
+	1    4395 4675
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4395 4525 4395 4410
+Wire Wire Line
+	4395 4410 4560 4410
+Connection ~ 4560 4410
+Wire Wire Line
+	4395 4825 4395 4930
+Wire Wire Line
+	4395 4930 4560 4930
+Connection ~ 4560 4930
+$Comp
+L Device:hall_effect_three_wire HS2
+U 1 1 5E21BC83
+P 5420 4675
+F 0 "HS2" H 5645 4750 50  0000 R CNN
+F 1 "hall_effect_three_wire" H 5350 4630 50  0001 R CNN
+F 2 "Sensor_Current:Diodes_SIP-3_4.1x1.5mm_P1.27mm" H 5420 4675 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/621-AH183-PG-B" H 5420 4675 50  0001 C CNN
+F 4 "621-AH183-PG-B" H 5420 4675 50  0001 C CNN "P/N"
+F 5 "8" H 5420 4675 50  0001 C CNN "Group#"
+	1    5420 4675
+	1    0    0    -1  
+$EndComp
+Text GLabel 5480 4410 2    50   Input ~ 0
++3.3v
+$Comp
+L power:GND #PWR0106
+U 1 1 5E21BC8A
+P 5630 4715
+F 0 "#PWR0106" H 5630 4465 50  0001 C CNN
+F 1 "GND" H 5725 4715 50  0000 C CNN
+F 2 "" H 5630 4715 50  0001 C CNN
+F 3 "" H 5630 4715 50  0001 C CNN
+	1    5630 4715
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5480 4410 5420 4410
+Wire Wire Line
+	5420 4410 5420 4475
+Wire Wire Line
+	5570 4675 5630 4675
+Wire Wire Line
+	5630 4675 5630 4715
+Text GLabel 5480 4930 2    50   Input ~ 0
+HS2
+Wire Wire Line
+	5480 4930 5420 4930
+Wire Wire Line
+	5420 4930 5420 4875
+$Comp
+L Device:R R2
+U 1 1 5E21BC97
+P 5255 4675
+F 0 "R2" H 5105 4720 50  0000 L CNN
+F 1 "50k" H 5070 4625 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 5185 4675 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF5102?qs=DyUWGjl%252BcVsMTSBF51O24w%3D%3D" H 5255 4675 50  0001 C CNN
+F 4 "755-ESR10EZPF5102" H 5255 4675 50  0001 C CNN "P/N"
+F 5 "11" H 5255 4675 50  0001 C CNN "Group#"
+	1    5255 4675
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5255 4525 5255 4410
+Wire Wire Line
+	5255 4410 5420 4410
+Connection ~ 5420 4410
+Wire Wire Line
+	5255 4825 5255 4930
+Wire Wire Line
+	5255 4930 5420 4930
+Connection ~ 5420 4930
+$Comp
+L Device:hall_effect_three_wire HS3
+U 1 1 5E22DEBD
+P 6215 4680
+F 0 "HS3" H 6440 4755 50  0000 R CNN
+F 1 "hall_effect_three_wire" H 6145 4635 50  0001 R CNN
+F 2 "Sensor_Current:Diodes_SIP-3_4.1x1.5mm_P1.27mm" H 6215 4680 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/621-AH183-PG-B" H 6215 4680 50  0001 C CNN
+F 4 "621-AH183-PG-B" H 6215 4680 50  0001 C CNN "P/N"
+F 5 "8" H 6215 4680 50  0001 C CNN "Group#"
+	1    6215 4680
+	1    0    0    -1  
+$EndComp
+Text GLabel 6275 4415 2    50   Input ~ 0
++3.3v
+$Comp
+L power:GND #PWR0107
+U 1 1 5E22DEC4
+P 6425 4720
+F 0 "#PWR0107" H 6425 4470 50  0001 C CNN
+F 1 "GND" H 6520 4720 50  0000 C CNN
+F 2 "" H 6425 4720 50  0001 C CNN
+F 3 "" H 6425 4720 50  0001 C CNN
+	1    6425 4720
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6275 4415 6215 4415
+Wire Wire Line
+	6215 4415 6215 4480
+Wire Wire Line
+	6365 4680 6425 4680
+Wire Wire Line
+	6425 4680 6425 4720
+Text GLabel 6275 4935 2    50   Input ~ 0
+HS3
+Wire Wire Line
+	6275 4935 6215 4935
+Wire Wire Line
+	6215 4935 6215 4880
+$Comp
+L Device:R R3
+U 1 1 5E22DED1
+P 6050 4680
+F 0 "R3" H 5900 4725 50  0000 L CNN
+F 1 "50k" H 5865 4630 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 5980 4680 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF5102?qs=DyUWGjl%252BcVsMTSBF51O24w%3D%3D" H 6050 4680 50  0001 C CNN
+F 4 "755-ESR10EZPF5102" H 6050 4680 50  0001 C CNN "P/N"
+F 5 "11" H 6050 4680 50  0001 C CNN "Group#"
+	1    6050 4680
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6050 4530 6050 4415
+Wire Wire Line
+	6050 4415 6215 4415
+Connection ~ 6215 4415
+Wire Wire Line
+	6050 4830 6050 4935
+Wire Wire Line
+	6050 4935 6215 4935
+Connection ~ 6215 4935
+$Comp
+L Device:hall_effect_three_wire HS4
+U 1 1 5E241606
+P 6995 4680
+F 0 "HS4" H 7220 4755 50  0000 R CNN
+F 1 "hall_effect_three_wire" H 6925 4635 50  0001 R CNN
+F 2 "Sensor_Current:Diodes_SIP-3_4.1x1.5mm_P1.27mm" H 6995 4680 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/621-AH183-PG-B" H 6995 4680 50  0001 C CNN
+F 4 "621-AH183-PG-B" H 6995 4680 50  0001 C CNN "P/N"
+F 5 "8" H 6995 4680 50  0001 C CNN "Group#"
+	1    6995 4680
+	1    0    0    -1  
+$EndComp
+Text GLabel 7055 4415 2    50   Input ~ 0
++3.3v
+$Comp
+L power:GND #PWR0108
+U 1 1 5E24160D
+P 7205 4720
+F 0 "#PWR0108" H 7205 4470 50  0001 C CNN
+F 1 "GND" H 7300 4720 50  0000 C CNN
+F 2 "" H 7205 4720 50  0001 C CNN
+F 3 "" H 7205 4720 50  0001 C CNN
+	1    7205 4720
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7055 4415 6995 4415
+Wire Wire Line
+	6995 4415 6995 4480
+Wire Wire Line
+	7145 4680 7205 4680
+Wire Wire Line
+	7205 4680 7205 4720
+Text GLabel 7055 4935 2    50   Input ~ 0
+HS4
+Wire Wire Line
+	7055 4935 6995 4935
+Wire Wire Line
+	6995 4935 6995 4880
+$Comp
+L Device:R R4
+U 1 1 5E24161A
+P 6830 4680
+F 0 "R4" H 6680 4725 50  0000 L CNN
+F 1 "50k" H 6645 4630 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 6760 4680 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF5102?qs=DyUWGjl%252BcVsMTSBF51O24w%3D%3D" H 6830 4680 50  0001 C CNN
+F 4 "755-ESR10EZPF5102" H 6830 4680 50  0001 C CNN "P/N"
+F 5 "11" H 6830 4680 50  0001 C CNN "Group#"
+	1    6830 4680
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6830 4530 6830 4415
+Wire Wire Line
+	6830 4415 6995 4415
+Connection ~ 6995 4415
+Wire Wire Line
+	6830 4830 6830 4935
+Wire Wire Line
+	6830 4935 6995 4935
+Connection ~ 6995 4935
+$Comp
+L Device:R R5
+U 1 1 5E3ABEF0
+P 4070 5365
+F 0 "R5" H 3900 5430 50  0000 L CNN
+F 1 "110" H 3905 5340 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 4000 5365 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF91R0?qs=493kPxzlxfLH1n18FpG%252BoA%3D%3D" H 4070 5365 50  0001 C CNN
+F 4 "755-ESR10EZPF91R0" H 4070 5365 50  0001 C CNN "P/N"
+F 5 "12" H 4070 5365 50  0001 C CNN "Group#"
+	1    4070 5365
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4180 5565 4070 5565
+Wire Wire Line
+	4070 5565 4070 5515
+$Comp
+L power:GND #PWR0109
+U 1 1 5DFE6AE3
+P 4070 5805
+F 0 "#PWR0109" H 4070 5555 50  0001 C CNN
+F 1 "GND" H 4075 5632 50  0000 C CNN
+F 2 "" H 4070 5805 50  0001 C CNN
+F 3 "" H 4070 5805 50  0001 C CNN
+	1    4070 5805
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4180 5765 4070 5765
+Wire Wire Line
+	4070 5765 4070 5805
+Wire Wire Line
+	4780 5765 4845 5765
+$Comp
+L Device:R R6
+U 1 1 5E024FBF
+P 4845 5970
+F 0 "R6" H 4915 6020 50  0000 L CNN
+F 1 "10k" H 4905 5930 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 4775 5970 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF1002?qs=DyUWGjl%252BcVujU2u8up15oQ%3D%3D" H 4845 5970 50  0001 C CNN
+F 4 "755-ESR10EZPF1002" H 4845 5970 50  0001 C CNN "P/N"
+F 5 "13" H 4845 5970 50  0001 C CNN "Group#"
+	1    4845 5970
+	1    0    0    -1  
+$EndComp
+Text GLabel 4890 5790 2    50   Input ~ 0
+OS1
+Text GLabel 4935 5160 2    50   Input ~ 0
++3.3v
+Wire Wire Line
+	4935 5160 4875 5160
+Wire Wire Line
+	4070 5215 4070 5160
+Wire Wire Line
+	4070 5160 4875 5160
+Connection ~ 4875 5160
+$Comp
+L Device:R R7
+U 1 1 5E0D849E
+P 5485 5365
+F 0 "R7" H 5315 5430 50  0000 L CNN
+F 1 "110" H 5320 5340 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 5415 5365 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF91R0?qs=493kPxzlxfLH1n18FpG%252BoA%3D%3D" H 5485 5365 50  0001 C CNN
+F 4 "755-ESR10EZPF91R0" H 5485 5365 50  0001 C CNN "P/N"
+F 5 "12" H 5485 5365 50  0001 C CNN "Group#"
+	1    5485 5365
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5595 5565 5485 5565
+Wire Wire Line
+	5485 5565 5485 5515
+$Comp
+L power:GND #PWR0111
+U 1 1 5E0D84A6
+P 5485 5805
+F 0 "#PWR0111" H 5485 5555 50  0001 C CNN
+F 1 "GND" H 5490 5632 50  0000 C CNN
+F 2 "" H 5485 5805 50  0001 C CNN
+F 3 "" H 5485 5805 50  0001 C CNN
+	1    5485 5805
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5595 5765 5485 5765
+Wire Wire Line
+	5485 5765 5485 5805
+Text GLabel 6350 5160 2    50   Input ~ 0
++3.3v
+Wire Wire Line
+	5485 5215 5485 5160
+$Comp
+L Device:R R9
+U 1 1 5E10DBC4
+P 6810 5375
+F 0 "R9" H 6640 5440 50  0000 L CNN
+F 1 "110" H 6645 5350 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 6740 5375 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF91R0?qs=493kPxzlxfLH1n18FpG%252BoA%3D%3D" H 6810 5375 50  0001 C CNN
+F 4 "755-ESR10EZPF91R0" H 6810 5375 50  0001 C CNN "P/N"
+F 5 "12" H 6810 5375 50  0001 C CNN "Group#"
+	1    6810 5375
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6920 5575 6810 5575
+Wire Wire Line
+	6810 5575 6810 5525
+$Comp
+L power:GND #PWR0113
+U 1 1 5E10DBCC
+P 6810 5815
+F 0 "#PWR0113" H 6810 5565 50  0001 C CNN
+F 1 "GND" H 6815 5642 50  0000 C CNN
+F 2 "" H 6810 5815 50  0001 C CNN
+F 3 "" H 6810 5815 50  0001 C CNN
+	1    6810 5815
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6920 5775 6810 5775
+Wire Wire Line
+	6810 5775 6810 5815
+Text GLabel 7675 5170 2    50   Input ~ 0
++3.3v
+Wire Wire Line
+	6810 5225 6810 5170
+$Comp
+L Device:R R11
+U 1 1 5E12B18D
+P 8155 5370
+F 0 "R11" H 7985 5435 50  0000 L CNN
+F 1 "110" H 7990 5345 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 8085 5370 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF91R0?qs=493kPxzlxfLH1n18FpG%252BoA%3D%3D" H 8155 5370 50  0001 C CNN
+F 4 "755-ESR10EZPF91R0" H 8155 5370 50  0001 C CNN "P/N"
+F 5 "12" H 8155 5370 50  0001 C CNN "Group#"
+	1    8155 5370
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8265 5570 8155 5570
+Wire Wire Line
+	8155 5570 8155 5520
+$Comp
+L power:GND #PWR0115
+U 1 1 5E12B195
+P 8155 5810
+F 0 "#PWR0115" H 8155 5560 50  0001 C CNN
+F 1 "GND" H 8160 5637 50  0000 C CNN
+F 2 "" H 8155 5810 50  0001 C CNN
+F 3 "" H 8155 5810 50  0001 C CNN
+	1    8155 5810
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8265 5770 8155 5770
+Wire Wire Line
+	8155 5770 8155 5810
+Text GLabel 9020 5165 2    50   Input ~ 0
++3.3v
+Wire Wire Line
+	8155 5220 8155 5165
+$Comp
+L power:GND #PWR0117
+U 1 1 5E023F11
+P 3550 2015
+F 0 "#PWR0117" H 3550 1765 50  0001 C CNN
+F 1 "GND" H 3555 1842 50  0000 C CNN
+F 2 "" H 3550 2015 50  0001 C CNN
+F 3 "" H 3550 2015 50  0001 C CNN
+	1    3550 2015
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3550 2015 3550 1975
+Connection ~ 3550 1975
+$Comp
+L power:GND #PWR0118
+U 1 1 5E08F319
+P 3550 3925
+F 0 "#PWR0118" H 3550 3675 50  0001 C CNN
+F 1 "GND" H 3555 3752 50  0000 C CNN
+F 2 "" H 3550 3925 50  0001 C CNN
+F 3 "" H 3550 3925 50  0001 C CNN
+	1    3550 3925
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0119
+U 1 1 5E0AA41D
+P 3550 5900
+F 0 "#PWR0119" H 3550 5650 50  0001 C CNN
+F 1 "GND" H 3555 5727 50  0000 C CNN
+F 2 "" H 3550 5900 50  0001 C CNN
+F 3 "" H 3550 5900 50  0001 C CNN
+	1    3550 5900
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0120
+U 1 1 5E0C4F59
+P 3550 7925
+F 0 "#PWR0120" H 3550 7675 50  0001 C CNN
+F 1 "GND" H 3555 7752 50  0000 C CNN
+F 2 "" H 3550 7925 50  0001 C CNN
+F 3 "" H 3550 7925 50  0001 C CNN
+	1    3550 7925
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4780 5565 4875 5565
+Wire Wire Line
+	4875 5160 4875 5565
+$Comp
+L power:GND #PWR0110
+U 1 1 5DFFC33A
+P 4845 6200
+F 0 "#PWR0110" H 4845 5950 50  0001 C CNN
+F 1 "GND" H 4850 6027 50  0000 C CNN
+F 2 "" H 4845 6200 50  0001 C CNN
+F 3 "" H 4845 6200 50  0001 C CNN
+	1    4845 6200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4845 6120 4845 6200
+Wire Wire Line
+	4845 5820 4845 5790
+Wire Wire Line
+	4890 5790 4845 5790
+Connection ~ 4845 5790
+Wire Wire Line
+	4845 5790 4845 5765
+$Comp
+L Device:R R8
+U 1 1 5E2A6F7F
+P 6260 5970
+F 0 "R8" H 6330 6020 50  0000 L CNN
+F 1 "10k" H 6320 5930 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 6190 5970 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF1002?qs=DyUWGjl%252BcVujU2u8up15oQ%3D%3D" H 6260 5970 50  0001 C CNN
+F 4 "755-ESR10EZPF1002" H 6260 5970 50  0001 C CNN "P/N"
+F 5 "13" H 6260 5970 50  0001 C CNN "Group#"
+	1    6260 5970
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6195 5565 6290 5565
+$Comp
+L power:GND #PWR0112
+U 1 1 5E2A6F88
+P 6260 6200
+F 0 "#PWR0112" H 6260 5950 50  0001 C CNN
+F 1 "GND" H 6265 6027 50  0000 C CNN
+F 2 "" H 6260 6200 50  0001 C CNN
+F 3 "" H 6260 6200 50  0001 C CNN
+	1    6260 6200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6260 6120 6260 6200
+Wire Wire Line
+	6305 5790 6260 5790
+Wire Wire Line
+	5485 5160 6290 5160
+Wire Wire Line
+	6290 5565 6290 5160
+Connection ~ 6290 5160
+Wire Wire Line
+	6290 5160 6350 5160
+Wire Wire Line
+	6810 5170 7615 5170
+Wire Wire Line
+	7520 5775 7585 5775
+$Comp
+L Device:R R10
+U 1 1 5E3D9EB4
+P 7585 5980
+F 0 "R10" H 7655 6030 50  0000 L CNN
+F 1 "10k" H 7645 5940 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 7515 5980 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF1002?qs=DyUWGjl%252BcVujU2u8up15oQ%3D%3D" H 7585 5980 50  0001 C CNN
+F 4 "755-ESR10EZPF1002" H 7585 5980 50  0001 C CNN "P/N"
+F 5 "13" H 7585 5980 50  0001 C CNN "Group#"
+	1    7585 5980
+	1    0    0    -1  
+$EndComp
+Text GLabel 7630 5800 2    50   Input ~ 0
+OS3
+Wire Wire Line
+	7520 5575 7615 5575
+Wire Wire Line
+	7615 5170 7615 5575
+$Comp
+L power:GND #PWR0114
+U 1 1 5E3D9EBD
+P 7585 6210
+F 0 "#PWR0114" H 7585 5960 50  0001 C CNN
+F 1 "GND" H 7590 6037 50  0000 C CNN
+F 2 "" H 7585 6210 50  0001 C CNN
+F 3 "" H 7585 6210 50  0001 C CNN
+	1    7585 6210
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7585 6130 7585 6210
+Wire Wire Line
+	7585 5830 7585 5800
+Wire Wire Line
+	7630 5800 7585 5800
+Connection ~ 7585 5800
+Wire Wire Line
+	7585 5800 7585 5775
+Wire Wire Line
+	8155 5165 8960 5165
+Wire Wire Line
+	8865 5770 8930 5770
+$Comp
+L Device:R R12
+U 1 1 5E44527B
+P 8930 5975
+F 0 "R12" H 9000 6025 50  0000 L CNN
+F 1 "10k" H 8990 5935 50  0000 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 8860 5975 50  0001 C CNN
+F 3 "https://www.mouser.com/ProductDetail/ROHM-Semiconductor/ESR10EZPF1002?qs=DyUWGjl%252BcVujU2u8up15oQ%3D%3D" H 8930 5975 50  0001 C CNN
+F 4 "755-ESR10EZPF1002" H 8930 5975 50  0001 C CNN "P/N"
+F 5 "13" H 8930 5975 50  0001 C CNN "Group#"
+	1    8930 5975
+	1    0    0    -1  
+$EndComp
+Text GLabel 8975 5795 2    50   Input ~ 0
+OS4
+Wire Wire Line
+	8865 5570 8960 5570
+$Comp
+L power:GND #PWR0116
+U 1 1 5E445284
+P 8930 6205
+F 0 "#PWR0116" H 8930 5955 50  0001 C CNN
+F 1 "GND" H 8935 6032 50  0000 C CNN
+F 2 "" H 8930 6205 50  0001 C CNN
+F 3 "" H 8930 6205 50  0001 C CNN
+	1    8930 6205
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8930 6125 8930 6205
+Wire Wire Line
+	8930 5825 8930 5795
+Wire Wire Line
+	8975 5795 8930 5795
+Connection ~ 8930 5795
+Wire Wire Line
+	8930 5795 8930 5770
+Wire Wire Line
+	8960 5570 8960 5165
+Connection ~ 8960 5165
+Wire Wire Line
+	8960 5165 9020 5165
+Text GLabel 6305 5790 2    50   Input ~ 0
+OS2
+Text GLabel 4470 1350 0    50   Input ~ 0
+M1_IN3
+Text GLabel 4470 1850 0    50   Input ~ 0
+M3_IN3
+Text GLabel 4470 3150 0    50   Input ~ 0
+M3_IN2
+Text GLabel 4470 3050 0    50   Input ~ 0
+M3_IN1
+Text GLabel 7920 2950 2    50   Input ~ 0
+M_EN
+Wire Wire Line
+	7920 2950 7845 2950
+Text GLabel 4470 1950 0    50   Input ~ 0
+OS1
+Wire Wire Line
+	4545 1950 4470 1950
+Text GLabel 4470 2950 0    50   Input ~ 0
+OS3
+Wire Wire Line
+	4545 2950 4470 2950
+Text GLabel 7920 1650 2    50   Input ~ 0
+OS2
+Wire Wire Line
+	7845 1650 7920 1650
+Text GLabel 7920 2750 2    50   Input ~ 0
+OS4
+Wire Wire Line
+	7845 2750 7920 2750
+Text GLabel 4880 3975 0    50   Input ~ 0
+U1
+Text GLabel 4880 4075 0    50   Input ~ 0
+V1
+Text GLabel 4880 4175 0    50   Input ~ 0
+W1
+$Comp
+L Connector_Generic:Conn_01x03 H1
+U 1 1 5E38F425
+P 5080 4075
+F 0 "H1" H 5160 4071 50  0000 L CNN
+F 1 "Conn_01x03" H 5160 4026 50  0001 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 5080 4075 50  0001 C CNN
+F 3 "~" H 5080 4075 50  0001 C CNN
+	1    5080 4075
+	1    0    0    -1  
+$EndComp
+Text GLabel 5435 3975 0    50   Input ~ 0
+U2
+Text GLabel 5435 4075 0    50   Input ~ 0
+V2
+Text GLabel 5435 4175 0    50   Input ~ 0
+W2
+$Comp
+L Connector_Generic:Conn_01x03 H2
+U 1 1 5E43618B
+P 5635 4075
+F 0 "H2" H 5715 4071 50  0000 L CNN
+F 1 "Conn_01x03" H 5715 4026 50  0001 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 5635 4075 50  0001 C CNN
+F 3 "~" H 5635 4075 50  0001 C CNN
+	1    5635 4075
+	1    0    0    -1  
+$EndComp
+Text GLabel 5970 3975 0    50   Input ~ 0
+U3
+Text GLabel 5970 4075 0    50   Input ~ 0
+V3
+Text GLabel 5970 4175 0    50   Input ~ 0
+W3
+$Comp
+L Connector_Generic:Conn_01x03 H3
+U 1 1 5E4517EC
+P 6170 4075
+F 0 "H3" H 6250 4071 50  0000 L CNN
+F 1 "Conn_01x03" H 6250 4026 50  0001 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 6170 4075 50  0001 C CNN
+F 3 "~" H 6170 4075 50  0001 C CNN
+	1    6170 4075
+	1    0    0    -1  
+$EndComp
+Text GLabel 6485 3975 0    50   Input ~ 0
+U4
+Text GLabel 6485 4075 0    50   Input ~ 0
+V4
+Text GLabel 6485 4175 0    50   Input ~ 0
+W4
+$Comp
+L Connector_Generic:Conn_01x03 H4
+U 1 1 5E46CF1F
+P 6685 4075
+F 0 "H4" H 6765 4071 50  0000 L CNN
+F 1 "Conn_01x03" H 6765 4026 50  0001 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 6685 4075 50  0001 C CNN
+F 3 "~" H 6685 4075 50  0001 C CNN
+	1    6685 4075
+	1    0    0    -1  
+$EndComp
+Connection ~ 7615 5170
+Wire Wire Line
+	7615 5170 7675 5170
+$Comp
+L Connector:Barrel_Jack BJ1
+U 1 1 5E03F070
+P 5260 6750
+F 0 "BJ1" H 5317 7075 50  0000 C CNN
+F 1 "Barrel_Jack" H 5317 6984 50  0000 C CNN
+F 2 "Connector_BarrelJack:BarrelJack_CUI_PJ-063AH_Horizontal" H 5310 6710 50  0001 C CNN
+F 3 "https://www.mouser.com/datasheet/2/670/pj-063ah-1312496.pdf" H 5310 6710 50  0001 C CNN
+F 4 "490-PJ-063AH" H 5260 6750 50  0001 C CNN "P/N"
+F 5 "1" H 5260 6750 50  0001 C CNN "Group#"
+	1    5260 6750
+	1    0    0    1   
+$EndComp
+$Comp
+L Switch:SW_SPDT SW1
+U 1 1 5E042B52
+P 5830 6850
+F 0 "SW1" H 5830 7135 50  0000 C CNN
+F 1 "SW_SPDT" H 5830 7044 50  0000 C CNN
+F 2 "Button_Switch_THT:SW_NKK_BB15AH" H 5830 6850 50  0001 C CNN
+F 3 "https://www.digikey.com/product-detail/en/nkk-switches/BB16AH-FA/360-3705-ND/1057151" H 5830 6850 50  0001 C CNN
+	1    5830 6850
+	1    0    0    1   
+$EndComp
+Wire Wire Line
+	6335 7050 6335 7045
+Connection ~ 6330 6750
+Wire Wire Line
+	5630 6850 5560 6850
+Wire Wire Line
+	6030 6950 6335 6950
+Connection ~ 6335 6950
+Wire Wire Line
+	6335 6950 6380 6950
+$Comp
+L Regulator_Switching:my_buck_boost U5
+U 1 1 5DFB7316
+P 6780 6800
+F 0 "U5" H 6780 7175 50  0000 C CNN
+F 1 "my_buck_boost" H 6780 7084 50  0000 C CNN
+F 2 "Converter_DCDC:my_buck_boost" H 6180 6450 50  0001 L CNN
+F 3 "~" V 6530 7200 50  0001 C CNN
+	1    6780 6800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6330 6750 6080 6750
+Wire Wire Line
+	6080 6750 6080 6650
+Wire Wire Line
+	6080 6650 5560 6650
+Text GLabel 4470 2050 0    50   Input ~ 0
+HS1
+Text GLabel 7915 1950 2    50   Input ~ 0
+HS2
+Text GLabel 4470 2850 0    50   Input ~ 0
+HS4
+Text GLabel 7915 2250 2    50   Input ~ 0
+HS3
+Wire Wire Line
+	4545 2850 4470 2850
+Wire Wire Line
+	4545 2050 4470 2050
+Wire Wire Line
+	6260 5765 6195 5765
+Wire Wire Line
+	6260 5790 6260 5765
+Wire Wire Line
+	6260 5820 6260 5790
+Connection ~ 6260 5790
+$Comp
+L Isolator:my_optical_switch O2
+U 1 1 5E25FB7E
+P 5895 5665
+F 0 "O2" H 5895 5990 50  0000 C CNN
+F 1 "my_optical_switch" H 5895 5899 50  0000 C CNN
+F 2 "Sensor:my_slotted_switch" H 5695 5465 50  0001 L CIN
+F 3 "https://www.mouser.com/datasheet/2/307/en-ee_sx1320-1092605.pdf" H 5895 5665 50  0001 L CNN
+	1    5895 5665
+	1    0    0    -1  
+$EndComp
+$Comp
+L Isolator:my_optical_switch O1
+U 1 1 5E2D3036
+P 4480 5665
+F 0 "O1" H 4480 5990 50  0000 C CNN
+F 1 "my_optical_switch" H 4480 5899 50  0000 C CNN
+F 2 "Sensor:my_slotted_switch" H 4280 5465 50  0001 L CIN
+F 3 "https://www.mouser.com/datasheet/2/307/en-ee_sx1320-1092605.pdf" H 4480 5665 50  0001 L CNN
+	1    4480 5665
+	1    0    0    -1  
+$EndComp
+$Comp
+L Isolator:my_optical_switch O3
+U 1 1 5E30F3A2
+P 7220 5675
+F 0 "O3" H 7220 6000 50  0000 C CNN
+F 1 "my_optical_switch" H 7220 5909 50  0000 C CNN
+F 2 "Sensor:my_slotted_switch" H 7020 5475 50  0001 L CIN
+F 3 "https://www.mouser.com/datasheet/2/307/en-ee_sx1320-1092605.pdf" H 7220 5675 50  0001 L CNN
+	1    7220 5675
+	1    0    0    -1  
+$EndComp
+$Comp
+L Isolator:my_optical_switch O4
+U 1 1 5E34B18F
+P 8565 5670
+F 0 "O4" H 8565 5995 50  0000 C CNN
+F 1 "my_optical_switch" H 8565 5904 50  0000 C CNN
+F 2 "Sensor:my_slotted_switch" H 8365 5470 50  0001 L CIN
+F 3 "https://www.mouser.com/datasheet/2/307/en-ee_sx1320-1092605.pdf" H 8565 5670 50  0001 L CNN
+	1    8565 5670
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7915 1950 7845 1950
+Wire Wire Line
+	7915 2250 7845 2250
+Text GLabel 7775 4045 0    50   Input ~ 0
++3.3v
+Text GLabel 7775 4145 0    50   Input ~ 0
+PIR
+Text GLabel 7775 4245 0    50   Input ~ 0
+GND
+$Comp
+L Connector_Generic:Conn_01x03 PIR1
+U 1 1 5E09835A
+P 7975 4145
+F 0 "PIR1" H 8055 4141 50  0000 L CNN
+F 1 "Conn_01x03" H 8055 4096 50  0001 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical" H 7975 4145 50  0001 C CNN
+F 3 "~" H 7975 4145 50  0001 C CNN
+	1    7975 4145
+	1    0    0    -1  
+$EndComp
+Text GLabel 7920 1750 2    50   Input ~ 0
+PIR
+Wire Wire Line
+	7920 2150 7845 2150
+Wire Wire Line
+	8755 4045 8815 4045
+$Comp
+L Device:R R13
+U 1 1 5E20A472
+P 8920 4065
+F 0 "R13" V 9010 3990 50  0000 L CNN
+F 1 "4.7k" H 8990 4020 50  0001 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 8850 4065 50  0001 C CNN
+F 3 "~" H 8920 4065 50  0001 C CNN
+	1    8920 4065
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R14
+U 1 1 5E20B966
+P 9135 4065
+F 0 "R14" V 9220 3975 50  0000 L CNN
+F 1 "4.7k" H 9205 4020 50  0001 L CNN
+F 2 "Resistor_SMD:R_0805_2012Metric" V 9065 4065 50  0001 C CNN
+F 3 "~" H 9135 4065 50  0001 C CNN
+	1    9135 4065
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8815 3875 8815 3895
+Wire Wire Line
+	9135 3895 8920 3895
+Connection ~ 8815 3895
+Wire Wire Line
+	8815 3895 8815 4045
+Wire Wire Line
+	8920 3915 8920 3895
+Connection ~ 8920 3895
+Wire Wire Line
+	8920 3895 8815 3895
+Wire Wire Line
+	9135 3915 9135 3895
+Wire Wire Line
+	9135 4345 9135 4215
+Wire Wire Line
+	8755 4345 9135 4345
+Wire Wire Line
+	8920 4245 8920 4215
+Wire Wire Line
+	8755 4245 8920 4245
+Wire Wire Line
+	9225 4345 9135 4345
+Connection ~ 9135 4345
+Wire Wire Line
+	9225 4245 8920 4245
+Connection ~ 8920 4245
+Text GLabel 4465 1550 0    50   Input ~ 0
+SDA
+Text GLabel 4465 1450 0    50   Input ~ 0
+SCL
+Wire Wire Line
+	7920 1750 7845 1750
+Wire Wire Line
+	4545 1450 4465 1450
+Wire Wire Line
+	4545 1550 4465 1550
+$EndSCHEMATC
