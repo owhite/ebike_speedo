@@ -1,0 +1,141 @@
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include "Adafruit_LEDBackpack.h"
+
+#define IDLE               0 
+#define CHANGE_BRIGHTNESS  1
+#define CHANGE_MODE        2
+#define TEMP_WARNING       3
+
+int state = TEMP_WARNING;
+
+int inc = 0;
+int maxInc = 3;
+
+//MPH, AMPS, BATTERY, TEMP
+char prefixes[] = {'M', 'A', 'B', 'T'};
+
+const int btnPin = 12;
+
+boolean blinkOn = false;
+uint32_t blinkDelta = 0;
+uint32_t blinkInterval = 700; 
+uint32_t blinkNow;
+
+bool brightnessToggle = true;
+bool buttonState = false;
+bool  lastReading = false;
+bool readingState = false;
+int readingTime = 0; // 0 is no reading; 1 is short; 2 is long;
+unsigned long onTime=0;
+int count = 0;
+
+Adafruit_AlphaNum4 alpha4 = Adafruit_AlphaNum4();
+
+void zipDisplay() { // this is a little blocking
+  alpha4.writeDigitRaw(3, 0x0);
+  alpha4.writeDigitRaw(0, 0xBFFF);
+  alpha4.writeDisplay();
+  delay(100);
+  alpha4.writeDigitRaw(0, 0x0);
+  alpha4.writeDigitRaw(1, 0xBFFF);
+  alpha4.writeDisplay();
+  delay(100);
+  alpha4.writeDigitRaw(1, 0x0);
+  alpha4.writeDigitRaw(2, 0xBFFF);
+  alpha4.writeDisplay();
+  delay(100);
+  alpha4.writeDigitRaw(2, 0x0);
+  alpha4.writeDigitRaw(3, 0xBFFF);
+  alpha4.writeDisplay();
+  delay(100);
+  
+  alpha4.clear();
+  alpha4.writeDisplay();
+}
+
+// right justifies digits
+void displayNum(int n) {
+  String str = String(n); // terrible arduino function
+
+  if (str.length() < 4) {
+    for(int i=0;i < str.length(); i++) {
+      alpha4.writeDigitAscii(i+(4-str.length()), str.charAt(i));
+    }
+  }
+}
+
+void setup() {
+  Serial.begin(9600);
+  
+  pinMode(btnPin, INPUT);
+
+  alpha4.begin(0x70);
+  alpha4.setBrightness(0);
+
+  zipDisplay();  zipDisplay();  zipDisplay();
+
+  alpha4.writeDigitAscii(0, prefixes[inc]);
+  displayNum(pow(12,inc-0));
+  alpha4.writeDisplay();
+}
+
+void loop() {
+  buttonState = digitalRead(btnPin);
+
+  if (buttonState == LOW && lastReading == HIGH) { // quick press, change inc
+    onTime = millis();
+    readingState = true;
+    readingTime = 1;
+  }
+
+  if (buttonState == LOW && lastReading == LOW) { // long press, toggle brightness
+    if ((millis() - onTime) > 500 ) {
+      lastReading = LOW;
+      readingTime = 2;
+      readingState = true;
+    } 
+  }
+
+  if (readingState == true && buttonState == HIGH) {
+    if (readingTime == 1) {
+      Serial.println("short");
+      state = CHANGE_MODE;
+    }
+    if (readingTime == 2) {
+      Serial.println("long");
+      state = CHANGE_BRIGHTNESS;
+    }
+    readingTime = 0;
+    readingState = false;
+  }
+  lastReading = buttonState;
+
+  switch (state) {
+  case IDLE:
+    alpha4.writeDigitAscii(0, prefixes[inc]);
+    displayNum(pow(12,inc));
+    alpha4.writeDisplay();
+    break;
+  case CHANGE_BRIGHTNESS:
+    alpha4.setBrightness(brightnessToggle * 14);
+    brightnessToggle = !brightnessToggle;
+    state = IDLE;
+    break;
+  case CHANGE_MODE:
+    zipDisplay(); 
+    inc++; if (inc > maxInc) { inc = 0; }
+    state = IDLE;
+    break;
+  case TEMP_WARNING:
+    alpha4.writeDigitAscii(0, 'T');
+    alpha4.writeDigitAscii(1, 'E');
+    alpha4.writeDigitAscii(2, 'M');
+    alpha4.writeDigitAscii(3, 'P');
+    alpha4.writeDisplay();
+    break;
+  default:
+    break;
+  }
+}
+
