@@ -1,6 +1,32 @@
+/*
+  STM32F405 code snippet
+  static unsigned short pin_state = 0;
+  while (1) {
+		HAL_Delay(100);
+		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_9, pin_state);
+		pin_state = !pin_state;
+
+		char transmit_buffer[100];
+		int sizebuff;
+		sizebuff = sprintf(transmit_buffer,"{\"amps\":%d, \"volts\":%d}\r\n", rand() %  200, rand() % 200);
+		HAL_UART_Transmit_DMA(&huart3, transmit_buffer, sizebuff);
+
+  }
+*/ 
+
+#include <ArduinoJson.h>
+
+#include "BluetoothSerial.h"
+
+#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
+#error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
+#endif
+
+BluetoothSerial SerialBT;
+
+
 #include <Wire.h>
 #include <Ewma.h>
-#include <VescUart.h>
 #include <Adafruit_GFX.h>
 #include "Adafruit_LEDBackpack.h"
 
@@ -40,7 +66,6 @@ int reading = 0; // Value to be displayed
 
 
 boolean RECEIVE_BITS = false;
-VescUart UART;
 
 boolean blinkOn = false;
 uint32_t blinkDelta = 0;
@@ -68,9 +93,8 @@ Adafruit_AlphaNum4 alpha4 = Adafruit_AlphaNum4();
 void setup() {
   Serial.begin(9600);
   Serial1.begin(19200);
+  SerialBT.begin("ESP32test"); //Bluetooth device name
 
-  UART.setSerialPort(&Serial1);
-  
   pinMode(btnPin, INPUT);
 
   alpha4.begin(0x70);
@@ -87,12 +111,12 @@ void loop() {
 
   RECEIVE_BITS = false;
 
-  if ( UART.getVescValues() ) {
+  if ( 1 ) { // you have stuff. 
     RECEIVE_BITS = true;
-    dataValue[0] = adcFilter0.filter(UART.data.rpm * MPH_scale);
-    dataValue[1] = adcFilter1.filter(UART.data.avgInputCurrent);
-    dataValue[2] = adcFilter2.filter(100 * (UART.data.inpVoltage - MINVOLTAGE) / (MAXVOLTAGE - MINVOLTAGE));
-    dataValue[3] = adcFilter3.filter(UART.data.tempFET);
+    dataValue[0] = adcFilter0.filter(10 * MPH_scale);
+    dataValue[1] = adcFilter1.filter(11);
+    dataValue[2] = adcFilter2.filter(100 * (90 - MINVOLTAGE) / (MAXVOLTAGE - MINVOLTAGE));
+    dataValue[3] = adcFilter3.filter(60);
 
     if (dataValue[3] > MAXTEMP) {
       state = TEMP_WARNING;
@@ -102,6 +126,8 @@ void loop() {
   else {
     // Serial.println("Failed to get data!");
   }
+
+  delay(100);
 
   Serial.println(dataValue[3]);
 
@@ -155,6 +181,8 @@ void loop() {
   case CHANGE_MODE:
     zipDisplay(0xBFFF); 
     inc++; if (inc > maxInc) { inc = 0; }
+    SerialBT.print("new state: ");
+    SerialBT.println(prefixes[inc]);
     state = IDLE;
     break;
   case TEMP_WARNING:
