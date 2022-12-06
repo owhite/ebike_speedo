@@ -1,0 +1,9 @@
+		HAL_GPIO_TogglePin (GPIOC, GPIO_PIN_9);
+		static int a;
+		char transmit_buffer[100];
+		int sizebuff;
+		extern uint16_t enc_obs_angle;
+	// sizebuff = sprintf(transmit_buffer,"%d,%0.2f,%0.2f,%0.2f,%0.2f\n",a,0.005493f*(float)foc_vars.enc_obs_angle,foc_vars.Vdq[1],1000.0f*motor.motor_flux,foc_vars.Idq_smoothed[1]);
+		sizebuff = sprintf(transmit_buffer,"here! \n");
+		HAL_UART_Transmit_DMA(&huart3, transmit_buffer, sizebuff);
+		a++;
