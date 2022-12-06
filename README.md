@@ -4,4 +4,4 @@
 * kicad files for PCB
 * ESP32 code using platformio environment
 * Compatible with [MESC controller](https://github.com/davidmolony/MESC_Firmware)
-<img src="../pics/assembled.png" title="Assembled speedometer">
+<img src="pics/assembled.png" title="Assembled speedometer">
