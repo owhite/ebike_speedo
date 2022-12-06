@@ -1,2 +1,6 @@
-# ebike_speedo
-kicad files and ESP32 code for a electronic speedometer compatible with the [MESC controller](https://github.com/davidmolony/MESC_Firmware)
+# EBIKE SPEEDOMETER
+* 14 segment LED displays
+* BLE with Adafruit HUZZAH32 – ESP32 Feather Board
+* kicad files for PCB
+* ESP32 code using platformio environment
+* Compatible with [MESC controller](https://github.com/davidmolony/MESC_Firmware)
