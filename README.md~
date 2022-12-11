@@ -15,15 +15,6 @@ Regardless of the values or data structure received, the entired data stream is 
 
 ## Programming
 * use the [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html) to progam the microcontroller on the ESC
-* use [platformio](https://platformio.org/) for the ESP32. 
-
-## ESP32 quirks
-There are conflicts between bootstrapping capability and usage of some pins. If you notice your board wont program unless you keep the button depressed, it might be due to this conflict.
-
-This reqiures that you burn the flash voltage selection eFuses change the internal regulator’s output voltage to 3.3 V. This was fixed with: 
-
-```
-$ espefuse.py set_flash_voltage 3.3V --port /dev/cu.usbserial-01562A86
-```
+* use [platformio](https://platformio.org/) for the ESP32. note, for reasons that are unclear, be sure to hold down the pushbutton on A11 pin of the ESP32 feather to initiate programming. This is annoying but simply disconnecting the pushbutton connection didnt work either. 
 
 <img src="pics/assembled.png" title="Assembled speedometer">
