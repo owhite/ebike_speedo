@@ -41,6 +41,9 @@ void setup() {
 
 
 void loop() {
+  delay(100);
+  Serial.println("beep");
+
   if (Serial1.available()) {
     inChar = Serial1.read();
     if (inChar == '\n' && oldChar == '\r') {
