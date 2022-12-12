@@ -1,17 +1,16 @@
 # EBIKE SPEEDOMETER PCB FEATURES
-* Super uninteresting 14 segment LED displays
-* Adafruit HUZZAH32 ESP32 Feather
+* Completely uninteresting 14 segment LED displays
 * Serial data --> board --> BLE to smartphone
 * Compatible with [MESC controller](https://github.com/davidmolony/MESC_Firmware)
 
 <img src="pics/3D_render.png" title="3D speedometer">
 
 ## Operation
-Device connects to an ESC (e.g. the [MP2](https://github.com/badgineer/CCC_ESC) with a [F405 pill](https://github.com/davidmolony/F405_pill)) and receives data via a serial output. Data is in the form of json. Typcial data stream could include:
+Device connects to an ESC (e.g. the [MP2](https://github.com/badgineer/CCC_ESC) with a [F405 pill](https://github.com/davidmolony/F405_pill)) and receives json data via a serial output. Typcial data stream could include:
 ```
 {"amps": 10, "volts": 20, "rpm": 200, "temp": 90}
 ```
-The speedometer is expecting certain tags and ignores others. For amps, volts, rpm and temp, these values as ints will be displayed on the 14 segment LED. RPM will be converted to MPH prior to display. 
+But you can configure the F405 to send other values, but the speedometer is expecting the above tags and ignores others. The speedometer uses these values as ints that will be displayed on the 14 segment LED. RPM will be converted to MPH prior to display. 
 
 Regardless of the values or data structure received, the entired data stream is passed on to a bluetooth device which can be captured on your smartphone using an app like [Serial Bluetooth Terminal](https://play.google.com/store/apps/details?id=de.kai_morich.serial_bluetooth_terminal). 
 
