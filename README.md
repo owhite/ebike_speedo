@@ -21,7 +21,7 @@ Regardless of the values or data structure received, the entired data stream is 
 ## ESP32 quirks
 There are conflicts between bootstrapping capability and usage of some pins. If you notice your board wont program unless you keep the button depressed, it might be due to this conflict.
 
-This reqiures that you burn the flash voltage selection eFuses change the internal regulator’s output voltage to 3.3 V. This was fixed with: 
+This reqiures that you burn the flash voltage selection eFuses change the internal regulator’s output voltage to 3.3 V. This was fixed with using a tool from [espressif](https://docs.espressif.com/projects/esptool/en/latest/esp32s3/espefuse/index.html): 
 
 ```
 $ espefuse.py set_flash_voltage 3.3V --port /dev/cu.usbserial-01562A86
