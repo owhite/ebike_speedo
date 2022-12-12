@@ -7,7 +7,7 @@
 <img src="pics/3D_render.png" title="3D speedometer">
 
 ## Operation
-Device connects to an ESC (e.g. the [MP2](https://github.com/badgineer/CCC_ESC) and receives data via a serial output. Data is in the form of json. Typcial data stream could include:
+Device connects to an ESC (e.g. the [MP2](https://github.com/badgineer/CCC_ESC) with a [green pill](https://github.com/davidmolony/F405_pill)) and receives data via a serial output. Data is in the form of json. Typcial data stream could include:
 ```
 {"amps": 10, "volts": 20, "rpm": 200, "temp": 90}
 ```
