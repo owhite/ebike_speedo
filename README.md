@@ -4,6 +4,8 @@
 * Serial data --> board --> BLE to smartphone
 * Compatible with [MESC controller](https://github.com/davidmolony/MESC_Firmware)
 
+<img src="pics/3D_render.png" title="3D speedometer">
+
 ## Operation
 Device connects to an ESC (e.g. the [MP2](https://github.com/badgineer/CCC_ESC) and receives data via a serial output. Data is in the form of json. Typcial data stream could include:
 ```
@@ -32,4 +34,3 @@ $ espefuse.py set_flash_voltage 3.3V --port /dev/cu.usbserial-01562A86
 * two 10k 0805 resistors
 * [TS14-1212-70-BK-160-SCR-D](https://www.cuidevices.com/product/resource/ts14.pdf) tactile switches
 
-<img src="pics/3D_render.png" title="3D speedometer">
