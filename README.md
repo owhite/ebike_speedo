@@ -35,3 +35,4 @@ be sure to use the appropriate port name.
 * Two 10k 0805 resistors
 * [TS14-1212-70-BK-160-SCR-D](https://www.cuidevices.com/product/resource/ts14.pdf) tactile switches
 
+<img src="pics/exploded.png" title="Separate parts">
