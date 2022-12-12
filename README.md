@@ -9,7 +9,7 @@ Device connects to an ESC (e.g. the [MP2](https://github.com/badgineer/CCC_ESC) 
 ```
 {"amps": 10, "volts": 20, "rpm": 200, "temp": 90}
 ```
-The speeddometer is expecting certain tags and ignores others. For amps, volts, rpm and temp, these values as ints will be displayed on the 14 segment LED. RPM will be converted to MPH prior to display. 
+The speedometer is expecting certain tags and ignores others. For amps, volts, rpm and temp, these values as ints will be displayed on the 14 segment LED. RPM will be converted to MPH prior to display. 
 
 Regardless of the values or data structure received, the entired data stream is passed on to a bluetooth device which can be captured on your smartphone using an app like [Serial Bluetooth Terminal](https://play.google.com/store/apps/details?id=de.kai_morich.serial_bluetooth_terminal). 
 
@@ -25,5 +25,11 @@ This reqiures that you burn the flash voltage selection eFuses change the intern
 ```
 $ espefuse.py set_flash_voltage 3.3V --port /dev/cu.usbserial-01562A86
 ```
+## BOM
+* Adafruit HUZZAH32 – ESP32 Feather Board
+* Adafruit Quad Alphanumeric Display w/ backpack
+* PCB (gerbers are [here](https://github.com/owhite/ebike_speedo/tree/main/V1.1/gerbers))
+* two 10k 0805 resistors
+* [TS14-1212-70-BK-160-SCR-D](https://www.cuidevices.com/product/resource/ts14.pdf) tactile switches
 
 <img src="pics/3D_render.png" title="3D speedometer">
