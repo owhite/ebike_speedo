@@ -7,7 +7,7 @@
 <img src="pics/3D_render.png" title="3D speedometer">
 
 ## Operation
-Device connects to an ESC (e.g. the [MP2](https://github.com/badgineer/CCC_ESC) with a [green pill](https://github.com/davidmolony/F405_pill)) and receives data via a serial output. Data is in the form of json. Typcial data stream could include:
+Device connects to an ESC (e.g. the [MP2](https://github.com/badgineer/CCC_ESC) with a [F405 pill](https://github.com/davidmolony/F405_pill)) and receives data via a serial output. Data is in the form of json. Typcial data stream could include:
 ```
 {"amps": 10, "volts": 20, "rpm": 200, "temp": 90}
 ```
@@ -27,6 +27,8 @@ This reqiures that you burn the flash voltage selection eFuses change the intern
 ```
 $ espefuse.py set_flash_voltage 3.3V --port /dev/cu.usbserial-01562A86
 ```
+be sure to use the appropriate port name. 
+
 ## BOM
 * Adafruit HUZZAH32 – ESP32 Feather Board
 * Adafruit Quad Alphanumeric Display w/ backpack
