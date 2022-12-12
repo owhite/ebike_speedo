@@ -26,4 +26,4 @@ This reqiures that you burn the flash voltage selection eFuses change the intern
 $ espefuse.py set_flash_voltage 3.3V --port /dev/cu.usbserial-01562A86
 ```
 
-<img src="pics/assembled.png" title="Assembled speedometer">
+<img src="pics/3D_render.png" title="3D speedometer">
