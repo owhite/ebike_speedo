@@ -18,7 +18,7 @@ BluetoothSerial SerialBT;
 
 #define BAUDRATE 115200
 
-// filter system
+// filter system, not used at present
 Ewma adcFilter0(0.1);
 Ewma adcFilter1(0.1);
 Ewma adcFilter2(0.1);
@@ -74,7 +74,6 @@ char oldChar;
 char inStr[100] = "";
 char cpStr[100] = "";
 int count = 0;
-int loopCount = 0;
 
 uint16_t amps;
 uint16_t volts;
