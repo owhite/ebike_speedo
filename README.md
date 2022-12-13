@@ -31,10 +31,12 @@ be sure to use the appropriate port name.
 ## Speedometer operation
 * Assemble
 * set the following parameters in ESP32 code:
-- #define POLEPAIRS    5
-- #define CIRCUMFERENCE 78.5
-- where circumference is cm of your back tire
-- code does not deal with gear ratios
+```
+#define POLEPAIRS    5
+#define CIRCUMFERENCE 78.5
+```
+(where circumference is cm of your back tire)
+(code does not deal with gear ratios)
 * Upload code to ESP32 using platformio
 * press top button to change LED display
 * display shows: "M", "A", "V" "T" for MPH, amps, battery voltage, and temperature
