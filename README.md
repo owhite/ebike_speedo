@@ -51,6 +51,7 @@ be sure to use the appropriate port name.
 * PCB (gerbers are [here](https://github.com/owhite/ebike_speedo/tree/main/V1.1/gerbers))
 * Two 10k 0805 resistors
 * [TS14-1212-70-BK-160-SCR-D](https://www.cuidevices.com/product/resource/ts14.pdf) tactile switches
+* 0.1 inch spacing header boards
 * This [housing](https://github.com/owhite/ebike_speedo/blob/main/3D_model/speedo_housing.stl) might be useful
 
 Let's play: how tall is your stack of boards!? 
