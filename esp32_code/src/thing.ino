@@ -267,8 +267,8 @@ void checkButton2() {
   lastReading2 = buttonState2;
 }
 
-// right justifies digits
-//  uses the hideous arduino String() function
+// right justifies digit on to the alpha display
+//  this uses the hideous arduino String() function
 void displayNum(int n) {
   String str = String(n);
   if (str.length() < 4) {

@@ -1,4 +1,4 @@
-# EBIKE SPEEDOMETER PCB FEATURES
+# EBIKE SPEEDOMETER FEATURES
 * Completely uninteresting 14 segment LED displays
 * Serial data --> board --> BLE to smartphone
 * Compatible with [MESC controller](https://github.com/davidmolony/MESC_Firmware)
@@ -27,6 +27,18 @@ This reqiures that you burn the flash voltage selection eFuses change the intern
 $ espefuse.py set_flash_voltage 3.3V --port /dev/cu.usbserial-01562A86
 ```
 be sure to use the appropriate port name. 
+
+## Speedometer operation
+* Assemble
+* set the following parameters in ESP32 code:
+- #define POLEPAIRS    5
+- #define CIRCUMFERENCE 78.5
+- where circumference is cm of your back tire
+- code does not deal with gear ratios
+* Upload code to ESP32 using platformio
+* press top button to change LED display
+* display shows: "M", "A", "V" "T" for MPH, amps, battery voltage, and temperature
+* press lower button to reset the timer data
 
 ## BOM
 * Adafruit Quad Alphanumeric Display w/ backpack
