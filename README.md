@@ -30,7 +30,7 @@ be sure to use the appropriate port name.
 
 ## Speedometer operation
 * Assemble
-* set the following parameters in ESP32 code:
+* Set the following parameters in ESP32 code:
 ```
 #define POLEPAIRS    5
 #define CIRCUMFERENCE 78.5
