@@ -501,6 +501,12 @@
     (uuid fc31149a-2542-4d3b-a77a-704145d1a5fd)
   )
 
+  (text "I2C out put to\nAdafruit Quad Alphanumeric Display w/ backpack"
+    (at 119.126 25.908 0)
+    (effects (font (size 1.27 1.27)) (justify left bottom))
+    (uuid 7462a864-1fb9-4ac4-8677-f09ec07ec015)
+  )
+
   (global_label "Vcc" (shape input) (at 96.52 36.83 270) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right))
     (uuid 0606959b-b676-4700-86d4-c5eb7e1dd62e)
