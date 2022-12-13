@@ -36,11 +36,14 @@ be sure to use the appropriate port name.
 #define CIRCUMFERENCE 78.5
 ```
 (where circumference is cm of your back tire)
+
 (code does not deal with gear ratios)
 * Upload code to ESP32 using platformio
-* press top button to change LED display
-* display shows: "M", "A", "V" "T" for MPH, amps, battery voltage, and temperature
-* press lower button to reset the timer data
+* Press top button to change LED display
+* Display shows: "M", "A", "V" "T" for MPH, amps, battery voltage, and temperature
+* Find "ESP32 Speedometer" on your smartphone
+* Gather data using an app like [Serial Bluetooth Terminal](https://play.google.com/store/apps/details?id=de.kai_morich.serial_bluetooth_terminal)
+* Note on the json data there's a mS value, press lower button to reset to zero
 
 ## BOM
 * Adafruit Quad Alphanumeric Display w/ backpack
