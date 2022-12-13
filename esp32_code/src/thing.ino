@@ -25,6 +25,7 @@ Ewma adcFilter2(0.1);
 Ewma adcFilter3(0.1);
 
 // magic nums for calculation of rpm
+//   calculations do not deal with gear ratios
 #define POLEPAIRS    5
 #define CIRCUMFERENCE 78.5 // much easier to circumerence measure with tape
 #define INCH_IN_MILE 63360

@@ -33,11 +33,8 @@ be sure to use the appropriate port name.
 * Set the following parameters in ESP32 code:
 ```
 #define POLEPAIRS    5
-#define CIRCUMFERENCE 78.5
+#define CIRCUMFERENCE 78.5 // circumference in cm of wheel
 ```
-(where circumference is cm of your back tire)
-
-(code does not deal with gear ratios)
 * Upload code to ESP32 using platformio
 * Press top button to change LED display
 * Display shows: "M", "A", "V" "T" for MPH, amps, battery voltage, and temperature
