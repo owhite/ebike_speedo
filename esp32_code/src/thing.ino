@@ -13,7 +13,8 @@ BluetoothSerial SerialBT;
 #define CHANGE_MODE        2
 #define TEMP_WARNING       3
 
-#define BTN_PIN  12
+#define BTN_PIN1  12
+#define BTN_PIN2  13
 
 #define BAUDRATE 115200
 
@@ -36,11 +37,17 @@ double MPH_scale = (CIRCUMFERENCE * 60) / (POLEPAIRS * INCH_IN_MILE);
 bool brightnessToggle = false;
 
 // button reading timers
-bool buttonState = false;
-bool lastReading = false;
-bool readingState = false;
-int readingTime = 0; // 0 is no reading; 1 is short; 2 is long;
-unsigned long onTime = 0;
+bool buttonState1 = false;
+bool lastReading1 = false;
+bool readingState1 = false;
+int readingTime1 = 0; 
+unsigned long onTime1 = 0;
+
+bool buttonState2 = false;
+bool lastReading2 = false;
+bool readingState2 = false;
+int readingTime2 = 0; 
+unsigned long onTime2 = 0;
 
 int state = IDLE;
 
@@ -55,12 +62,18 @@ char * tags [] = {
 #define maxTags     (sizeof(tags)/sizeof(char *))
 char prefixes[maxTags] = {'M', 'A', 'B', 'T'}; // MPH, AMPS, BATTERY, TEMP
 
+// stuff to manipulate milliseconds
+uint32_t milliStart, milliCurrent, milliDelta;
+boolean milliReset = true;
+
 // serial reading stuff
 boolean RECEIVE_BITS = false;
 char inChar;
 char oldChar;
 char inStr[100] = "";
+char cpStr[100] = "";
 int count = 0;
+int loopCount = 0;
 
 uint16_t amps;
 uint16_t volts;
@@ -70,8 +83,8 @@ void setup() {
   Serial1.begin(BAUDRATE);
   SerialBT.begin("ESP32 Speedometer"); // name seen by BLE receiving device
 
-  pinMode(13, OUTPUT);
-  pinMode(BTN_PIN, INPUT);
+  pinMode(BTN_PIN1, INPUT);
+  pinMode(BTN_PIN2, INPUT);
 
   alphaLED.begin(0x70);
   alphaLED.setBrightness(0);
@@ -87,11 +100,14 @@ void loop() {
 
   RECEIVE_BITS = false;
   checkSerial();
-  checkButtons();
+  checkButton1();
+  checkButton2();
 
   switch (state) {
   case IDLE:
     if (RECEIVE_BITS) {
+
+      strcpy(cpStr, inStr); // need a backup
       StaticJsonDocument<200> doc;
       DeserializationError error = deserializeJson(doc, inStr);
 
@@ -100,16 +116,33 @@ void loop() {
 	Serial.print(F("deserializeJson() failed: "));
 	Serial.println(error.f_str());
 	SerialBT.println("deserializeJson() failed: ");
-	alphaLED.writeDigitAscii(3, ':');
-	alphaLED.writeDigitAscii(2, '-');
-	alphaLED.writeDigitAscii(1, '(');
+	SerialBT.println(error.f_str());
+	SerialBT.println(cpStr);
+	// alert speedo user there's a _JSON error_
+	alphaLED.writeDigitAscii(0, 'J'); 
+	alphaLED.writeDigitAscii(1, 'S');
+	alphaLED.writeDigitAscii(2, 'N');
+	alphaLED.writeDigitAscii(3, 'E');
       }
-      else { 
+      else { // no JSON error
+	if (doc["mS"].isNull() != 1) { // did we get milliseconds? 
+	  milliCurrent = doc["mS"].as<uint32_t>();
+	  // user requested that we zero out the milliseconds
+	  if (milliReset) { milliStart = milliCurrent; }
+	  // stuff it back into the json
+	  doc["mS"] = (milliCurrent - milliStart); 
+	}
+	milliReset = false;
+
+	// serialize and send to the BLE
+	serializeJson(doc, SerialBT);            
+	SerialBT.println();
+
 	alphaLED.writeDigitAscii(0, prefixes[inputInc]);
 	if (doc[tags[inputInc]].isNull() != 1) { 
 	  displayNum( doc[tags[inputInc]].as<int>()); 
 	}
-	else { // the json didnt have one of the words in tags[]
+	else { // one of the words in tags[] was not in json
 	  alphaLED.writeDigitAscii(3, '-');
 	}
       }
@@ -152,7 +185,6 @@ void checkSerial() {
     if (inChar == '\n' && oldChar == '\r') {
       inStr[count - 1] = '\0';
       // Serial.println(inStr);
-      SerialBT.println(inStr);
       Serial.print("thing  ");
       Serial.println(inStr);
 
@@ -171,36 +203,68 @@ void checkSerial() {
   }
 }
 
-void checkButtons() {
-  buttonState = digitalRead(BTN_PIN);
+void checkButton1() {
+  buttonState1 = digitalRead(BTN_PIN1);
 
-  if (buttonState == LOW && lastReading == HIGH) { // quick press, change inputInc
-    onTime = millis();
-    readingState = true;
-    readingTime = 1;
+  if (buttonState1 == LOW && lastReading1 == HIGH) { // quick press, change inputInc
+    onTime1 = millis();
+    readingState1 = true;
+    readingTime1 = 1;
   }
 
-  if (buttonState == LOW && lastReading == LOW) { // long press, toggle brightness
-    if ((millis() - onTime) > 500 ) {
-      lastReading = LOW;
-      readingTime = 2;
-      readingState = true;
+  if (buttonState1 == LOW && lastReading1 == LOW) { // long press, toggle brightness
+    if ((millis() - onTime1) > 500 ) {
+      lastReading1 = LOW;
+      readingTime1 = 2;
+      readingState1 = true;
     } 
   }
 
-  if (readingState == true && buttonState == HIGH) {
-    if (readingTime == 1) {
-      Serial.println("short");
+  if (readingState1 == true && buttonState1 == HIGH) {
+    if (readingTime1 == 1) {
+      Serial.println("short1");
       state = CHANGE_MODE;
     }
-    if (readingTime == 2) {
-      Serial.println("long");
+    if (readingTime1 == 2) {
+      Serial.println("long2");
       state = CHANGE_BRIGHTNESS;
     }
-    readingTime = 0;
-    readingState = false;
+    readingTime1 = 0;
+    readingState1 = false;
   }
-  lastReading = buttonState;
+  lastReading1 = buttonState1;
+}
+
+void checkButton2() {
+  buttonState2 = digitalRead(BTN_PIN2);
+
+  if (buttonState2 == LOW && lastReading2 == HIGH) { // quick press, change inputInc
+    onTime2 = millis();
+    readingState2 = true;
+    readingTime2 = 1;
+  }
+
+  if (buttonState2 == LOW && lastReading2 == LOW) { // long press, toggle brightness
+    if ((millis() - onTime2) > 500 ) {
+      lastReading2 = LOW;
+      readingTime2 = 2;
+      readingState2 = true;
+    } 
+  }
+
+  if (readingState2 == true && buttonState2 == HIGH) {
+    if (readingTime2 == 1) {
+      // user is requesting to reset reported time
+      milliReset = true;
+    }
+    if (readingTime2 == 2) {
+      Serial.println("long2");
+      // nothing happens
+    }
+    readingTime2 = 0;
+    readingState2 = false;
+  }
+  lastReading2 = buttonState2;
 }
 
 // right justifies digits

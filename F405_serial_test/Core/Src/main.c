@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "usb_device.h"
+#include <stdbool.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -75,6 +76,10 @@ static void MX_SPI3_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+uint32_t milliStart;
+uint32_t milliCurrent;
+uint32_t milliDelta;
+bool milliReset = true;
 
 /* USER CODE END 0 */
 
@@ -126,10 +131,18 @@ int main(void)
   {
     /* USER CODE END WHILE */
 	  HAL_GPIO_TogglePin (GPIOC, GPIO_PIN_9);
-	  HAL_Delay (250);
+	  HAL_Delay (120);
 	  char transmit_buffer[100];
 	  int sizebuff;
-	  sizebuff = sprintf(transmit_buffer,"{\"amps\":%d, \"volts\":%d}\r\n", rand() %  200, rand() % 200);
+	  milliCurrent = HAL_GetTick();
+	  if (milliReset) {
+		  // some day it would be cool if the user could reset this
+		  // doesnt work yet
+		  milliStart = milliCurrent;
+	  }
+	  milliReset = false;
+
+	  sizebuff = sprintf(transmit_buffer,"{\"mS\":%lu, \"amps\":%d, \"volts\":%d}\r\n", (milliCurrent - milliStart), rand() %  200, rand() % 200);
 	  HAL_UART_Transmit_DMA(&huart3, transmit_buffer, sizebuff);
     /* USER CODE BEGIN 3 */
   }
