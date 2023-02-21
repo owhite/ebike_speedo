@@ -34,7 +34,7 @@ be sure to use the appropriate port name.
 ```
 #define POLEPAIRS    5
 #define CIRCUMFERENCE 78.5 // circumference in cm of wheel
-#define MAXTEMP 65
+#define MAXTEMP 65 
 // for the range when it provides a percentage
 #define MINVOLTAGE 86.4    // lower bound of voltage
 #define MAXVOLTAGE 104.0   // 24s lipos fully charge
