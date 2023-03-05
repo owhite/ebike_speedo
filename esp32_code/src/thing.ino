@@ -1,7 +1,6 @@
 #include <ArduinoJson.h>
 #include "BluetoothSerial.h"
 #include <Wire.h>
-#include <Ewma.h>
 #include <Adafruit_GFX.h>
 #include "Adafruit_LEDBackpack.h"
 
@@ -9,13 +8,13 @@ Adafruit_AlphaNum4 alphaLED = Adafruit_AlphaNum4();
 BluetoothSerial SerialBT;
 
 #define IDLE                0 
-#define INIT                1 
+#define REQUEST_START       1 
 #define RECEIVED_PACKET     2
 #define CHANGE_BRIGHTNESS   3
 #define CHANGE_MODE         4
 #define TEMP_WARNING        5
-#define RECEIVED_BAD_PACKET 6
-#define PING_SERIAL         7
+#define ERROR_WARNING       6
+#define RECEIVED_BAD_PACKET 7
 #define SET_LOG_VARIABLES   8
 
 #define BTN_PIN1  12
@@ -23,23 +22,15 @@ BluetoothSerial SerialBT;
 
 #define BAUDRATE 115200
 
-boolean JSON_WARNING = false; 
-
-// filter system, not used at present
-Ewma adcFilter0(0.1);
-Ewma adcFilter1(0.1);
-Ewma adcFilter2(0.1);
-Ewma adcFilter3(0.1);
-
 // magic nums for calculation of rpm
 //   calculations do not deal with gear ratios
-#define POLEPAIRS    5
+#define POLEPAIRS    7
 #define CIRCUMFERENCE 78.5 // much easier to circumerence measure with tape
 #define INCH_IN_MILE 63360
 double MPH_scale = (CIRCUMFERENCE * 60) / (POLEPAIRS * INCH_IN_MILE);
 #define MINVOLTAGE 86.4
 #define MAXVOLTAGE 104.0 // 24s lipos
-#define MAXTEMP 65
+#define MAXTEMP 70
 
 // controls if the LED is bright or dim
 bool brightnessToggle = false;
@@ -57,37 +48,33 @@ bool readingState2 = false;
 int readingTime2 = 0; 
 unsigned long onTime2 = 0;
 
-int state = IDLE;
-
 // used to parse input
 int inputInc = 0;
 char * tags [] = {
     (char*) "ehz",
     (char*) "tmp",
     (char*) "vbus",
-    (char*) "tmp"
+    (char*) "MOS_temp"
 };
+
 #define maxTags     (sizeof(tags)/sizeof(char *))
 char prefixes[maxTags] = {'M', 'A', 'B', 'T'}; // MPH, AMPS, BATTERY, TEMP
 
-// stuff to manipulate milliseconds
-uint32_t milliStart, milliCurrent, milliDelta;
-boolean milliReset = true;
-
 // serial reading stuff
-unsigned long timeSinceReceive;
-unsigned long currentTime;
-const unsigned long serialInterval = 600;
+#define STR_LEN 1024
 
 char inChar;
 char inChar2;
 char oldChar;
-char inStr[100] = "";
-char cpStr[100] = "";
+char inStr[STR_LEN] = "";
+char cpStr[STR_LEN] = "";
 int count = 0;
 
-uint16_t amps;
-uint16_t volts;
+unsigned long timeSinceReceive;
+unsigned long currentTime;
+const unsigned long serialInterval = 600;
+
+int state = REQUEST_START;
 
 void setup() {
   Serial.begin(BAUDRATE);
@@ -100,6 +87,7 @@ void setup() {
   alphaLED.begin(0x70);
   alphaLED.setBrightness(0);
 
+  Serial1.write("status stop\r\n");
   delay(1000); 
 }
 
@@ -113,50 +101,58 @@ void loop() {
   case IDLE:
     currentTime = millis();
     if (currentTime - timeSinceReceive >= serialInterval) {
-      zipDisplay(0xBFFF); // this is blocking by 300ms
-      // ping the device
-      Serial1.write("help\r\n");
+      alphaLED.clear();
+      alphaLED.writeDisplay();
     }
-    break;
 
-  case INIT:
-    zipDisplay(0xBFFF); 
-    displayNum(pow(12,inputInc-0));
-    alphaLED.writeDisplay();
     state = IDLE;
     break;
 
+  case REQUEST_START:
+    Serial1.write("status json\r\n");
+    zipDisplay(0xBFFF); 
+    state = IDLE;
+    break;
+    
   case RECEIVED_PACKET:
-    alphaLED.clear();
-    alphaLED.writeDigitAscii(0, prefixes[inputInc]);
     {
-      Serial.print("json  :: ");
-      Serial.print(inStr);
-      Serial.println(":: json");
-
-
+      strcpy(cpStr, inStr);
       StaticJsonDocument<200> doc;
-      DeserializationError error = deserializeJson(doc, inStr);
+      DeserializationError complaint = deserializeJson(doc, inStr);
 
       // two things can happen
-      if (error) { 
-	if (strstr(inStr, "Displays this help") != NULL) {
-	  Serial.print("SERIAL ON  :: ");
-	  Serial.print(inStr);
-	  Serial1.write("status json\r\n"); // request json
-	  delay(100);
-	}
-	else {
-	  // Serial.print("noise  :: ");
-	  // Serial.print(inStr);
-	  // Serial.println(" :: noise");
-	}
+      if (complaint) { 
+	Serial.println("not json");
 	state = IDLE;
 	break;
       }
       else { // or not, but that's fine
+	timeSinceReceive = millis();
+	Serial.println("received json");
+
+	float temp = doc[tags[inputInc]].as<float>();
+	temp = temp - 273.15;
+	if (temp > MAXTEMP) {
+	  Serial.print("temp "); Serial.println(temp);
+	  state = TEMP_WARNING;
+	  break;
+	}
+
+	int e = doc["error"].as<int>();
+	if (e != 0) {
+	  Serial.print("error "); Serial.println(e);
+	  alphaLED.clear();
+	  alphaLED.writeDigitAscii(0, 'E');
+	  displayNum( e );
+	  alphaLED.writeDisplay();
+	  state = IDLE;
+	  break;
+	}
+
 	switch(prefixes[inputInc]) {
-	case 'A': // Serial.println("AMPS!");
+	case 'A': 
+	  alphaLED.clear();
+	  alphaLED.writeDigitAscii(0, prefixes[inputInc]);
 	  if (doc["idq_d"].isNull() != 1 & doc["idq_q"].isNull() != 1) { 
 	    float iDd = doc["idq_d"];
 	    float iDq = doc["idq_q"];
@@ -166,16 +162,34 @@ void loop() {
 	    alphaLED.writeDigitAscii(3, '-');
 	  }
 	  break;
+	case 'T':
+	  {
+	    float temp = doc[tags[inputInc]].as<float>();
+	    temp = temp - 273.15;
+	    alphaLED.clear();
+	    alphaLED.writeDigitAscii(0, prefixes[inputInc]);
+	    if (doc[tags[inputInc]].isNull() != 1) { 
+	      displayNum( int( temp ) ); 
+	    }
+	    else {
+	      alphaLED.writeDigitAscii(3, '-');
+	    }
+	  }
+	  break;
 	case 'M':
-	  if (doc[tags[inputInc]].isNull() != 1) { // requested thing may not have been in json
+	  alphaLED.clear();
+	  alphaLED.writeDigitAscii(0, prefixes[inputInc]);
+	  if (doc[tags[inputInc]].isNull() != 1) { 
 	    float x = doc[tags[inputInc]].as<float>();
-	    displayNum( int( (x * 6.0) / 7) ); 
+	    displayNum( int( x ) ); 
 	  }
 	  else {
 	    alphaLED.writeDigitAscii(3, '-');
 	  }
 	  break;
 	case 'B': // VBat
+	  alphaLED.clear();
+	  alphaLED.writeDigitAscii(0, prefixes[inputInc]);
 	  if (doc[tags[inputInc]].isNull() != 1) { 
 	    displayNum( int( doc[tags[inputInc]].as<float>() ) ); 
 	  }
@@ -184,9 +198,9 @@ void loop() {
 	  }
 	  break;
 	}
+	alphaLED.writeDisplay();
       }
     }
-    alphaLED.writeDisplay();
 
     state = IDLE;
     break;
@@ -201,8 +215,6 @@ void loop() {
     zipDisplay(0xBFFF); 
     Serial.print("new inc: ");
     Serial.println(prefixes[inputInc]);
-    // SerialBT.print("new state: ");
-    // SerialBT.println(prefixes[inputInc]);
     alphaLED.clear();
     alphaLED.writeDigitAscii(0, prefixes[inputInc]);
     alphaLED.writeDisplay();
@@ -211,18 +223,15 @@ void loop() {
     break;
 
   case TEMP_WARNING:
+    alphaLED.clear();
     alphaLED.writeDigitAscii(0, 'T');
     alphaLED.writeDigitAscii(1, 'E');
     alphaLED.writeDigitAscii(2, 'M');
     alphaLED.writeDigitAscii(3, 'P');
     alphaLED.writeDisplay();
-    delay(400);
-    alphaLED.clear();
-    // displayNum( int (dataValue[3]) );
-    alphaLED.writeDisplay();
-    delay(400);
-    alphaLED.clear();
     state = IDLE;
+    break;
+
   default:
     break;
   }
@@ -234,10 +243,12 @@ void checkSerial() {
     inChar = Serial1.read();
     // sometimes non-useful characters come in
     if (inChar == 10 || inChar == 13 || (inChar > 31 && inChar < 127)) {
+      SerialBT.write(inChar);
+      Serial.write(inChar);
       if (inChar == '\n' && oldChar == '\r') {
 	// must have received end of line if we're here
 	inStr[count - 1] = '\0';
-	timeSinceReceive = millis();
+	Serial.println("received packet");
 	state = RECEIVED_PACKET;
 	count = 0;
       }
@@ -249,10 +260,16 @@ void checkSerial() {
     }
   }
 
-  // manually talk to serial if needed
+  // send command from arduino seial
   if (Serial.available()) {
     inChar2 = Serial.read();
     Serial.write(inChar2);
+    Serial1.write(inChar2);
+  }
+
+  // send command from BT serial
+  if (SerialBT.available()) {
+    inChar2 = SerialBT.read();
     Serial1.write(inChar2);
   }
 }
@@ -281,8 +298,8 @@ void checkButton1() {
       state = CHANGE_MODE;
     }
     if (readingTime1 == 2) {
-      Serial.println("long2");
-      state = CHANGE_BRIGHTNESS;
+      state = REQUEST_START;
+      Serial.println("long1");
     }
     readingTime1 = 0;
     readingState1 = false;
@@ -309,13 +326,13 @@ void checkButton2() {
 
   if (readingState2 == true && buttonState2 == HIGH) {
     if (readingTime2 == 1) {
-      Serial.println("short1 low");
+      Serial.println("short2 low");
       inputInc--; if (inputInc < 0) { inputInc = maxTags - 1; }
       state = CHANGE_MODE;
     }
     if (readingTime2 == 2) {
       Serial.println("long2");
-      // nothing happens
+      state = CHANGE_BRIGHTNESS;
     }
     readingTime2 = 0;
     readingState2 = false;

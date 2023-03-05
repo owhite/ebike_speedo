@@ -140,7 +140,6 @@
  /Users/owhite/.platformio/packages/framework-arduinoespressif32/libraries/BluetoothSerial/src/BTAdvertisedDevice.h \
  /Users/owhite/.platformio/packages/framework-arduinoespressif32/libraries/Wire/src/Wire.h \
  /Users/owhite/.platformio/packages/framework-arduinoespressif32/cores/esp32/esp32-hal.h \
- .pio/libdeps/featheresp32/EWMA/Ewma.h \
  .pio/libdeps/featheresp32/Adafruit\ GFX\ Library/Adafruit_GFX.h \
  .pio/libdeps/featheresp32/Adafruit\ GFX\ Library/gfxfont.h \
  .pio/libdeps/featheresp32/Adafruit\ BusIO/Adafruit_I2CDevice.h \
