@@ -103,6 +103,7 @@ void loop() {
     if (currentTime - timeSinceReceive >= serialInterval) {
       alphaLED.clear();
       alphaLED.writeDisplay();
+      timeSinceReceive = millis();
     }
 
     state = IDLE;
@@ -243,12 +244,12 @@ void checkSerial() {
     inChar = Serial1.read();
     // sometimes non-useful characters come in
     if (inChar == 10 || inChar == 13 || (inChar > 31 && inChar < 127)) {
-      SerialBT.write(inChar);
       Serial.write(inChar);
       if (inChar == '\n' && oldChar == '\r') {
 	// must have received end of line if we're here
 	inStr[count - 1] = '\0';
 	Serial.println("received packet");
+	SerialBT.print(inStr);
 	state = RECEIVED_PACKET;
 	count = 0;
       }
@@ -258,6 +259,28 @@ void checkSerial() {
 	oldChar = inChar;
       }
     }
+  }
+
+  // send command from arduino seial
+  if (Serial.available()) {
+    inChar2 = Serial.read();
+    Serial.write(inChar2);
+    Serial1.write(inChar2);
+  }
+
+  // send command from BT serial
+  if (SerialBT.available()) {
+    inChar2 = SerialBT.read();
+    Serial1.write(inChar2);
+  }
+}
+
+void checkSerial2() {
+  // receives input from the ESC
+  if (Serial1.available()) {
+    inChar = Serial1.read();
+    Serial.write(inChar);
+    SerialBT.write(inChar);
   }
 
   // send command from arduino seial
