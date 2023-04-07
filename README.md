@@ -58,3 +58,4 @@ be sure to use the appropriate port name.
 
 Let's play: how tall is your stack of boards!? 
 <img src="pics/exploded.png" title="Separate parts">
+ 
