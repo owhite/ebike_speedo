@@ -1,21 +1,47 @@
 #include <CAN.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
+// from: MESC_Firmware/MESC_RTOS/Tasks/can_ids.h
+#include <can_ids.h> 
 #include "Adafruit_LEDBackpack.h"
 
 Adafruit_AlphaNum4 alphaLED = Adafruit_AlphaNum4(); 
 
-// #define CAN_ID_SPEED     0x2A00000
-#define CAN_ID_SPEED     0x2A0
 #define CAN_PACKET_SIZE  8
+#define CAN_DEBUG 0
+
+#define CAN_ELEMENTS 3
+uint16_t canSet[] = {CAN_ID_SPEED, CAN_ID_MOTOR_CURRENT, CAN_ID_TEMP_MOT_MOS1};
+uint8_t prefixes[] = {'M', 'A', 'T'}; // maintain the order with above values
+float canValues[CAN_ELEMENTS] = {};
+uint8_t canBuf[8] = {};
+
+
+union {
+  uint8_t b[4];
+  float f;
+} canData;
 
 boolean blinkOn = false;
 uint32_t blinkDelta = 0;
 uint32_t blinkInterval = 100; 
 uint32_t blinkNow;
 
-uint32_t val = 0;
+uint16_t packetId;
 
+int ifInSet(uint16_t i) {
+  for (int x = 0; x < CAN_ELEMENTS; x++)  {
+    if (i == canSet[x]) {
+      return(x);
+      break;
+    }
+  }
+  return( -1 );
+}
+
+uint16_t extract_id(uint32_t ext_id) {
+  return (ext_id >> 16);
+}
 
 void setup() {
   Serial.begin(9600);
@@ -31,6 +57,9 @@ void setup() {
     Serial.println("Starting CAN failed!");
     while (1);
   }
+
+  // register CAN callback
+  CAN.onReceive(onReceive);
 
   alphaLED.begin(0x70);
   alphaLED.setBrightness(0);
@@ -52,37 +81,70 @@ void loop() {
     digitalWrite(LED_BUILTIN, blinkOn);
   }
 
-  int packetSize = CAN.parsePacket();
+  for (int i = 0; i<CAN_ELEMENTS; i++) {
+    Serial.print(char(prefixes[i]));
+    Serial.print(" :: ");
+    Serial.println(canValues[i]);
+  }
+  delay(800);
+}
 
-  if (packetSize == CAN_PACKET_SIZE && (CAN.packetId() >> 16) == CAN_ID_SPEED) {
+void onReceive(int packetSize) {
+  // received a packet
 
-    int n = CAN.packetId();
-    n = n >> 16;
-    displayNum( n ); 
-    alphaLED.writeDisplay();
+  packetId = extract_id(CAN.packetId());
 
-    Serial.print("Received speed: ");
+  if ( CAN_DEBUG ) {
+
+    Serial.print("Received ");
+
     if (CAN.packetExtended()) {
       Serial.print("extended ");
     }
 
     if (CAN.packetRtr()) {
-      Serial.print("RTR "); // contained no data
+      // Remote transmission request, packet contains no data
+      Serial.print("RTR ");
     }
+
+    Serial.print("packet with id 0x");
+    Serial.print(CAN.packetId(), HEX);
 
     if (CAN.packetRtr()) {
       Serial.print(" and requested length ");
       Serial.println(CAN.packetDlc());
     }
     else {
+      Serial.print(" and length ");
+      Serial.println(packetSize);
+
       // only print packet data for non-RTR packets
       while (CAN.available()) {
-        Serial.print((char)CAN.read());
+	Serial.print((char)CAN.read());
       }
       Serial.println();
     }
+    if (CAN.packetExtended()) {
+      Serial.print("EXTENDED");
+    }
+  }
 
-    Serial.println();
+  if (packetSize == CAN_PACKET_SIZE) {
+    int val = ifInSet(packetId); // shitty filter
+    if (val != -1) {
+      // Serial.print("PACKET :: ");
+      // Serial.print(packetId, HEX);
+      // Serial.print(":: ");
+      for (int i = 0; i < packetSize; i++) {
+	canBuf[i] = CAN.read();
+      }
+      canData.b[0]=canBuf[4];
+      canData.b[1]=canBuf[5];
+      canData.b[2]=canBuf[6];
+      canData.b[3]=canBuf[7];
+      canValues[val] = canData.f;
+      // Serial.println(canData.f);
+    }
   }
 }
 
