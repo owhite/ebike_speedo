@@ -1,6 +1,12 @@
 #include <CAN.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include "Adafruit_LEDBackpack.h"
 
-#define CAN_ID_SPEED     0x2A00000
+Adafruit_AlphaNum4 alphaLED = Adafruit_AlphaNum4(); 
+
+// #define CAN_ID_SPEED     0x2A00000
+#define CAN_ID_SPEED     0x2A0
 #define CAN_PACKET_SIZE  8
 
 boolean blinkOn = false;
@@ -26,6 +32,14 @@ void setup() {
     while (1);
   }
 
+  alphaLED.begin(0x70);
+  alphaLED.setBrightness(0);
+  alphaLED.clear();
+  alphaLED.writeDigitAscii(1, 'O');
+  alphaLED.writeDigitAscii(2, 'F');
+  alphaLED.writeDigitAscii(3, 'F');
+  alphaLED.writeDisplay();
+
   delay(1000); 
 }
 
@@ -40,7 +54,13 @@ void loop() {
 
   int packetSize = CAN.parsePacket();
 
-  if (packetSize == CAN_PACKET_SIZE && CAN.packetId() == CAN_ID_SPEED) {
+  if (packetSize == CAN_PACKET_SIZE && (CAN.packetId() >> 16) == CAN_ID_SPEED) {
+
+    int n = CAN.packetId();
+    n = n >> 16;
+    displayNum( n ); 
+    alphaLED.writeDisplay();
+
     Serial.print("Received speed: ");
     if (CAN.packetExtended()) {
       Serial.print("extended ");
@@ -66,3 +86,15 @@ void loop() {
   }
 }
 
+// right justifies digit on to the alpha display
+//  this uses the hideous arduino String() function
+void displayNum(int n) {
+  String str = String(n);
+  if (str.length() < 4) {
+    for(int i=0;i < str.length(); i++) {
+      Serial.print(str.charAt(i));
+      alphaLED.writeDigitAscii(i+(4-str.length()), str.charAt(i));
+    }
+  }
+  Serial.println();
+}
