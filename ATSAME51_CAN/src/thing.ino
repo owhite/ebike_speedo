@@ -254,6 +254,8 @@ void button1Status() {
 
     if( releasedTime1 - pressedTime1 > LONG_PRESS_TIME ) {
       Serial.println("long press");
+      brightnessToggle = !brightnessToggle;
+      alphaLED.setBrightness(brightnessToggle * 14);
       delay(10);
       reportInc = 0;
     }
