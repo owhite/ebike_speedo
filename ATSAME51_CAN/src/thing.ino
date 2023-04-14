@@ -1,21 +1,10 @@
 #include <CAN.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
-// from: MESC_Firmware/MESC_RTOS/Tasks/can_ids.h
-#include <can_ids.h> 
-#include "Adafruit_LEDBackpack.h"
+#include <can_ids.h> // from: MESC_Firmware/MESC_RTOS/Tasks/can_ids.h
+#include <Adafruit_LEDBackpack.h>
 
 Adafruit_AlphaNum4 alphaLED = Adafruit_AlphaNum4(); 
-
-#define IDLE                0 
-#define REQUEST_START       1 
-#define RECEIVED_PACKET     2
-#define CHANGE_BRIGHTNESS   3
-#define CHANGE_MODE         4
-#define TEMP_WARNING        5
-#define ERROR_WARNING       6
-#define RECEIVED_BAD_PACKET 7
-#define KILLSTATE           8
 
 #define BTN_PIN1       12
 #define BTN_PIN2       13
@@ -25,20 +14,19 @@ Adafruit_AlphaNum4 alphaLED = Adafruit_AlphaNum4();
 #define CAN_DEBUG 0
 #define CAN_ELEMENTS 3
 
-// magic nums for calculation of rpm
-//   calculations do not deal with gear ratios
+// bike variables
 #define POLEPAIRS    7
 #define CIRCUMFERENCE 78.5 // much easier to circumerence measure with tape
 #define INCH_IN_MILE 63360
-double MPH_scale = (CIRCUMFERENCE * 60) / (POLEPAIRS * INCH_IN_MILE);
 #define MINVOLTAGE 86.4
 #define MAXVOLTAGE 104.0 // 24s lipos
 #define MAXTEMP 70
+double MPH_scale = (CIRCUMFERENCE * 60) / (POLEPAIRS * INCH_IN_MILE);
 
 unsigned long currentTime;
 
 // CAN variables
-unsigned long canLastTime;
+unsigned long canReceiveTime;
 unsigned long canInterval = 2000;
 boolean receivedPacket = true;
 const unsigned long canlInterval = 600;
@@ -53,46 +41,51 @@ union {
 } canData;
 
 // reporting things
+unsigned long reportLastTime;
+unsigned long reportInterval = 400;
 uint8_t prefixes[] = {'M', 'A', 'T'}; // maintain the order with canSet[]. 'M' is SPEED, etc
+
 uint8_t userRequest = 0; // what the user wants
+uint8_t userRequestMax = 3; 
+
 uint8_t reportInc = 0; // cycles through things to display
 uint8_t reportMax = 4; 
-byte reportList  = B00000001; 
-byte reportCAN   = B00000010; // set when exceeded timeout
-byte reportError = B00000100; // set when CAN says there's an error
-byte reportTemp  = B00001000; // set when over heating
+boolean reportCAN = false;    // set when exceeded timeout
+boolean reportError = true; // set when CAN says there's an error
+boolean reportTemp  = true;  // set when over heating
 
 // blink variables
 boolean blinkOn = false;
 uint32_t lastBlinkTime = 0;
-uint32_t blinkInterval = 300; 
+uint32_t blinkInterval = 100; 
 uint32_t blinkNow;
 
-// controls if the LED is bright or dim
+// control if LED is bright or dim
 bool brightnessToggle = false;
 
 // button reading timers
-bool buttonState1 = false;                                                                                                  
-bool lastReading1 = false;
-bool readingState1 = false;
-int readingTime1 = 0; 
-unsigned long onTime1 = 0;
+const int SHORT_PRESS_TIME = 600;
+const int LONG_PRESS_TIME  = 600;
+int lastState1 = LOW;
+int currentState1;
+unsigned long pressedTime1  = 0;
+unsigned long releasedTime1 = 0;
 
-bool buttonState2 = false;
-bool lastReading2 = false;
-bool readingState2 = false;
-int readingTime2 = 0; 
-unsigned long onTime2 = 0;
+int lastState2 = LOW;
+int currentState2;
+unsigned long pressedTime2  = 0;
+unsigned long releasedTime2 = 0;
 
-int state = REQUEST_START;
 
 void setup() {
   Serial.begin(9600);
 
+  pinMode(BTN_PIN1, INPUT);
+  pinMode(BTN_PIN2, INPUT);
   pinMode(PIN_CAN_STANDBY, OUTPUT);
-  digitalWrite(PIN_CAN_STANDBY, false); // turn off STANDBY
   pinMode(PIN_CAN_BOOSTEN, OUTPUT);
-  digitalWrite(PIN_CAN_BOOSTEN, true); // turn on booster
+  digitalWrite(PIN_CAN_STANDBY, false); // standby off
+  digitalWrite(PIN_CAN_BOOSTEN, true);  // booster on
   
   pinMode(LED_BUILTIN, OUTPUT);
 
@@ -111,7 +104,9 @@ void setup() {
   alphaLED.writeDigitAscii(3, 'F');
   alphaLED.writeDisplay();
 
-  delay(1000); 
+  zipDisplay(0xBFFF); 
+  zipDisplay(0xBFFF); 
+  zipDisplay(0xBFFF); 
 }
 
 void loop() {
@@ -119,44 +114,53 @@ void loop() {
   blinkLED();
   canStatus();
   tempStatus();
-  // button1Status();
+  errorStatus();
+  button1Status();
   // button2Status();
-
-  currentTime = millis();
-  if ((currentTime - reportLastTime) > reportInterval) {  // went over time
-    reportLastTime = currentTime;
-    bumpReportInc();
-  }
 
   switch (reportInc) {
   case 0: // show what the user wants
     alphaLED.clear();
     alphaLED.writeDigitAscii(0, prefixes[userRequest]);
     displayNum( int( canValues[userRequest] ) ); 
+    alphaLED.writeDisplay();
     break;
   case 1: // show CAN status
-    if (0) {
-    }
-    else { // nothing to report so...
-      bumpReportInc();
+    if (reportCAN) {
+      alphaLED.clear();
+      alphaLED.writeDigitAscii(1, 'C');
+      alphaLED.writeDigitAscii(2, 'A');
+      alphaLED.writeDigitAscii(3, 'N');
+      alphaLED.writeDisplay();
+      // Serial.println("no CAN");
     }
     break;
   case 2: // show error status
-    if (0) {
-    }
-    else { // nothing to report so...
-      bumpReportInc();
+    if (reportError) {
+      alphaLED.clear();
+      alphaLED.writeDigitAscii(0, 'E');
+      displayNum( int( canValues[userRequest] ) ); 
+      // displayNum( int( canValues[userRequest] ) ); 
     }
     break;
   case 3: // show temp status
-    if (0) {
-    }
-    else { // nothing to report so...
-      bumpReportInc();
+    if (reportTemp) {
+      alphaLED.clear();
+      alphaLED.writeDigitAscii(0, 'T');
+      alphaLED.writeDigitAscii(1, 'E');
+      alphaLED.writeDigitAscii(2, 'M');
+      alphaLED.writeDigitAscii(3, 'P');
+      alphaLED.writeDisplay();
     }
     break;
   default:
     break;
+  }
+
+  currentTime = millis();
+  if ((currentTime - reportLastTime) > reportInterval) {  // went over time
+    reportLastTime = currentTime;
+    bumpReportInc();
   }
 }
 
@@ -169,25 +173,29 @@ void canStatus() {
   if (receivedPacket) {
     canReceiveTime = millis();
     receivedPacket = false;
+    reportCAN = false;
   }
 
   currentTime = millis();
-  reportList &= (~reportCAN); // clear
-  if ((currentTime - canReceiveTime ) > canInterval) {  // went over time
-    canCurrentTime = canReceiveTime;
-    reportList |= reportCAN; // set 
+  if ((currentTime - canReceiveTime ) > canInterval) {  
+    canReceiveTime = currentTime;
+    reportCAN = true; // went over time
   }
 }
 
 void tempStatus() {
+  reportTemp = false;
 }
 
+void errorStatus() {
+  reportError = false;
+}
 
 void blinkLED() {
   // non-blocking blink
   currentTime= millis();
   if ((currentTime - lastBlinkTime) > blinkInterval) {
-    lastBlinkTime = blinkNow;
+    lastBlinkTime = currentTime;
     blinkOn = !blinkOn;
     digitalWrite(LED_BUILTIN, blinkOn);
   }
@@ -221,12 +229,38 @@ void onReceive(int packetSize) {
 void displayNum(int n) {
   String str = String(n);
   if (str.length() < 4) {
-    for(int i=0;i < str.length(); i++) {
+    for(int i=0;i < int(str.length()); i++) {
       // Serial.print(str.charAt(i));
       alphaLED.writeDigitAscii(i+(4-str.length()), str.charAt(i));
     }
   }
   // Serial.println();
+}
+
+void button1Status() {
+  currentState1 = digitalRead(BTN_PIN1);
+
+  if(lastState1 == HIGH && currentState1 == LOW) // press
+    pressedTime1 = millis();
+  else if(lastState1 == LOW && currentState1 == HIGH) { // release
+    releasedTime1 = millis();
+
+    if( releasedTime1 - pressedTime1 < SHORT_PRESS_TIME ) {
+      userRequest++; if (userRequest > userRequestMax - 1) { userRequest = 0; }
+      Serial.println("short press");
+      delay(10);
+      reportInc = 0; // set to zero
+    }
+
+    if( releasedTime1 - pressedTime1 > LONG_PRESS_TIME ) {
+      Serial.println("long press");
+      delay(10);
+      reportInc = 0;
+    }
+  }
+
+  // save the the last state
+  lastState1 = currentState1;
 }
 
 // the delays make this blocking
