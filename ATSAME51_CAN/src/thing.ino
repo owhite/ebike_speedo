@@ -11,26 +11,25 @@ Adafruit_AlphaNum4 alphaLED = Adafruit_AlphaNum4();
 #define KILLSWITCH_PIN 17
 
 #define CAN_PACKET_SIZE  8
-#define CAN_DEBUG 0
-#define CAN_ELEMENTS 3
+#define CAN_DEBUG        0
+#define CAN_ELEMENTS     3
 
 // bike variables
 #define POLEPAIRS    7
-#define CIRCUMFERENCE 78.5 // much easier to circumerence measure with tape
-#define INCH_IN_MILE 63360
-#define MINVOLTAGE 86.4
-#define MAXVOLTAGE 104.0 // 24s lipos
+#define CIRCUMFERENCE 219.5 // much easier to circumerence measure with tape
+#define GEAR_RATIO 9.82
+#define CM_IN_MILE 160900
+#define MINVOLTAGE 58
+#define MAXVOLTAGE 75 
 #define MAXTEMP 70
-double MPH_scale = (CIRCUMFERENCE * 60) / (POLEPAIRS * INCH_IN_MILE);
-
-unsigned long currentTime;
+double EHZ_scale = (CIRCUMFERENCE * 60 * 60) / (160900 * GEAR_RATIO * POLEPAIRS);
 
 // CAN variables
 unsigned long canReceiveTime;
 unsigned long canInterval = 2000;
 boolean receivedPacket = true;
 const unsigned long canlInterval = 600;
-uint16_t canSet[] = {CAN_ID_SPEED, CAN_ID_MOTOR_CURRENT, CAN_ID_TEMP_MOT_MOS1};
+uint16_t canSet[] = {CAN_ID_SPEED, CAN_ID_MOTOR_CURRENT, CAN_ID_BUS_VOLT_CURR, CAN_ID_TEMP_MOT_MOS1};
 float canValues[CAN_ELEMENTS] = {};
 uint8_t canBuf[8] = {};
 uint16_t packetId;
@@ -41,12 +40,13 @@ union {
 } canData;
 
 // reporting things
+unsigned long currentTime;
 unsigned long reportLastTime;
 unsigned long reportInterval = 400;
-uint8_t prefixes[] = {'M', 'A', 'T'}; // maintain the order with canSet[]. 'M' is SPEED, etc
+uint8_t prefixes[] = {'M', 'A', 'B', 'T'}; // maintain the order with canSet[]. 'M' is SPEED, etc
 
 uint8_t userRequest = 0; // what the user wants
-uint8_t userRequestMax = 3; 
+uint8_t userRequestMax = 4; 
 
 uint8_t reportInc = 0; // cycles through things to display
 uint8_t reportMax = 4; 
@@ -57,7 +57,7 @@ boolean reportTemp  = true;  // set when over heating
 // blink variables
 boolean blinkOn = false;
 uint32_t lastBlinkTime = 0;
-uint32_t blinkInterval = 100; 
+const uint32_t blinkInterval = 100; 
 uint32_t blinkNow;
 
 // control if LED is bright or dim
@@ -67,13 +67,12 @@ bool brightnessToggle = false;
 const int SHORT_PRESS_TIME = 600;
 const int LONG_PRESS_TIME  = 600;
 int lastState1 = LOW;
-int currentState1;
-unsigned long pressedTime1  = 0;
-unsigned long releasedTime1 = 0;
-
 int lastState2 = LOW;
+int currentState1;
 int currentState2;
+unsigned long pressedTime1  = 0;
 unsigned long pressedTime2  = 0;
+unsigned long releasedTime1 = 0;
 unsigned long releasedTime2 = 0;
 
 
@@ -87,8 +86,6 @@ void setup() {
   digitalWrite(PIN_CAN_STANDBY, false); // standby off
   digitalWrite(PIN_CAN_BOOSTEN, true);  // booster on
   
-  pinMode(LED_BUILTIN, OUTPUT);
-
   if (!CAN.begin(500000)) {
     Serial.println("Starting CAN failed!");
     while (1);
@@ -104,6 +101,9 @@ void setup() {
   alphaLED.writeDigitAscii(3, 'F');
   alphaLED.writeDisplay();
 
+  pressedTime1 = millis();
+  pressedTime2 = millis();
+
   zipDisplay(0xBFFF); 
   zipDisplay(0xBFFF); 
   zipDisplay(0xBFFF); 
@@ -113,10 +113,13 @@ void loop() {
 
   blinkLED();
   canStatus();
+  processCANData();
   tempStatus();
   errorStatus();
   button1Status();
-  // button2Status();
+  button2Status();
+
+  Serial.println(EHZ_scale);
 
   switch (reportInc) {
   case 0: // show what the user wants
@@ -162,6 +165,10 @@ void loop() {
     reportLastTime = currentTime;
     bumpReportInc();
   }
+}
+
+void processCANData() {
+  canValues[0] *= EHZ_scale;
 }
 
 void bumpReportInc() {
@@ -247,13 +254,13 @@ void button1Status() {
 
     if( releasedTime1 - pressedTime1 < SHORT_PRESS_TIME ) {
       userRequest++; if (userRequest > userRequestMax - 1) { userRequest = 0; }
-      Serial.println("short press");
+      Serial.println("short press1");
       delay(10);
       reportInc = 0; // set to zero
     }
 
     if( releasedTime1 - pressedTime1 > LONG_PRESS_TIME ) {
-      Serial.println("long press");
+      Serial.println("long press1");
       brightnessToggle = !brightnessToggle;
       alphaLED.setBrightness(brightnessToggle * 14);
       delay(10);
@@ -263,6 +270,34 @@ void button1Status() {
 
   // save the the last state
   lastState1 = currentState1;
+}
+
+void button2Status() {
+  currentState2 = digitalRead(BTN_PIN2);
+
+  if(lastState2 == HIGH && currentState2 == LOW) // press
+    pressedTime2 = millis();
+  else if(lastState2 == LOW && currentState2 == HIGH) { // release
+    releasedTime2 = millis();
+
+    if( releasedTime2 - pressedTime2 < SHORT_PRESS_TIME ) {
+      userRequest++; if (userRequest > userRequestMax - 1) { userRequest = 0; }
+      Serial.println("short press2");
+      delay(10);
+      reportInc = 0; // set to zero
+    }
+
+    if( releasedTime2 - pressedTime2 > LONG_PRESS_TIME ) {
+      Serial.println("long press2");
+      // brightnessToggle = !brightnessToggle;
+      // alphaLED.setBrightness(brightnessToggle * 14);
+      delay(10);
+      reportInc = 0;
+    }
+  }
+
+  // save the the last state
+  lastState2 = currentState2;
 }
 
 // the delays make this blocking
