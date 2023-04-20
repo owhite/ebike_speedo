@@ -12,8 +12,8 @@ Adafruit_AlphaNum4 alphaLED = Adafruit_AlphaNum4();
 
 #define CAN_PACKET_SIZE  8
 #define CAN_DEBUG        0
-#define CAN_ELEMENTS     3
 
+/////////
 // bike variables
 #define POLEPAIRS    7
 #define CIRCUMFERENCE 219.5 // much easier to circumerence measure with tape
@@ -22,47 +22,53 @@ Adafruit_AlphaNum4 alphaLED = Adafruit_AlphaNum4();
 #define MINVOLTAGE 58
 #define MAXVOLTAGE 75 
 #define MAXTEMP 70
-double EHZ_scale = (CIRCUMFERENCE * 60 * 60) / (160900 * GEAR_RATIO * POLEPAIRS);
+float EHZ_scale = (CIRCUMFERENCE * 60 * 60) / (160900 * GEAR_RATIO * POLEPAIRS);
 
+/////////
 // CAN variables
 unsigned long canReceiveTime;
 unsigned long canInterval = 2000;
 boolean receivedPacket = true;
 const unsigned long canlInterval = 600;
-uint16_t canSet[] = {CAN_ID_SPEED, CAN_ID_MOTOR_CURRENT, CAN_ID_BUS_VOLT_CURR, CAN_ID_TEMP_MOT_MOS1};
-float canValues[CAN_ELEMENTS] = {};
+// permitted values
+uint16_t canSet[] = {CAN_ID_SPEED, CAN_ID_BUS_VOLT_CURR, CAN_ID_TEMP_MOT_MOS1};
+const uint8_t canElements = 3;
 uint8_t canBuf[8] = {};
 uint16_t packetId;
 
 union {
   uint8_t b[4];
   float f;
-} canData;
+} canData1;
 
+union {
+  uint8_t b[4];
+  float f;
+} canData2;
+
+/////////
 // reporting things
 unsigned long currentTime;
 unsigned long reportLastTime;
 unsigned long reportInterval = 400;
-uint8_t prefixes[] = {'M', 'A', 'B', 'T'}; // maintain the order with canSet[]. 'M' is SPEED, etc
-
+uint8_t prefixes[] = {'M', 'E', 'B', 'A', 'T'}; // maintain the order with canSet[]. 'M' is SPEED, etc
+const uint8_t userRequestMax = 5; 
+float reportValues[userRequestMax] = {};
 uint8_t userRequest = 0; // what the user wants
-uint8_t userRequestMax = 4; 
-
 uint8_t reportInc = 0; // cycles through things to display
 uint8_t reportMax = 4; 
 boolean reportCAN = false;    // set when exceeded timeout
 boolean reportError = true; // set when CAN says there's an error
 boolean reportTemp  = true;  // set when over heating
 
+///////// NOT USED
 // blink variables
 boolean blinkOn = false;
 uint32_t lastBlinkTime = 0;
 const uint32_t blinkInterval = 100; 
 uint32_t blinkNow;
 
-// control if LED is bright or dim
-bool brightnessToggle = false;
-
+/////////
 // button reading timers
 const int SHORT_PRESS_TIME = 600;
 const int LONG_PRESS_TIME  = 600;
@@ -74,7 +80,8 @@ unsigned long pressedTime1  = 0;
 unsigned long pressedTime2  = 0;
 unsigned long releasedTime1 = 0;
 unsigned long releasedTime2 = 0;
-
+// control if LED is bright or dim
+bool brightnessToggle = true;
 
 void setup() {
   Serial.begin(9600);
@@ -110,22 +117,17 @@ void setup() {
 }
 
 void loop() {
-
-  blinkLED();
   canStatus();
-  processCANData();
   tempStatus();
   errorStatus();
-  button1Status();
+  // button1Status();
   button2Status();
-
-  Serial.println(EHZ_scale);
 
   switch (reportInc) {
   case 0: // show what the user wants
     alphaLED.clear();
     alphaLED.writeDigitAscii(0, prefixes[userRequest]);
-    displayNum( int( canValues[userRequest] ) ); 
+    displayNum( int( reportValues[userRequest] ) ); 
     alphaLED.writeDisplay();
     break;
   case 1: // show CAN status
@@ -142,8 +144,8 @@ void loop() {
     if (reportError) {
       alphaLED.clear();
       alphaLED.writeDigitAscii(0, 'E');
-      displayNum( int( canValues[userRequest] ) ); 
-      // displayNum( int( canValues[userRequest] ) ); 
+      displayNum( int( reportValues[userRequest] ) ); 
+      // displayNum( int( reportValues[userRequest] ) ); 
     }
     break;
   case 3: // show temp status
@@ -165,10 +167,6 @@ void loop() {
     reportLastTime = currentTime;
     bumpReportInc();
   }
-}
-
-void processCANData() {
-  canValues[0] *= EHZ_scale;
 }
 
 void bumpReportInc() {
@@ -215,18 +213,41 @@ void onReceive(int packetSize) {
   if (packetSize == CAN_PACKET_SIZE) {
     int val = ifInSet(packetId); // shitty CAN filter
     if (val != -1) {
+
       // Serial.print("PACKET :: ");
       // Serial.print(packetId, HEX);
-      // Serial.print(":: ");
+      // Serial.print(" :: VAL :: ");
+      // Serial.print(val);
       for (int i = 0; i < packetSize; i++) {
 	canBuf[i] = CAN.read();
       }
-      canData.b[0]=canBuf[4];
-      canData.b[1]=canBuf[5];
-      canData.b[2]=canBuf[6];
-      canData.b[3]=canBuf[7];
-      canValues[val] = canData.f;
-      // Serial.println(canData.f);
+      canData1.b[0]=canBuf[0];
+      canData1.b[1]=canBuf[1];
+      canData1.b[2]=canBuf[2];
+      canData1.b[3]=canBuf[3];
+      canData2.b[0]=canBuf[4];
+      canData2.b[1]=canBuf[5];
+      canData2.b[2]=canBuf[6];
+      canData2.b[3]=canBuf[7];
+
+      switch (packetId) {
+      case CAN_ID_SPEED:
+	reportValues[1] = canData1.f; // hardcoded index into array is kind of stupid
+	reportValues[0] = reportValues[1] * EHZ_scale;
+	break;
+      case CAN_ID_BUS_VOLT_CURR:
+	reportValues[2] = canData1.f;
+	reportValues[3] = canData2.f;
+	break;
+      case CAN_ID_TEMP_MOT_MOS1:
+	reportValues[4] = canData2.f;
+	break;
+      default:
+	break;
+      }
+
+      // Serial.print(" :: ");
+      // Serial.println(reportValues[val]);
     }
   }
 }
@@ -247,8 +268,9 @@ void displayNum(int n) {
 void button1Status() {
   currentState1 = digitalRead(BTN_PIN1);
 
-  if(lastState1 == HIGH && currentState1 == LOW) // press
+  if(lastState1 == HIGH && currentState1 == LOW) {// press
     pressedTime1 = millis();
+  }
   else if(lastState1 == LOW && currentState1 == HIGH) { // release
     releasedTime1 = millis();
 
@@ -289,8 +311,8 @@ void button2Status() {
 
     if( releasedTime2 - pressedTime2 > LONG_PRESS_TIME ) {
       Serial.println("long press2");
-      // brightnessToggle = !brightnessToggle;
-      // alphaLED.setBrightness(brightnessToggle * 14);
+      brightnessToggle = !brightnessToggle;
+      alphaLED.setBrightness(brightnessToggle * 14);
       delay(10);
       reportInc = 0;
     }
@@ -324,7 +346,7 @@ void zipDisplay(int c) {
 }
 
 int ifInSet(uint16_t i) {
-  for (int x = 0; x < CAN_ELEMENTS; x++)  {
+  for (int x = 0; x < canElements; x++)  {
     if (i == canSet[x]) {
       return(x);
       break;
