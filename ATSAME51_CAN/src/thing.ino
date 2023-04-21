@@ -58,8 +58,8 @@ float reportValues[userRequestMax] = {};
 uint8_t userRequest = 0; // what the user wants
 uint8_t reportInc = 0; // cycles through things to display
 uint8_t reportMax = 4; 
-boolean reportCAN = false;    // set when exceeded timeout
-boolean reportError = true; // set when CAN says there's an error
+boolean reportCAN = false;   // set when exceeded timeout
+boolean reportError = true;  // set when CAN says there's an error
 boolean reportTemp  = true;  // set when over heating
 
 ///////// NOT USED
@@ -188,11 +188,11 @@ void canStatus() {
   }
 }
 
-void tempStatus() {
+void tempStatus() { // dunt work
   reportTemp = false;
 }
 
-void errorStatus() {
+void errorStatus() { // dunt work
   reportError = false;
 }
 
