@@ -211,7 +211,7 @@ void onReceive(int packetSize) {
   // received a packet
   packetId = extract_id(CAN.packetId());
   if (packetSize == CAN_PACKET_SIZE) {
-    int val = ifInSet(packetId); // shitty CAN filter
+    int val = ifInSet(packetId); // best way to filter?
     if (val != -1) {
 
       DEBUG_PRINT("PACKET :: ");
