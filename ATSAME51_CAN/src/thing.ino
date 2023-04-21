@@ -3,6 +3,7 @@
 #include <Adafruit_GFX.h>
 #include <can_ids.h> // from: MESC_Firmware/MESC_RTOS/Tasks/can_ids.h
 #include <Adafruit_LEDBackpack.h>
+#include "debug.h"
 
 Adafruit_AlphaNum4 alphaLED = Adafruit_AlphaNum4(); 
 
@@ -94,7 +95,7 @@ void setup() {
   digitalWrite(PIN_CAN_BOOSTEN, true);  // booster on
   
   if (!CAN.begin(500000)) {
-    Serial.println("Starting CAN failed!");
+    DEBUG_PRINTLN("Starting CAN failed!");
     while (1);
   }
 
@@ -137,7 +138,7 @@ void loop() {
       alphaLED.writeDigitAscii(2, 'A');
       alphaLED.writeDigitAscii(3, 'N');
       alphaLED.writeDisplay();
-      // Serial.println("no CAN");
+      // DEBUG_PRINTLN("no CAN");
     }
     break;
   case 2: // show error status
@@ -145,7 +146,6 @@ void loop() {
       alphaLED.clear();
       alphaLED.writeDigitAscii(0, 'E');
       displayNum( int( reportValues[userRequest] ) ); 
-      // displayNum( int( reportValues[userRequest] ) ); 
     }
     break;
   case 3: // show temp status
@@ -214,10 +214,10 @@ void onReceive(int packetSize) {
     int val = ifInSet(packetId); // shitty CAN filter
     if (val != -1) {
 
-      // Serial.print("PACKET :: ");
-      // Serial.print(packetId, HEX);
-      // Serial.print(" :: VAL :: ");
-      // Serial.print(val);
+      DEBUG_PRINT("PACKET :: ");
+      DEBUG_PRINT(packetId);
+      DEBUG_PRINT(" :: VAL :: ");
+      DEBUG_PRINT(val);
       for (int i = 0; i < packetSize; i++) {
 	canBuf[i] = CAN.read();
       }
@@ -246,8 +246,8 @@ void onReceive(int packetSize) {
 	break;
       }
 
-      // Serial.print(" :: ");
-      // Serial.println(reportValues[val]);
+      DEBUG_PRINT(" :: ");
+      DEBUG_PRINTLN(reportValues[val]);
     }
   }
 }
@@ -258,11 +258,10 @@ void displayNum(int n) {
   String str = String(n);
   if (str.length() < 4) {
     for(int i=0;i < int(str.length()); i++) {
-      // Serial.print(str.charAt(i));
+      // DEBUG_PRINTLN(str.charAt(i));
       alphaLED.writeDigitAscii(i+(4-str.length()), str.charAt(i));
     }
   }
-  // Serial.println();
 }
 
 void button1Status() {
@@ -276,13 +275,13 @@ void button1Status() {
 
     if( releasedTime1 - pressedTime1 < SHORT_PRESS_TIME ) {
       userRequest++; if (userRequest > userRequestMax - 1) { userRequest = 0; }
-      Serial.println("short press1");
+      DEBUG_PRINTLN("short press1");
       delay(10);
       reportInc = 0; // set to zero
     }
 
     if( releasedTime1 - pressedTime1 > LONG_PRESS_TIME ) {
-      Serial.println("long press1");
+      DEBUG_PRINTLN("long press1");
       brightnessToggle = !brightnessToggle;
       alphaLED.setBrightness(brightnessToggle * 14);
       delay(10);
@@ -304,13 +303,13 @@ void button2Status() {
 
     if( releasedTime2 - pressedTime2 < SHORT_PRESS_TIME ) {
       userRequest++; if (userRequest > userRequestMax - 1) { userRequest = 0; }
-      Serial.println("short press2");
+      DEBUG_PRINTLN("short press2");
       delay(10);
       reportInc = 0; // set to zero
     }
 
     if( releasedTime2 - pressedTime2 > LONG_PRESS_TIME ) {
-      Serial.println("long press2");
+      DEBUG_PRINTLN("long press2");
       brightnessToggle = !brightnessToggle;
       alphaLED.setBrightness(brightnessToggle * 14);
       delay(10);
