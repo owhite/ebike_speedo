@@ -27,13 +27,12 @@ float EHZ_scale = (CIRCUMFERENCE * 60 * 60) / (160900 * GEAR_RATIO * POLEPAIRS);
 
 /////////
 // CAN variables
+unsigned long myTime1;
+unsigned long myTime2;
+
 unsigned long canReceiveTime;
 unsigned long canInterval = 2000;
-boolean receivedPacket = true;
 const unsigned long canlInterval = 600;
-// permitted values
-uint16_t canSet[] = {CAN_ID_SPEED, CAN_ID_BUS_VOLT_CURR, CAN_ID_TEMP_MOT_MOS1};
-const uint8_t canElements = 3;
 uint8_t canBuf[8] = {};
 uint16_t packetId;
 
@@ -51,16 +50,15 @@ union {
 // reporting things
 unsigned long currentTime;
 unsigned long reportLastTime;
-unsigned long reportInterval = 400;
-uint8_t prefixes[] = {'M', 'E', 'B', 'A', 'T'}; // maintain the order with canSet[]. 'M' is SPEED, etc
+unsigned long reportInterval = 800;
+uint8_t prefixes[] = {'M', 'E', 'B', 'A', 'T'}; 
 const uint8_t userRequestMax = 5; 
+float reportedValue; 
 float reportValues[userRequestMax] = {};
 uint8_t userRequest = 0; // what the user wants
 uint8_t reportInc = 0; // cycles through things to display
-uint8_t reportMax = 4; 
-boolean reportCAN = false;   // set when exceeded timeout
-boolean reportError = true;  // set when CAN says there's an error
-boolean reportTemp  = true;  // set when over heating
+uint8_t lastReportInc = 0; 
+boolean flagList[] = {false, false, false}; // can, error, temp
 
 ///////// NOT USED
 // blink variables
@@ -119,10 +117,25 @@ void setup() {
 
 void loop() {
   canStatus();
-  tempStatus();
   errorStatus();
+  tempStatus();
   // button1Status();
   button2Status();
+
+  currentTime = millis();
+  // periodic check to change display based on errors
+  if ((currentTime - reportLastTime) > reportInterval) {  
+    lastReportInc = reportInc;
+    int i;
+    for(i=lastReportInc+1;i<4;i++) {
+      if (flagList[i-1]) {
+	reportInc = i;
+	break;
+      }
+    }
+    if (i == 4) { reportInc = 0; }
+    reportLastTime = currentTime;
+  }
 
   switch (reportInc) {
   case 0: // show what the user wants
@@ -130,70 +143,49 @@ void loop() {
     alphaLED.writeDigitAscii(0, prefixes[userRequest]);
     displayNum( int( reportValues[userRequest] ) ); 
     alphaLED.writeDisplay();
+    reportedValue = reportValues[userRequest];
     break;
-  case 1: // show CAN status
-    if (reportCAN) {
-      alphaLED.clear();
-      alphaLED.writeDigitAscii(1, 'C');
-      alphaLED.writeDigitAscii(2, 'A');
-      alphaLED.writeDigitAscii(3, 'N');
-      alphaLED.writeDisplay();
-      // DEBUG_PRINTLN("no CAN");
-    }
+  case 1: // show CAN has timed out
+    alphaLED.clear();
+    alphaLED.writeDigitAscii(1, 'C');
+    alphaLED.writeDigitAscii(2, 'A');
+    alphaLED.writeDigitAscii(3, 'N');
+    alphaLED.writeDisplay();
     break;
   case 2: // show error status
-    if (reportError) {
-      alphaLED.clear();
-      alphaLED.writeDigitAscii(0, 'E');
-      displayNum( int( reportValues[userRequest] ) ); 
-    }
+    alphaLED.clear();
+    alphaLED.writeDigitAscii(0, 'E');
+    displayNum( int( reportValues[userRequest] ) ); 
+    alphaLED.writeDisplay();
     break;
   case 3: // show temp status
-    if (reportTemp) {
-      alphaLED.clear();
-      alphaLED.writeDigitAscii(0, 'T');
-      alphaLED.writeDigitAscii(1, 'E');
-      alphaLED.writeDigitAscii(2, 'M');
-      alphaLED.writeDigitAscii(3, 'P');
-      alphaLED.writeDisplay();
-    }
+    alphaLED.clear();
+    alphaLED.writeDigitAscii(0, 'T');
+    alphaLED.writeDigitAscii(1, 'E');
+    alphaLED.writeDigitAscii(2, 'M');
+    alphaLED.writeDigitAscii(3, 'P');
+    alphaLED.writeDisplay();
     break;
   default:
     break;
   }
 
-  currentTime = millis();
-  if ((currentTime - reportLastTime) > reportInterval) {  // went over time
-    reportLastTime = currentTime;
-    bumpReportInc();
-  }
-}
-
-void bumpReportInc() {
-  reportInc++;
-  if (reportInc > reportMax) { reportInc = 0; }
 }
 
 void canStatus() {
-  if (receivedPacket) {
-    canReceiveTime = millis();
-    receivedPacket = false;
-    reportCAN = false;
-  }
-
+  flagList[0] = false;
   currentTime = millis();
   if ((currentTime - canReceiveTime ) > canInterval) {  
-    canReceiveTime = currentTime;
-    reportCAN = true; // went over time
+    flagList[0] = true;
   }
 }
 
-void tempStatus() { // dunt work
-  reportTemp = false;
+void errorStatus() { 
+  flagList[1] = false;
 }
 
-void errorStatus() { // dunt work
-  reportError = false;
+void tempStatus() {
+  flagList[2] = false;
 }
 
 void blinkLED() {
@@ -207,47 +199,45 @@ void blinkLED() {
 }
 
 void onReceive(int packetSize) {
-  receivedPacket = true;
   // received a packet
   packetId = extract_id(CAN.packetId());
   if (packetSize == CAN_PACKET_SIZE) {
-    int val = ifInSet(packetId); // best way to filter?
-    if (val != -1) {
+    for (int i = 0; i < packetSize; i++) {
+      canBuf[i] = CAN.read();
+    }
+    canData1.b[0]=canBuf[0];
+    canData1.b[1]=canBuf[1];
+    canData1.b[2]=canBuf[2];
+    canData1.b[3]=canBuf[3];
+    canData2.b[0]=canBuf[4];
+    canData2.b[1]=canBuf[5];
+    canData2.b[2]=canBuf[6];
+    canData2.b[3]=canBuf[7];
 
-      DEBUG_PRINT("PACKET :: ");
-      DEBUG_PRINT(packetId);
-      DEBUG_PRINT(" :: VAL :: ");
-      DEBUG_PRINT(val);
-      for (int i = 0; i < packetSize; i++) {
-	canBuf[i] = CAN.read();
-      }
-      canData1.b[0]=canBuf[0];
-      canData1.b[1]=canBuf[1];
-      canData1.b[2]=canBuf[2];
-      canData1.b[3]=canBuf[3];
-      canData2.b[0]=canBuf[4];
-      canData2.b[1]=canBuf[5];
-      canData2.b[2]=canBuf[6];
-      canData2.b[3]=canBuf[7];
-
-      switch (packetId) {
-      case CAN_ID_SPEED:
-	reportValues[1] = canData1.f; // hardcoded index into array is kind of stupid
-	reportValues[0] = reportValues[1] * EHZ_scale;
-	break;
-      case CAN_ID_BUS_VOLT_CURR:
-	reportValues[2] = canData1.f;
-	reportValues[3] = canData2.f;
-	break;
-      case CAN_ID_TEMP_MOT_MOS1:
-	reportValues[4] = canData2.f;
-	break;
-      default:
-	break;
-      }
-
-      DEBUG_PRINT(" :: ");
-      DEBUG_PRINTLN(reportValues[val]);
+    // hardcoded index into reportValues is kind of stupid
+    // the idx corresponds items user wants
+    // and map to: prefixes[] = {'M', 'E', 'B', 'A', 'T'}; 
+    switch (packetId) {
+    case CAN_ID_SPEED:
+      // DEBUG_PRINT(" PACKET :: ");
+      // DEBUG_PRINT(packetId);
+      reportValues[1] = canData1.f; 
+      reportValues[0] = reportValues[1] * EHZ_scale;
+      // DEBUG_PRINT(" :: ");
+      // DEBUG_PRINTLN(reportValues[0]);
+      canReceiveTime = millis();
+      break;
+    case CAN_ID_BUS_VOLT_CURR:
+      reportValues[2] = canData1.f;
+      reportValues[3] = canData2.f;
+      canReceiveTime = millis();
+      break;
+    case CAN_ID_TEMP_MOT_MOS1:
+      reportValues[4] = canData2.f;
+      canReceiveTime = millis();
+      break;
+    default:
+      break;
     }
   }
 }
@@ -342,16 +332,6 @@ void zipDisplay(int c) {
   
   alphaLED.clear();
   alphaLED.writeDisplay();
-}
-
-int ifInSet(uint16_t i) {
-  for (int x = 0; x < canElements; x++)  {
-    if (i == canSet[x]) {
-      return(x);
-      break;
-    }
-  }
-  return( -1 );
 }
 
 uint16_t extract_id(uint32_t ext_id) {
