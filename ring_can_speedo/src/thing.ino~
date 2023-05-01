@@ -1,0 +1,17 @@
+boolean blinkOn = false;
+uint32_t blinkDelta = 0;
+uint32_t blinkInterval = 1000; 
+uint32_t blinkNow;
+
+uint32_t val = 0;
+
+void setup() {
+    pinMode(13, OUTPUT); 
+}
+
+void loop() {
+  digitalWrite(13, HIGH);
+  delay(100);
+  digitalWrite(13, LOW);
+  delay(100);
+}
