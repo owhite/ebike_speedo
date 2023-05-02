@@ -1,29 +1,102 @@
+#include <ST7789_t3.h>
+#include <SPI.h>
 #include <Adafruit_NeoPixel.h>
+#include <DigiFont.h>
 
-#define PIXEL_PIN 7 // Digital IO pin connected to the NeoPixels.
-#define PIXEL_COUNT 14 // Number of NeoPixels
+// LCD setup
+#define LCD_SCLK 13  // SCL
+#define LCD_MOSI 11  // SDA
+#define LCD_CS   10  // CS
+#define LCD_DC    9  // D/C
+#define LCD_RST   8  // RST can use any pin
+#define SCR_WD 160
+#define SCR_HT 128
+ST7789_t3 lcd = ST7789_t3(LCD_CS, LCD_DC, LCD_MOSI, LCD_SCLK, LCD_RST);
 
-int BRIGHTVAL = 0; // Variable to store birghness value in 
+// Neopixel setup
+#define PIXELPIN   7 
+#define NUMPIXELS 24 
+#define DELAYVAL 500 
+int BRIGHTVAL = 4; 
+Adafruit_NeoPixel ring(NUMPIXELS, PIXELPIN, NEO_GRB + NEO_KHZ800);
 
-Adafruit_NeoPixel strip(PIXEL_COUNT, PIXEL_PIN, NEO_GRB + NEO_KHZ800);
+// DigiFont setup
+#define RGBto565(r,g,b) ((((r) & 0xF8) << 8) | (((g) & 0xFC) << 3) | ((b) >> 3))
+#define	BLACK   0x0000
+#define	BLUE    0x001F
+#define	RED     0xF800
+#define	GREEN   0x07E0
+#define CYAN    0x07FF
+#define MAGENTA 0xF81F
+#define YELLOW  0xFFE0
+#define WHITE   0xFFFF
 
-boolean oldState = HIGH;
-int mode = 0; // Currently-active animation mode, 0-9
+#define	GREY  RGBto565(128,128,128)
+#define	LGREY RGBto565(160,160,160)
+#define	DGREY RGBto565( 80, 80, 80)
 
-void setup() {
- strip.begin(); // Initialize NeoPixel strip object (REQUIRED)
- strip.show(); // Initialize all pixels to 'off'
+#define	LBLUE RGBto565(100,100,255)
+#define	DBLUE RGBto565(  0,  0,128)
+
+void customLineH(int x0,int x1, int y, int c)    { lcd.drawFastHLine(x0,y,x1-x0+1,c); }
+void customLineV(int x, int y0,int y1, int c)    { lcd.drawFastVLine(x,y0,y1-y0+1,c); } 
+void customRect(int x, int y,int w,int h, int c) { lcd.fillRect(x,y,w,h,c); } 
+DigiFont font(customLineH, customLineV, customRect);
+unsigned long ms;
+
+void setup(void) {
+  Serial.begin(9600);
+  lcd.initR(INITR_BLACKTAB); // for 128x160 display
+  lcd.setRotation(3);
+
+  // lcd.setCursor((SCR_WD / 2) - 40, SCR_HT / 2);
+  // lcd.print("enjoy yourself");
+
+  lcd.fillScreen(BLACK);
+
+  ring.setBrightness(BRIGHTVAL);
+
+  ring.begin();
+  ring.clear();
+  ring.show();
 }
 
 void loop() {
-  colorWipe(strip.Color(255,   0,   0), 50);    // Red
+  // demoBig();
+  int w=SCR_WD/3;
+  font.setColors(RGBto565(230,230,0),RGBto565(180,180,0),RGBto565(40,40,0));
+
+  for(int i=0; i<ring.numPixels(); i++) { // For each pixel in strip...
+    ring.clear();
+    ring.setPixelColor(i, ring.Color(255,   255,   255)); 
+    ring.show(); 
+    delay(100);
+
+    font.setSize1(w-8,SCR_HT-20,10);
+    font.drawDigit2c(i%10,0*w,0);
+  }
 }
 
-void colorWipe(uint32_t color, int wait) {
- for(int i=0; i<strip.numPixels(); i++) { // For each pixel in strip...
- strip.setPixelColor(i, color); // Set pixel's color (in RAM)
- strip.setBrightness(BRIGHTVAL); // Set brightness value between 0-255
- strip.show(); // Update strip to match
- delay(wait); // Pause for a moment
- }
+void demoBig()
+{
+  lcd.fillScreen(BLACK);
+  int i=0;
+  int w=SCR_WD/3;
+  ms=millis();
+  while(millis()-ms<6000) {
+    font.setColors(RGBto565(230,230,0),RGBto565(180,180,0),RGBto565(40,40,0));
+    font.setSize1(w-8,SCR_HT-20,10);
+    font.drawDigit2c(i%10,0*w,0);
+
+    font.setSize1(w-8,SCR_HT-20,12);
+    font.setColors(RGBto565(230,230,0),RGBto565(180,180,0),RGBto565(40,40,0));
+    font.drawDigit2c(i%10,1*w,0);
+
+    font.setSize1(w-8,SCR_HT-20,17);
+    font.setColors(RGBto565(230,230,0),RGBto565(180,180,0),RGBto565(40,40,0));
+    font.drawDigit2c(i%10,2*w,0);
+    delay(100);
+    i++;
+  }
 }
+
