@@ -3,7 +3,7 @@
 #include <Adafruit_NeoPixel.h>
 #include <DigiFont.h>
 #include "bitmaps.h" // converter is here https://www.cemetech.net/sc/
-
+#include "MESCerror.h"
 
 // LCD setup
 #define LCD_SCLK 13  // SCL
@@ -24,8 +24,6 @@ ST7789_t3 lcd = ST7789_t3(LCD_CS, LCD_DC, LCD_MOSI, LCD_SCLK, LCD_RST);
 int BRIGHTVAL = 5; 
 Adafruit_NeoPixel ring(NUMPIXELS, PIXELPIN, NEO_GRB + NEO_KHZ800);
 
-// 43 x 32
-
 // DigiFont setup
 #define RGBto565(r,g,b) ((((r) & 0xF8) << 8) | (((g) & 0xFC) << 3) | ((b) >> 3))
 #define	BLACK   0x0000
@@ -40,7 +38,6 @@ Adafruit_NeoPixel ring(NUMPIXELS, PIXELPIN, NEO_GRB + NEO_KHZ800);
 #define	GREY  RGBto565(128,128,128)
 #define	LGREY RGBto565(160,160,160)
 #define	DGREY RGBto565( 80, 80, 80)
-
 #define	LBLUE RGBto565(100,100,255)
 #define	DBLUE RGBto565(  0,  0,128)
 
@@ -50,22 +47,11 @@ void customRect(int x, int y,int w,int h, int c) { lcd.fillRect(x,y,w,h,c); }
 DigiFont font(customLineH, customLineV, customRect);
 unsigned long ms;
 
-void drawRGBBitmap(int16_t x, int16_t y, const uint16_t bitmap[], int16_t w, int16_t h) {
-  for (int16_t j = 0; j < h; j++, y++) {
-    for (int16_t i = 0; i < w; i++) {
-      lcd.drawPixel(x + i, y, pgm_read_word(&bitmap[j * w + i]));
-    }
-  }
-}
-
 
 void setup(void) {
   Serial.begin(9600);
   lcd.initR(INITR_BLACKTAB); // for 128x160 display
   lcd.setRotation(3);
-
-  // lcd.setCursor((SCR_WD / 2) - 40, SCR_HT / 2);
-  // lcd.print("enjoy yourself");
 
   lcd.fillScreen(BLACK);
 
@@ -78,22 +64,51 @@ void setup(void) {
 
 void loop() {
   // demoBig();
-  int w=SCR_WD/3;
+
+  findErrorString(10);
 
   drawRGBBitmap(0, 0, bitmap, BITMAP_WIDTH, BITMAP_HEIGHT);
 
-  font.setColors(RGBto565(230,230,0),RGBto565(180,180,0),RGBto565(40,40,0));
+  font.setColors(
+		 RGBto565(230,230,230),
+		 RGBto565(180,180,180),
+		 RGBto565(40,40,40));
 
-  for(int i=0; i<ring.numPixels(); i++) { // For each pixel in strip...
+  for(int i=0; i<ring.numPixels(); i++) {
     ring.clear();
-    ring.setPixelColor(i, ring.Color(50,   50,   50)); 
+    ring.setPixelColor(0, ring.Color(50,   50,   50)); 
     ring.show(); 
     delay(100);
 
-    font.setSize1(w-20,SCR_HT/2,10);
-    font.drawDigit2c(i%10,BITMAP_WIDTH,20);
+    int font_width = 20;
+    int font_space = font_width + 20;
+    font.setSize1(font_width, SCR_HT/3, font_width / 2.4);
+    font.drawDigit2c(i%10,10, 30);
+    font.drawDigit2c(i%10,10 + font_space,30);
+    font.drawDigit2c(i%10,10 + (2 * font_space),30);
   }
 }
+
+void drawRGBBitmap(int16_t x, int16_t y, const uint16_t bitmap[], int16_t w, int16_t h) {
+  for (int16_t j = 0; j < h; j++, y++) {
+    for (int16_t i = 0; i < w; i++) {
+      lcd.drawPixel(x + i, y, pgm_read_word(&bitmap[j * w + i]));
+    }
+  }
+}
+
+uint8_t findErrorString(int16_t x) {
+  uint8_t count = 0;
+  for(int i=0;i<32;i++) {
+    if (x & 0x0001) {
+      Serial.println(error_codes[i]);
+      count++;
+    }
+    x = x >> 1;
+  }
+  return(count);
+}
+
 
 void demoBig()
 {
