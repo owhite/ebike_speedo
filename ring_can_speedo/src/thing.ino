@@ -2,6 +2,8 @@
 #include <SPI.h>
 #include <Adafruit_NeoPixel.h>
 #include <DigiFont.h>
+#include "bitmaps.h" // converter is here https://www.cemetech.net/sc/
+
 
 // LCD setup
 #define LCD_SCLK 13  // SCL
@@ -11,14 +13,18 @@
 #define LCD_RST   8  // RST can use any pin
 #define SCR_WD 160
 #define SCR_HT 128
+#define pgm_read_word(addr) (*(const unsigned short *)(addr))
+
 ST7789_t3 lcd = ST7789_t3(LCD_CS, LCD_DC, LCD_MOSI, LCD_SCLK, LCD_RST);
 
 // Neopixel setup
 #define PIXELPIN   7 
 #define NUMPIXELS 24 
 #define DELAYVAL 500 
-int BRIGHTVAL = 4; 
+int BRIGHTVAL = 5; 
 Adafruit_NeoPixel ring(NUMPIXELS, PIXELPIN, NEO_GRB + NEO_KHZ800);
+
+// 43 x 32
 
 // DigiFont setup
 #define RGBto565(r,g,b) ((((r) & 0xF8) << 8) | (((g) & 0xFC) << 3) | ((b) >> 3))
@@ -44,6 +50,15 @@ void customRect(int x, int y,int w,int h, int c) { lcd.fillRect(x,y,w,h,c); }
 DigiFont font(customLineH, customLineV, customRect);
 unsigned long ms;
 
+void drawRGBBitmap(int16_t x, int16_t y, const uint16_t bitmap[], int16_t w, int16_t h) {
+  for (int16_t j = 0; j < h; j++, y++) {
+    for (int16_t i = 0; i < w; i++) {
+      lcd.drawPixel(x + i, y, pgm_read_word(&bitmap[j * w + i]));
+    }
+  }
+}
+
+
 void setup(void) {
   Serial.begin(9600);
   lcd.initR(INITR_BLACKTAB); // for 128x160 display
@@ -64,16 +79,19 @@ void setup(void) {
 void loop() {
   // demoBig();
   int w=SCR_WD/3;
+
+  drawRGBBitmap(0, 0, bitmap, BITMAP_WIDTH, BITMAP_HEIGHT);
+
   font.setColors(RGBto565(230,230,0),RGBto565(180,180,0),RGBto565(40,40,0));
 
   for(int i=0; i<ring.numPixels(); i++) { // For each pixel in strip...
     ring.clear();
-    ring.setPixelColor(i, ring.Color(255,   255,   255)); 
+    ring.setPixelColor(i, ring.Color(50,   50,   50)); 
     ring.show(); 
     delay(100);
 
-    font.setSize1(w-8,SCR_HT-20,10);
-    font.drawDigit2c(i%10,0*w,0);
+    font.setSize1(w-20,SCR_HT/2,10);
+    font.drawDigit2c(i%10,BITMAP_WIDTH,20);
   }
 }
 
