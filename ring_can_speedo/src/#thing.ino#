@@ -67,8 +67,6 @@ void setup(void) {
 }
 
 void loop() {
-  // demoBig();
-
   findErrorString(10);
 
   drawRGBBitmap(0, 0, bitmap, BITMAP_WIDTH, BITMAP_HEIGHT);
@@ -142,29 +140,5 @@ uint8_t findErrorString(int16_t x) {
     x = x >> 1;
   }
   return(count);
-}
-
-
-void demoBig()
-{
-  lcd.fillScreen(BLACK);
-  int i=0;
-  int w=SCR_WD/3;
-  ms=millis();
-  while(millis()-ms<6000) {
-    font.setColors(RGBto565(230,230,0),RGBto565(180,180,0),RGBto565(40,40,0));
-    font.setSize1(w-8,SCR_HT-20,10);
-    font.drawDigit2c(i%10,0*w,0);
-
-    font.setSize1(w-8,SCR_HT-20,12);
-    font.setColors(RGBto565(230,230,0),RGBto565(180,180,0),RGBto565(40,40,0));
-    font.drawDigit2c(i%10,1*w,0);
-
-    font.setSize1(w-8,SCR_HT-20,17);
-    font.setColors(RGBto565(230,230,0),RGBto565(180,180,0),RGBto565(40,40,0));
-    font.drawDigit2c(i%10,2*w,0);
-    delay(100);
-    i++;
-  }
 }
 
