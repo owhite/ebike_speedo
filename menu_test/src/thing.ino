@@ -48,145 +48,174 @@ void customLineV(int x, int y0,int y1, int c)    { lcd.drawFastVLine(x,y0,y1-y0+
 void customRect(int x, int y,int w,int h, int c) { lcd.fillRect(x,y,w,h,c); } 
 DigiFont font(customLineH, customLineV, customRect);
 
+#define INIT_MENU    0
+#define SHOW_MENU    1
+#define SANCTUARY    2
+#define IDLE         3
+
+int state = IDLE;
+
+// Menu setup
 class MyRenderer : public MenuComponentRenderer {
-public:
-    void render(Menu const& menu) const {
-      Serial.print("\nCurrent menu name: ");
-      Serial.println(menu.get_name());
-      lcd.fillScreen(BLACK);
-        for (int i = 0; i < menu.get_num_components(); ++i) {
-            MenuComponent const* cp_m_comp = menu.get_menu_component(i);
-            cp_m_comp->render(*this);
-	    Serial.print(cp_m_comp->get_name());
-	    lcd.setCursor(0, (i+1) * PCD8544_CHAR_HEIGHT);
-	    lcd.print(cp_m_comp->get_name());
-            if (cp_m_comp->is_current()) {
-	      lcd.print(" X ");
-	      Serial.print("<<< ");
-	    }
-            Serial.println("");
-        }
+ public:
+  void render(Menu const& menu) const {
+    Serial.print("\nCurrent menu name: ");
+    Serial.println(menu.get_name());
+    lcd.fillScreen(BLACK);
+    for (int i = 0; i < menu.get_num_components(); ++i) {
+      MenuComponent const* cp_m_comp = menu.get_menu_component(i);
+      cp_m_comp->render(*this);
+      Serial.print(cp_m_comp->get_name());
+      lcd.setCursor(0, (i+1) * PCD8544_CHAR_HEIGHT);
+      lcd.print(cp_m_comp->get_name());
+      if (cp_m_comp->is_current()) {
+	lcd.print(" X ");
+	Serial.print("<<< ");
+      }
+      Serial.println();
     }
+  }
 
-    // did testing on these, really not sure what they do. 
-    void render_menu_item(MenuItem const& menu_item) const {
-      // lcd.setCursor(120, 1 * PCD8544_CHAR_HEIGHT);
-      // lcd.print("1");
-    }
+  // did testing on these, really not sure what they do. 
+  void render_menu_item(MenuItem const& menu_item) const {
+  }
 
-    void render_back_menu_item(BackMenuItem const& menu_item) const {
-      // lcd.setCursor(120, 2 * PCD8544_CHAR_HEIGHT);
-      // lcd.print("2");
-    }
+  void render_back_menu_item(BackMenuItem const& menu_item) const {
+  }
 
-    void render_numeric_menu_item(NumericMenuItem const& menu_item) const {
-      // lcd.setCursor(120, 3 * PCD8544_CHAR_HEIGHT);
-      // lcd.print("3");
-    }
+  void render_numeric_menu_item(NumericMenuItem const& menu_item) const {
+  }
 
-    void render_menu(Menu const& menu) const {
-      // lcd.setCursor(120, 4 * PCD8544_CHAR_HEIGHT);
-      // lcd.print("4");
-    }
+  void render_menu(Menu const& menu) const {
+  }
 };
 MyRenderer my_renderer;
 
-// Menu callback function
-
+// Menu callbacks
 void on_item1_selected(MenuComponent* p_menu_component) {
-    lcd.setCursor(0, 6 * PCD8544_CHAR_HEIGHT);
-    Serial.println("Item1 Selectd");
-    lcd.print("Item1 Selectd");
-    delay(1500); // so we can look the result on the LCD
+  lcd.setCursor(0, 6 * PCD8544_CHAR_HEIGHT);
+  Serial.println("Item1 Selectd");
+  lcd.print("Item1 Selectd");
+  delay(1500); // so we can look the result on the LCD
 }
 
 void on_item2_selected(MenuComponent* p_menu_component) {
-    lcd.setCursor(0, 6 * PCD8544_CHAR_HEIGHT);
-    lcd.print("Item2 Selectd");
-    Serial.println("Item2 Selectd");
-    delay(1500); // so we can look the result on the LCD
+  lcd.setCursor(0, 6 * PCD8544_CHAR_HEIGHT);
+  lcd.print("Item2 Selectd");
+  Serial.println("Item2 Selectd");
+  delay(1500); // so we can look the result on the LCD
 }
 
 void on_item3_selected(MenuComponent* p_menu_component) {
-    lcd.setCursor(0, 6 * PCD8544_CHAR_HEIGHT);
-    lcd.print("Item3 Selectd");
-    Serial.println("Item3 Selectd");
-    delay(1500); // so we can look the result on the LCD
+  lcd.setCursor(0, 6 * PCD8544_CHAR_HEIGHT);
+  lcd.print("Item3 Selected, IDLING");
+  Serial.println("Item3 Selected");
+
+  state = SANCTUARY;
+
+  delay(500); 
 }
 
 
 // Menu variables
-
 MenuSystem ms(my_renderer);
-MenuItem mm_mi1("Lvl1-Item1(I)", &on_item1_selected);
-MenuItem mm_mi2("Lvl1-Item2(I)", &on_item2_selected);
-Menu mu1("Lvl1-Item3(M)");
-MenuItem mu1_mi1("Lvl2-Item1(I)", &on_item3_selected);
+MenuItem   mm_mi1 ("Lvl1-Item1(I)", &on_item1_selected);
+MenuItem   mm_mi2 ("Lvl1-Item2(I)", &on_item2_selected);
+Menu       mu1    ("Lvl1-Item3(M)");
+MenuItem   mu1_mi1("Lvl2-Item1(I)", &on_item3_selected);
 
 void serial_print_help() {
-    Serial.println("***************");
-    Serial.println("w: go to previus item (up)");
-    Serial.println("s: go to next item (down)");
-    Serial.println("a: go back (right)");
-    Serial.println("d: select \"selected\" item");
-    Serial.println("?: print this help");
-    Serial.println("h: print this help");
-    Serial.println("***************");
+  Serial.println("***************");
+  Serial.println("w: go to previus item (up)");
+  Serial.println("s: go to next item (down)");
+  Serial.println("a: go back (right)");
+  Serial.println("d: select \"selected\" item");
+  Serial.println("?: print this help");
+  Serial.println("h: print this help");
+  Serial.println("***************");
 }
 
 void serial_handler() {
-    char inChar;
-    if((inChar = Serial.read())>0) {
-        switch (inChar) {
-            case 'w': // Previus item
-                ms.prev();
-                ms.display();
-                break;
-            case 's': // Next item
-                ms.next();
-                ms.display();
-                break;
-            case 'a': // Back pressed
-                ms.back();
-                ms.display();
-                break;
-            case 'd': // Select pressed
-                ms.select();
-                ms.display();
-                break;
-            case '?':
-            case 'h': // Display help
-                serial_print_help();
-                break;
-            default:
-                break;
-        }
+  char inChar;
+  if((inChar = Serial.read())>0) {
+    switch (inChar) {
+    case 'w': // Previus item
+      state = INIT_MENU;
+      ms.prev();
+      break;
+    case 's': // Next item
+      state = INIT_MENU;
+      ms.next();
+      break;
+    case 'a': // Back pressed
+      state = INIT_MENU;
+      ms.back();
+      break;
+    case 'd': // Select pressed
+      state = INIT_MENU;
+      ms.select();
+      break;
+    case '?':
+    case 'h': // Display help
+      serial_print_help();
+      break;
+    default:
+      break;
     }
+  }
 }
 
 // Standard arduino functions
 
 void setup() {
-    Serial.begin(9600);
+  Serial.begin(9600);
+  lcd.initR(INITR_BLACKTAB); // for 128x160 display
+  lcd.setRotation(3);
+  lcd.fillScreen(BLACK);
+  lcd.setTextSize(1);
 
-    Serial.begin(9600);
-    lcd.initR(INITR_BLACKTAB); // for 128x160 display
-    lcd.setRotation(3);
+  serial_print_help();
 
-    lcd.fillScreen(BLACK);
+  ms.get_root_menu().add_item(&mm_mi1);
+  ms.get_root_menu().add_item(&mm_mi2);
+  ms.get_root_menu().add_menu(&mu1);
+  mu1.add_item(&mu1_mi1);
+  ms.display();
+}
 
-    lcd.setTextSize(1);
+void loop2() {
+  serial_handler();
 
-    serial_print_help();
+  lcd.fillScreen(BLACK);
+  lcd.setCursor(50, 50);
+  lcd.print("sanctuary");
 
-    ms.get_root_menu().add_item(&mm_mi1);
-    ms.get_root_menu().add_item(&mm_mi2);
-    ms.get_root_menu().add_menu(&mu1);
-    mu1.add_item(&mu1_mi1);
-    ms.display();
+  delay(1000);
+  ms.display();
+  delay(1000);
+  
 }
 
 void loop() {
-    serial_handler();
+  serial_handler();
+
+  switch (state) {
+  case INIT_MENU:
+    ms.display();
+    state = SHOW_MENU;
+    break;
+  case SHOW_MENU:
+    break;
+  case SANCTUARY:
+    lcd.fillScreen(BLACK);
+    lcd.setCursor(50, 50);
+    lcd.print("sanctuary");
+    state = IDLE;
+    break;
+  case IDLE:
+    break;
+  default:
+    break;
+  }
 }
 
