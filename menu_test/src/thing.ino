@@ -15,7 +15,7 @@
 #define SCR_HT 128
 #define pgm_read_word(addr) (*(const unsigned short *)(addr))
 
-#define PCD8544_CHAR_HEIGHT 8
+#define PCD8544_CHAR_HEIGHT 16
 
 ST7789_t3 lcd = ST7789_t3(LCD_CS, LCD_DC, LCD_MOSI, LCD_SCLK, LCD_RST);
 
@@ -92,7 +92,7 @@ class MyRenderer : public MenuComponentRenderer {
 MyRenderer my_renderer;
 
 // Menu callbacks
-void on_item1_selected(MenuComponent* p_menu_component) {
+void on_item1_selected(MenuComponent* p_menu_component, int* thing) {
   lcd.setCursor(0, 6 * PCD8544_CHAR_HEIGHT);
   Serial.println("Item1 Selectd");
   lcd.print("Item1 Selectd");
@@ -108,7 +108,7 @@ void on_item2_selected(MenuComponent* p_menu_component) {
 
 void on_item3_selected(MenuComponent* p_menu_component) {
   lcd.setCursor(0, 6 * PCD8544_CHAR_HEIGHT);
-  lcd.print("Item3 Selected, IDLING");
+  lcd.print("3 Selected, IDLING");
   Serial.println("Item3 Selected");
 
   state = SANCTUARY;
@@ -119,10 +119,72 @@ void on_item3_selected(MenuComponent* p_menu_component) {
 
 // Menu variables
 MenuSystem ms(my_renderer);
-MenuItem   mm_mi1 ("Lvl1-Item1(I)", &on_item1_selected);
-MenuItem   mm_mi2 ("Lvl1-Item2(I)", &on_item2_selected);
-Menu       mu1    ("Lvl1-Item3(M)");
-MenuItem   mu1_mi1("Lvl2-Item1(I)", &on_item3_selected);
+Menu       mu1    ("Item1");
+Menu       mu2    ("Item2");
+Menu       mu3    ("Item3");
+
+MenuItem   mu1_mi1("Next1.1(I)", &on_item1_selected);
+MenuItem   mu1_mi2("Next1.2(I)", &on_item2_selected);
+MenuItem   mu1_mi3("Next1.3(I)", &on_item2_selected);
+
+MenuItem   mu2_mi1("Next2.1(I)", &on_item2_selected);
+MenuItem   mu2_mi2("Next2.2(I)", &on_item2_selected);
+MenuItem   mu2_mi3("Next2.3(I)", &on_item2_selected);
+
+MenuItem   mu3_mi1("Next3.1(I)", &on_item3_selected);
+MenuItem   mu3_mi2("Next3.2(I)", &on_item3_selected);
+MenuItem   mu3_mi3("Next3.3(I)", &on_item3_selected);
+
+
+void setup() {
+  Serial.begin(9600);
+  lcd.initR(INITR_BLACKTAB); // for 128x160 display
+  lcd.setRotation(3);
+  lcd.fillScreen(BLACK);
+  lcd.setTextSize(2);
+
+  serial_print_help();
+
+  ms.get_root_menu().add_menu(&mu1);
+  mu1.add_item(&mu1_mi1);
+  mu1.add_item(&mu1_mi2);
+  mu1.add_item(&mu1_mi3);
+
+  ms.get_root_menu().add_menu(&mu2);
+  mu2.add_item(&mu2_mi1);
+  mu2.add_item(&mu2_mi2);
+  mu2.add_item(&mu2_mi3);
+
+  ms.get_root_menu().add_menu(&mu3);
+  mu3.add_item(&mu3_mi1);
+  mu3.add_item(&mu3_mi2);
+  mu3.add_item(&mu3_mi3);
+
+  ms.display();
+}
+
+void loop() {
+  serial_handler();
+
+  switch (state) {
+  case INIT_MENU:
+    ms.display();
+    state = SHOW_MENU;
+    break;
+  case SHOW_MENU:
+    break;
+  case SANCTUARY:
+    lcd.fillScreen(BLACK);
+    lcd.setCursor(0, 10);
+    lcd.print("sanctuary");
+    state = IDLE;
+    break;
+  case IDLE:
+    break;
+  default:
+    break;
+  }
+}
 
 void serial_print_help() {
   Serial.println("***************");
@@ -164,58 +226,3 @@ void serial_handler() {
     }
   }
 }
-
-// Standard arduino functions
-
-void setup() {
-  Serial.begin(9600);
-  lcd.initR(INITR_BLACKTAB); // for 128x160 display
-  lcd.setRotation(3);
-  lcd.fillScreen(BLACK);
-  lcd.setTextSize(1);
-
-  serial_print_help();
-
-  ms.get_root_menu().add_item(&mm_mi1);
-  ms.get_root_menu().add_item(&mm_mi2);
-  ms.get_root_menu().add_menu(&mu1);
-  mu1.add_item(&mu1_mi1);
-  ms.display();
-}
-
-void loop2() {
-  serial_handler();
-
-  lcd.fillScreen(BLACK);
-  lcd.setCursor(50, 50);
-  lcd.print("sanctuary");
-
-  delay(1000);
-  ms.display();
-  delay(1000);
-  
-}
-
-void loop() {
-  serial_handler();
-
-  switch (state) {
-  case INIT_MENU:
-    ms.display();
-    state = SHOW_MENU;
-    break;
-  case SHOW_MENU:
-    break;
-  case SANCTUARY:
-    lcd.fillScreen(BLACK);
-    lcd.setCursor(50, 50);
-    lcd.print("sanctuary");
-    state = IDLE;
-    break;
-  case IDLE:
-    break;
-  default:
-    break;
-  }
-}
-
