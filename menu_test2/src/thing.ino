@@ -1,9 +1,11 @@
 #include <MenuSystem.h>
+#include "menu_handling.h"
 #include <ST7789_t3.h>
 #include <SPI.h>
 #include <DigiFont.h>
 #include "bitmaps.h" // converter is here https://www.cemetech.net/sc/
 #include "MESCerror.h"
+#include "states.h"
 
 // LCD setup
 #define LCD_SCLK 13  // SCL
@@ -48,51 +50,11 @@ void customLineV(int x, int y0,int y1, int c)    { lcd.drawFastVLine(x,y0,y1-y0+
 void customRect(int x, int y,int w,int h, int c) { lcd.fillRect(x,y,w,h,c); } 
 DigiFont font(customLineH, customLineV, customRect);
 
-#define INIT_MENU        0
-#define SHOW_MENU        1
-#define DISPLAY_VOLTS    2
-#define DISPLAY_AMPS     3
-#define DISPLAY_EHZ      4
-#define DISPLAY_MPH      5
-#define DISPLAY_TEMP     6
-#define IDLE             7
-
 int state = IDLE;
 // Menu setup
-class MyRenderer : public MenuComponentRenderer {
- public:
-  void render(Menu const& menu) const {
-    Serial.print("\nCurrent menu name: ");
-    Serial.println(menu.get_name());
-    lcd.fillScreen(BLACK);
-    for (int i = 0; i < menu.get_num_components(); ++i) {
-      MenuComponent const* cp_m_comp = menu.get_menu_component(i);
-      cp_m_comp->render(*this);
-      Serial.print(cp_m_comp->get_name());
-      lcd.setCursor(0, (i+1) * PCD8544_CHAR_HEIGHT);
-      lcd.print(cp_m_comp->get_name());
-      if (cp_m_comp->is_current()) {
-	lcd.print(" X ");
-	Serial.print("<<< ");
-      }
-      Serial.println();
-    }
-  }
 
-  // did testing on these, really not sure what they do. 
-  void render_menu_item(MenuItem const& menu_item) const {
-  }
-
-  void render_back_menu_item(BackMenuItem const& menu_item) const {
-  }
-
-  void render_numeric_menu_item(NumericMenuItem const& menu_item) const {
-  }
-
-  void render_menu(Menu const& menu) const {
-  }
-};
 MyRenderer my_renderer;
+MenuSystem ms(my_renderer);
 
 // Menu callbacks
 void changeState(int val) {
@@ -124,9 +86,6 @@ void on_item3_selected(MenuComponent* p_menu_component) {
   delay(500); 
 }
 
-// MyRenderer my_renderer;
-MenuSystem ms(my_renderer);
-
 Menu       mu1    ("Display");
 Menu       mu2    ("Errors");
 Menu       mu3    ("Set variables");
@@ -144,7 +103,6 @@ MenuItem   mu3_mi1("Field weakening", &on_item3_selected);
 MenuItem   mu3_mi2("Max power",       &on_item3_selected);
 MenuItem   mu3_mi3("Max current",     &on_item3_selected);
 
-
 void setup() {
   Serial.begin(9600);
   lcd.initR(INITR_BLACKTAB); // for 128x160 display
@@ -152,8 +110,7 @@ void setup() {
   lcd.fillScreen(BLACK);
   lcd.setTextSize(1);
 
-  serial_print_help();
-
+  my_renderer.initLCD(&lcd);
   ms.get_root_menu().add_menu(&mu1);
   mu1.add_item(&mu1_mi1);
   mu1.add_item(&mu1_mi2);
@@ -219,17 +176,6 @@ void loop() {
   }
 }
 
-void serial_print_help() {
-  Serial.println("***************");
-  Serial.println("w: go to previus item (up)");
-  Serial.println("s: go to next item (down)");
-  Serial.println("a: go back (right)");
-  Serial.println("d: select \"selected\" item");
-  Serial.println("?: print this help");
-  Serial.println("h: print this help");
-  Serial.println("***************");
-}
-
 void serial_handler() {
   char inChar;
   if((inChar = Serial.read())>0) {
@@ -252,7 +198,14 @@ void serial_handler() {
       break;
     case '?':
     case 'h': // Display help
-      serial_print_help();
+      Serial.println("***************");
+      Serial.println("w: go to previus item (up)");
+      Serial.println("s: go to next item (down)");
+      Serial.println("a: go back (right)");
+      Serial.println("d: select \"selected\" item");
+      Serial.println("?: print this help");
+      Serial.println("h: print this help");
+      Serial.println("***************");
       break;
     default:
       break;
