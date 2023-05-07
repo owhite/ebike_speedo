@@ -111,17 +111,17 @@ void setup() {
   lcd.setTextSize(1);
 
   my_renderer.initLCD(&lcd);
-  ms.get_root_menu().add_menu(&mu1);
+  ms.get_root_menu().add_menu(&mu1, RENDER_LIST);
   mu1.add_item(&mu1_mi1);
   mu1.add_item(&mu1_mi2);
   mu1.add_item(&mu1_mi3);
   mu1.add_item(&mu1_mi4);
 
-  ms.get_root_menu().add_menu(&mu2);
+  ms.get_root_menu().add_menu(&mu2, RENDER_BOTTOM);
   mu2.add_item(&mu2_mi1);
   mu2.add_item(&mu2_mi2);
 
-  ms.get_root_menu().add_menu(&mu3);
+  ms.get_root_menu().add_menu(&mu3, RENDER_LIST);
   mu3.add_item(&mu3_mi1);
   mu3.add_item(&mu3_mi2);
   mu3.add_item(&mu3_mi3);

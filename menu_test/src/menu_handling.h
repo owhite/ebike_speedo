@@ -10,6 +10,10 @@
 #include <ST7789_t3.h>
 #include <MenuSystem.h>
 
+#define	RENDER_LIST    0
+#define	RENDER_BOTTOM  1
+
+
 #define	BLACK   0x0000
 #define PCD8544_CHAR_HEIGHT 8
 
