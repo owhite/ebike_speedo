@@ -17,7 +17,7 @@
 #define SCR_HT 128
 #define pgm_read_word(addr) (*(const unsigned short *)(addr))
 
-#define PCD8544_CHAR_HEIGHT 8
+#define LCD_CHAR_HEIGHT 12
 
 ST7789_t3 lcd = ST7789_t3(LCD_CS, LCD_DC, LCD_MOSI, LCD_SCLK, LCD_RST);
 
@@ -50,8 +50,15 @@ void customLineV(int x, int y0,int y1, int c)    { lcd.drawFastVLine(x,y0,y1-y0+
 void customRect(int x, int y,int w,int h, int c) { lcd.fillRect(x,y,w,h,c); } 
 DigiFont font(customLineH, customLineV, customRect);
 
+#define INPUT_MENU         0
+#define INPUT_BRIGHTNESS   1
+
+int input_state = INPUT_MENU;
+
 int state = IDLE;
 // Menu setup
+
+int brightness_val = 100;
 
 MyRenderer my_renderer;
 MenuSystem ms(my_renderer);
@@ -61,7 +68,7 @@ void changeState(int val) {
   Serial.print("state change :: ");
   Serial.println( val );
 
-  lcd.setCursor(0, 6 * PCD8544_CHAR_HEIGHT);
+  lcd.setCursor(0, 6 * LCD_CHAR_HEIGHT);
   lcd.print("state change: ");
   lcd.print(val);
   delay(500); // pause to look at LCD
@@ -70,25 +77,26 @@ void changeState(int val) {
 }
 
 void on_item2_selected(MenuComponent* p_menu_component) {
-  lcd.setCursor(0, 6 * PCD8544_CHAR_HEIGHT);
+  lcd.setCursor(0, 6 * LCD_CHAR_HEIGHT);
   lcd.print("Item2 Selectd");
   Serial.println("Item2 Selectd");
   delay(1500); // so we can look the result on the LCD
 }
 
-void on_item3_selected(MenuComponent* p_menu_component) {
-  lcd.setCursor(0, 6 * PCD8544_CHAR_HEIGHT);
-  lcd.print("3 Selected, IDLING");
-  Serial.println("Item3 Selected");
+void brightness(MenuComponent* p_menu_component) {
+  lcd.setCursor(0, 6 * LCD_CHAR_HEIGHT);
+  lcd.print("brightness");
+  Serial.println("brightness");
 
-  state = DISPLAY_VOLTS;
+  state = SET_BRIGHTNESS;
 
   delay(500); 
 }
 
+
 Menu       mu1    ("Display");
 Menu       mu2    ("Errors");
-Menu       mu3    ("Set variables");
+MenuItem   mu3    ("Brightness",   [] { changeState(INIT_BRIGHTNESS); });
 
 MenuItem   mu1_mi1("Amps" , [] { changeState(DISPLAY_AMPS);  });
 MenuItem   mu1_mi2("Volts", [] { changeState(DISPLAY_VOLTS); });
@@ -98,10 +106,6 @@ MenuItem   mu1_mi5("TEMP" , [] { changeState(DISPLAY_TEMP);  });
 
 MenuItem   mu2_mi1("View errors",  &on_item2_selected);
 MenuItem   mu2_mi2("Reset errors", &on_item2_selected);
-
-MenuItem   mu3_mi1("Field weakening", &on_item3_selected);
-MenuItem   mu3_mi2("Max power",       &on_item3_selected);
-MenuItem   mu3_mi3("Max current",     &on_item3_selected);
 
 void setup() {
   Serial.begin(9600);
@@ -121,16 +125,22 @@ void setup() {
   mu2.add_item(&mu2_mi1);
   mu2.add_item(&mu2_mi2);
 
-  ms.get_root_menu().add_menu(&mu3, RENDER_LIST);
-  mu3.add_item(&mu3_mi1);
-  mu3.add_item(&mu3_mi2);
-  mu3.add_item(&mu3_mi3);
+  ms.get_root_menu().add_item(&mu3);
 
   ms.display();
 }
 
 void loop() {
-  serial_handler();
+  switch (input_state) {
+  case INPUT_MENU:
+    serial_menu_input();
+    break;
+  case INPUT_BRIGHTNESS:
+    serial_brightness_input();
+    break;
+  default:
+    break;
+  }
 
   switch (state) {
   case INIT_MENU:
@@ -144,6 +154,18 @@ void loop() {
     lcd.setCursor(0, 10);
     lcd.print("amps");
     state = IDLE;
+    break;
+  case INIT_BRIGHTNESS:
+    input_state = INPUT_BRIGHTNESS;
+    state = SET_BRIGHTNESS;
+    lcd.fillScreen(BLACK);
+    break;
+  case SET_BRIGHTNESS:
+    lcd.setCursor(0, 10);
+    lcd.print("brightness");
+    lcd.setCursor(0, 20);
+    lcd.print(brightness_val);
+    state = SET_BRIGHTNESS;
     break;
   case DISPLAY_VOLTS:
     lcd.fillScreen(BLACK);
@@ -176,7 +198,7 @@ void loop() {
   }
 }
 
-void serial_handler() {
+void serial_menu_input() {
   char inChar;
   if((inChar = Serial.read())>0) {
     switch (inChar) {
@@ -207,6 +229,34 @@ void serial_handler() {
       Serial.println("h: print this help");
       Serial.println("***************");
       break;
+    default:
+      break;
+    }
+  }
+}
+
+
+void serial_brightness_input() {
+  char inChar;
+  if((inChar = Serial.read())>0) {
+    switch (inChar) {
+    case 'w': // Previus item
+      lcd.fillScreen(BLACK);
+      brightness_val++;
+      break;
+    case 's': // Next item
+      lcd.fillScreen(BLACK);
+      brightness_val--;
+      break;
+    case 'a': // Back pressed
+      state = INIT_MENU;
+      input_state = INPUT_MENU;
+      ms.back();
+      break;
+    case 'd': // Select pressed
+      break;
+    case '?':
+
     default:
       break;
     }

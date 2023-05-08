@@ -15,17 +15,28 @@ void MyRenderer::render(Menu const& menu) const {
 
   Serial.println(menu.get_type());
 
+  int x = 4;
+  int y = LCD_CHAR_HEIGHT;
+
   for (int i = 0; i < menu.get_num_components(); ++i) {
     MenuComponent const* cp_m_comp = menu.get_menu_component(i);
     cp_m_comp->render(*this);
     Serial.print(cp_m_comp->get_name());
 
-    _lcd->setCursor(0, (i+1) * PCD8544_CHAR_HEIGHT);
-    _lcd->print(cp_m_comp->get_name());
+    _lcd->setCursor(x, y);
     if (cp_m_comp->is_current()) {
-      _lcd->print(" X ");
+
+      size_t length = strlen(cp_m_comp->get_name());
+
+      _lcd->drawRect(x-2, y - 2, strlen(cp_m_comp->get_name()) * 7, LCD_CHAR_HEIGHT + 4, ST7735_WHITE);
+      _lcd->print(cp_m_comp->get_name());
       Serial.print("<<< ");
     }
+    else {
+      _lcd->print(cp_m_comp->get_name());
+    }
+
+    y += LCD_CHAR_HEIGHT + 7;
     Serial.println();
   }
 }

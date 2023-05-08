@@ -175,7 +175,7 @@ protected:
 
 protected:
   const char* _name;
-  uint8_t _type;
+  uint8_t _type = 0;
   bool _has_focus;
   bool _is_current;
   SelectFnPtr _select_fn;

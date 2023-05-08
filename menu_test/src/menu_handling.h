@@ -15,7 +15,7 @@
 
 
 #define	BLACK   0x0000
-#define PCD8544_CHAR_HEIGHT 8
+#define LCD_CHAR_HEIGHT 8
 
 #ifndef _MY_RENDERER_H
 #define _MY_RENDERER_H
