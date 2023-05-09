@@ -21,6 +21,12 @@
 
 ST7789_t3 lcd = ST7789_t3(LCD_CS, LCD_DC, LCD_MOSI, LCD_SCLK, LCD_RST);
 
+// LCD timing
+boolean showData = false; // data as in MPH, ehz, Amps, temp
+uint32_t dataPrev = 0;
+uint32_t dataInterval = 2000; 
+uint32_t dataNow;
+
 // Neopixel setup
 #define PIXELPIN   7 
 #define NUMPIXELS 24 
@@ -50,13 +56,8 @@ void customLineV(int x, int y0,int y1, int c)    { lcd.drawFastVLine(x,y0,y1-y0+
 void customRect(int x, int y,int w,int h, int c) { lcd.fillRect(x,y,w,h,c); } 
 DigiFont font(customLineH, customLineV, customRect);
 
-#define INPUT_MENU         0
-#define INPUT_BRIGHTNESS   1
-
 int input_state = INPUT_MENU;
-
 int state = IDLE;
-// Menu setup
 
 int brightness_val = 100;
 
@@ -76,23 +77,12 @@ void changeState(int val) {
   state = val;
 }
 
-void on_item2_selected(MenuComponent* p_menu_component) {
+void errorReset(MenuComponent* p_menu_component) {
   lcd.setCursor(0, 6 * LCD_CHAR_HEIGHT);
-  lcd.print("Item2 Selectd");
-  Serial.println("Item2 Selectd");
-  delay(1500); // so we can look the result on the LCD
+  lcd.print("Error codes reset");
+  Serial.println("Error reset selected");
+  state = IDLE;
 }
-
-void brightness(MenuComponent* p_menu_component) {
-  lcd.setCursor(0, 6 * LCD_CHAR_HEIGHT);
-  lcd.print("brightness");
-  Serial.println("brightness");
-
-  state = SET_BRIGHTNESS;
-
-  delay(500); 
-}
-
 
 Menu       mu1    ("Display");
 Menu       mu2    ("Errors");
@@ -104,8 +94,8 @@ MenuItem   mu1_mi3("ehz"  , [] { changeState(DISPLAY_EHZ);   });
 MenuItem   mu1_mi4("MPH"  , [] { changeState(DISPLAY_MPH);   });
 MenuItem   mu1_mi5("TEMP" , [] { changeState(DISPLAY_TEMP);  });
 
-MenuItem   mu2_mi1("View errors",  &on_item2_selected);
-MenuItem   mu2_mi2("Reset errors", &on_item2_selected);
+MenuItem   mu2_mi1("View errors",  [] { changeState(DISPLAY_ERRORS); });
+MenuItem   mu2_mi2("Reset errors", &errorReset);
 
 void setup() {
   Serial.begin(9600);
@@ -131,23 +121,19 @@ void setup() {
 }
 
 void loop() {
-  switch (input_state) {
-  case INPUT_MENU:
-    serial_menu_input();
-    break;
-  case INPUT_BRIGHTNESS:
-    serial_brightness_input();
-    break;
-  default:
-    break;
+  serial_input();
+
+  dataNow = millis();
+
+  if ( (dataNow - ms.get_last_menu_time() ) > dataInterval) {
+    lcd.setCursor(0, 60);
+    lcd.print("time");
   }
 
   switch (state) {
   case INIT_MENU:
     ms.display();
     state = SHOW_MENU;
-    break;
-  case SHOW_MENU:
     break;
   case DISPLAY_AMPS:
     lcd.fillScreen(BLACK);
@@ -156,7 +142,7 @@ void loop() {
     state = IDLE;
     break;
   case INIT_BRIGHTNESS:
-    input_state = INPUT_BRIGHTNESS;
+    input_state = INPUT_NUMBER;
     state = SET_BRIGHTNESS;
     lcd.fillScreen(BLACK);
     break;
@@ -166,6 +152,24 @@ void loop() {
     lcd.setCursor(0, 20);
     lcd.print(brightness_val);
     state = SET_BRIGHTNESS;
+    break;
+  case DISPLAY_ERRORS:
+    lcd.fillScreen(BLACK);
+    lcd.setCursor(0, 10);
+    lcd.print("MESC ERRORS:");
+    Serial.println("errors...");
+    int error_val = 10;
+    int count = 2;
+    for(int i=0;i<32;i++) {
+      if (error_val & 0x0001) {
+	lcd.setCursor(8, count * LCD_CHAR_HEIGHT);
+	count++;
+	lcd.print(error_codes[i]);
+	Serial.println(error_codes[i]);
+      }
+      error_val = error_val >> 1;
+    }
+    state = IDLE;
     break;
   case DISPLAY_VOLTS:
     lcd.fillScreen(BLACK);
@@ -191,7 +195,21 @@ void loop() {
     lcd.print("temps");
     state = IDLE;
     break;
+  case SHOW_MENU:
   case IDLE:
+    break;
+  default:
+    break;
+  }
+}
+
+void serial_input() {
+  switch (input_state) {
+  case INPUT_MENU:
+    serial_menu_input();
+    break;
+  case INPUT_NUMBER:
+    serial_brightness_input();
     break;
   default:
     break;

@@ -43,20 +43,24 @@ void MyRenderer::render(Menu const& menu) const {
 
 void MyRenderer::render_menu_item(MenuItem const& menu_item) const {
   // Serial.print(menu_item.get_name());
+  // lastMenuMS = millis();
 }
 
 void MyRenderer::render_back_menu_item(BackMenuItem const& menu_item) const {
   // Serial.print(menu_item.get_name());
+  /// lastMenuMS = millis();
 }
 
 void MyRenderer::render_menu(Menu const& menu) const {
   // Serial.print(menu.get_name());
+  // lastMenuMS = millis();
 }
 
 void MyRenderer::render_numeric_menu_item(NumericMenuItem const& menu_item) const {
+  // lastMenuMS = millis();
 }
 
 void MyRenderer::menu_setup(Menu const& menu, MenuItem const& menu_item) const {
-
+  // lastMenuMS = millis();
 }
 
