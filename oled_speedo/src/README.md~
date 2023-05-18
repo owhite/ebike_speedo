@@ -1,0 +1,5 @@
+% magick 'scrap.png' -crop 58x20+11+8 scrap2.png
+% magick 'scrap.png' -crop 58x20+77+8 scrap2.png
+% magick 'scrap.png' -crop 58x20+144+8 scrap2.png
+% magick 'scrap.png' -crop 58x20+210+8 scrap2.png
+% magick 'scrap.png' -crop 58x20+274+8 scrap2.png
