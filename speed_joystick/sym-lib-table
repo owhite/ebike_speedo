@@ -1,6 +1,4 @@
 (sym_lib_table
   (version 7)
   (lib (name "teensy")(type "Legacy")(uri "${KIPRJMOD}/teensy.lib")(options "")(descr ""))
-  (lib (name "joystick-rescue")(type "KiCad")(uri "${KIPRJMOD}/joystick-rescue.kicad_sym")(options "")(descr ""))
-  (lib (name "speed_joystick-rescue")(type "KiCad")(uri "${KIPRJMOD}/speed_joystick-rescue.kicad_sym")(options "")(descr ""))
 )
