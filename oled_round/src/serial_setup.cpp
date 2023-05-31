@@ -18,7 +18,11 @@ void serial_input(MenuSystem ms, int state, int input_state, int brightness) {
 
 void serial_menu_input(MenuSystem ms, int state, int input_state) {
   char inChar;
-  if((inChar = Serial.read())>0) {
+
+  if (Serial.available() > 0) {
+
+    inChar = Serial.read();
+
     switch (inChar) {
     case 'w': // Previus item
       state = INIT_MENU;
@@ -29,6 +33,7 @@ void serial_menu_input(MenuSystem ms, int state, int input_state) {
       ms.next();
       break;
     case 'a': // Back pressed
+      Serial.println("BACK");
       state = INIT_MENU;
       ms.back();
       break;
@@ -56,7 +61,9 @@ void serial_menu_input(MenuSystem ms, int state, int input_state) {
 
 void serial_brightness_input(MenuSystem ms, int state, int input_state, int brightness) {
   char inChar;
-  if((inChar = Serial.read())>0) {
+
+  if (Serial.available() > 0) {
+    inChar = Serial.read();
     switch (inChar) {
     case 'w': // Previus item
       brightness++;

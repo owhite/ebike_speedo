@@ -1,6 +1,6 @@
 #include <MenuSystem.h>
 #include "menu_handling.h"
-#include <ST7789_t3.h>
+#include "Adafruit_GC9A01A.h"
 #include <SPI.h>
 #include <DigiFont.h>
 #include "bitmaps.h" // converter is here https://www.cemetech.net/sc/
@@ -13,13 +13,16 @@
 #define LCD_CS   10  // CS
 #define LCD_DC    9  // D/C
 #define LCD_RST   8  // RST can use any pin
-#define SCR_WD 160
-#define SCR_HT 128
+#define LCD_WD 240
+#define LCD_HT 240
+#define  LCD_BL 20
+
 #define pgm_read_word(addr) (*(const unsigned short *)(addr))
 
 #define LCD_CHAR_HEIGHT 12
 
-ST7789_t3 lcd = ST7789_t3(LCD_CS, LCD_DC, LCD_MOSI, LCD_SCLK, LCD_RST);
+// Hardware SPI on Feather or other boards
+Adafruit_GC9A01A lcd(LCD_CS, LCD_DC);
 
 // LCD timing
 boolean showData = false; // data as in MPH, ehz, Amps, temp
@@ -99,8 +102,9 @@ MenuItem   mu2_mi2("Reset errors", &errorReset);
 
 void setup() {
   Serial.begin(9600);
-  lcd.initR(INITR_BLACKTAB); // for 128x160 display
-  lcd.setRotation(3);
+  lcd.begin();
+
+  lcd.setRotation(0);
   lcd.fillScreen(BLACK);
   lcd.setTextSize(1);
 

@@ -7,7 +7,7 @@
  * Licensed under the MIT license (see LICENSE)
  */
 
-#include <ST7789_t3.h>
+#include "Adafruit_GC9A01A.h"
 #include <MenuSystem.h>
 
 #define	RENDER_LIST    0
@@ -22,7 +22,7 @@
 
 class MyRenderer : public MenuComponentRenderer {
 public:
-  void initLCD(ST7789_t3 *l);
+  void initLCD(Adafruit_GC9A01A *l);
   void render(Menu const& menu) const;
   void render_menu_item(MenuItem const& menu_item) const;
   void render_back_menu_item(BackMenuItem const& menu_item) const;

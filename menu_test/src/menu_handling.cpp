@@ -1,9 +1,11 @@
 #include "menu_handling.h"
 #include "states.h"
 
-ST7789_t3 *_lcd;
+#define WHITE   0xFFFF
 
-void MyRenderer::initLCD(ST7789_t3 *l) {
+Adafruit_GC9A01A *_lcd;
+
+void MyRenderer::initLCD(Adafruit_GC9A01A *l) {
   _lcd = l;
 }
 
@@ -28,7 +30,7 @@ void MyRenderer::render(Menu const& menu) const {
 
       size_t length = strlen(cp_m_comp->get_name());
 
-      _lcd->drawRect(x-2, y - 2, strlen(cp_m_comp->get_name()) * 7, LCD_CHAR_HEIGHT + 4, ST7735_WHITE);
+      _lcd->drawRect(x-2, y - 2, strlen(cp_m_comp->get_name()) * 7, LCD_CHAR_HEIGHT + 4, WHITE);
       _lcd->print(cp_m_comp->get_name());
       Serial.print("<<< ");
     }

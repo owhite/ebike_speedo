@@ -62,7 +62,7 @@ float EHZ_scale = (CIRCUMFERENCE * 60 * 60) / (CM_IN_MILE * GEAR_RATIO * POLEPAI
 #define LCD_CHAR_HEIGHT 12
 
 // Hardware SPI on Feather or other boards
-Adafruit_GC9A01A tft(LCD_CS, LCD_DC);
+Adafruit_GC9A01A lcd(LCD_CS, LCD_DC);
 
 // DigiFont setup
 #define RGBto565(r,g,b) ((((r) & 0xF8) << 8) | (((g) & 0xFC) << 3) | ((b) >> 3))
@@ -81,9 +81,9 @@ Adafruit_GC9A01A tft(LCD_CS, LCD_DC);
 #define LBLUE RGBto565(100,100,255)
 #define DBLUE RGBto565(  0,  0,128)
 
-void customLineH(int x0,int x1, int y, int c)    { tft.drawFastHLine(x0,y,x1-x0+1,c); }
-void customLineV(int x, int y0,int y1, int c)    { tft.drawFastVLine(x,y0,y1-y0+1,c); } 
-void customRect(int x, int y,int w,int h, int c) { tft.fillRect(x,y,w,h,c); } 
+void customLineH(int x0,int x1, int y, int c)    { lcd.drawFastHLine(x0,y,x1-x0+1,c); }
+void customLineV(int x, int y0,int y1, int c)    { lcd.drawFastVLine(x,y0,y1-y0+1,c); } 
+void customRect(int x, int y,int w,int h, int c) { lcd.fillRect(x,y,w,h,c); } 
 DigiFont font(customLineH, customLineV, customRect);
 
 // LCD timing
@@ -128,10 +128,10 @@ void changeState(int val) {
   Serial.print("state change :: ");
   Serial.println( val );
 
-  tft.setTextSize(1);
-  tft.setCursor(0, 6 * LCD_CHAR_HEIGHT);
-  tft.print("state change: ");
-  tft.print(val);
+  lcd.setTextSize(1);
+  lcd.setCursor(0, 6 * LCD_CHAR_HEIGHT);
+  lcd.print("state change: ");
+  lcd.print(val);
   delay(500); // pause to look at LCD
 
   state = val;
@@ -141,10 +141,10 @@ void updateMainDisplay(int val) {
   Serial.print("diplaay change :: ");
   Serial.println( val );
 
-  tft.setTextSize(1);
-  tft.setCursor(0, 6 * LCD_CHAR_HEIGHT);
-  tft.print("display change: ");
-  tft.print(val);
+  lcd.setTextSize(1);
+  lcd.setCursor(0, 6 * LCD_CHAR_HEIGHT);
+  lcd.print("display change: ");
+  lcd.print(val);
   delay(500); // pause to look at LCD
 
   main_display_state = val;
@@ -154,9 +154,9 @@ void updateMainDisplay(int val) {
 
 // doesnt do anything yet
 void errorReset(MenuComponent* p_menu_component) {
-  tft.setTextSize(1);
-  tft.setCursor(0, 6 * LCD_CHAR_HEIGHT);
-  tft.print("Error codes reset");
+  lcd.setTextSize(1);
+  lcd.setCursor(0, 6 * LCD_CHAR_HEIGHT);
+  lcd.print("Error codes reset");
   Serial.println("Error reset selected");
   state = IDLE_MENU;
 }
@@ -168,16 +168,106 @@ void setup() {
   pinMode(LCD_BL, OUTPUT);
   analogWrite(LCD_BL, 255);
 
-  tft.begin();
+  lcd.begin();
 
-  tft.setRotation(0);
-  tft.fillScreen(BLACK);
-  tft.setTextSize(1);
+  lcd.setRotation(0);
+  lcd.fillScreen(BLACK);
+  lcd.setTextSize(1);
 
   setupFrame();
+
+  my_renderer.initLCD(&lcd);
+  ms.get_root_menu().add_menu(&mu1, RENDER_LIST);
+  mu1.add_item(&mu1_mi1);
+  mu1.add_item(&mu1_mi2);
+  mu1.add_item(&mu1_mi3);
+  mu1.add_item(&mu1_mi4);
+
+  ms.get_root_menu().add_menu(&mu2, RENDER_BOTTOM);
+  mu2.add_item(&mu2_mi1);
+  mu2.add_item(&mu2_mi2);
+
+  ms.get_root_menu().add_item(&mu3);
+
+  ms.display();
 }
 
 void loop() {
+  serial_input(ms, state, input_state, brightness_val);
+
+  if ( (millis() - ms.get_last_menu_time() ) > dataInterval) {
+    if (! screen_was_reset ) { setupFrame(); }
+    state = IDLE_DISPLAY;
+  }
+
+  updateBattery(0.8);
+
+  canFlag = false;
+  if ((millis() - canReceiveTime ) > canInterval) {  
+    canFlag = true;
+  }
+
+  switch (state) {
+  case INIT_MENU:
+    screen_was_reset = false;
+    ms.display();
+    state = IDLE_MENU;
+    break;
+  case INIT_BRIGHTNESS:
+    input_state = INPUT_NUMBER;
+    state = SET_BRIGHTNESS;
+    lcd.fillScreen(BLACK);
+    break;
+  case SET_BRIGHTNESS:
+    lcd.setTextSize(1);
+    lcd.setCursor(0, 10);
+    lcd.print("brightness");
+    lcd.setCursor(0, 20);
+    lcd.print(brightness_val);
+    state = SET_BRIGHTNESS;
+    break;
+  case IDLE_DISPLAY:
+    displayNum( sine256[count], 20, 0, 30);
+    displayNum( 255 - sine256[count], 9, 0, (2 * LCD_HT / 3) + 18);
+    displayNum( 255 - sine256[count], 9, (2 * LCD_WD / 3) + 8, (2 * LCD_HT / 3) + 18);
+    int range = ring.numPixels() - 5;
+    int x = map(sine256[count], 0, 255, 0, BIKE_SPEED_MAX);
+    int y = map(x, 0, BIKE_SPEED_MAX, 0, range);
+    ring.clear();
+    ring.setPixelColor(0, ring.Color(0, 0, 240)); 
+    ring.setPixelColor(1, ring.Color(0, 0, 240)); 
+    ring.setPixelColor(23, ring.Color(0, 0, 240)); 
+    ring.setPixelColor(y+2, ring.Color(0,   240,   0)); 
+    ring.show(); 
+    break;
+  case SHOW_ERRORS:
+    lcd.fillScreen(BLACK);
+    lcd.setTextSize(1);
+    lcd.setCursor(0, 10);
+    lcd.print("MESC ERRORS:");
+    Serial.println("errors...");
+    int error_val = 10;
+    int count = 2;
+    for(int i=0;i<32;i++) {
+      if (error_val & 0x0001) {
+	lcd.setTextSize(1);
+	lcd.setCursor(8, count * LCD_CHAR_HEIGHT);
+	count++;
+	lcd.print(error_codes[i]);
+	Serial.println(error_codes[i]);
+      }
+      error_val = error_val >> 1;
+    }
+    state = IDLE_MENU;
+    break;
+  case IDLE_MENU:
+    break;
+  default:
+    break;
+  }
+
+  count++;
+  if (count > 255) {count = 0;};
 }
 
 uint16_t extract_id(uint32_t ext_id) {
@@ -239,42 +329,42 @@ void updateBattery(float level) {
   uint8_t b_height = 55;
   uint8_t tab_height = 5;
 
-  tft.fillRect(battery_center_x-(tab_width/2), battery_center_y-(b_height/2)-tab_height, tab_width, tab_height, color1);
-  tft.fillRect(battery_center_x-(b_width/2), battery_center_y-(b_height/2), b_width, b_height, color1);
+  lcd.fillRect(battery_center_x-(tab_width/2), battery_center_y-(b_height/2)-tab_height, tab_width, tab_height, color1);
+  lcd.fillRect(battery_center_x-(b_width/2), battery_center_y-(b_height/2), b_width, b_height, color1);
 
   uint8_t pad = 3;
   uint8_t x1 = battery_center_x-(b_width/2) + pad;
   uint8_t y1 = battery_center_y-(b_height/2) + pad;
   uint8_t x2 = b_width - (2 * pad);
   uint8_t y2 = b_height - (2 * pad);
-  tft.drawRect(x1, y1, x2, y2, color2);
+  lcd.drawRect(x1, y1, x2, y2, color2);
 
   y2 = y2 * (1 - level);
 
-  tft.fillRect(x1, y1, x2, y2, color2);
+  lcd.fillRect(x1, y1, x2, y2, color2);
 
   if (level < 0.2) {
-    tft.setTextSize(4);
-    tft.setCursor(battery_center_x - 10, battery_center_y - 12);
-    tft.print("!");
+    lcd.setTextSize(4);
+    lcd.setCursor(battery_center_x - 10, battery_center_y - 12);
+    lcd.print("!");
   }
 }
 
 void setupFrame() {
-  tft.fillScreen(BLACK);
+  lcd.fillScreen(BLACK);
   uint8_t panel1_y = 2 * LCD_HT / 3;
   uint8_t panel3_x = 1 * LCD_WD / 3;
   uint8_t panel4_x = 2 * LCD_WD / 3;
 
   // top / bottom separator
-  tft.fillRect(0, panel1_y - 2, LCD_WD, 6, LGREY);
-  tft.fillRect(0, panel1_y, LCD_WD, 2, DGREY);
+  lcd.fillRect(0, panel1_y - 2, LCD_WD, 6, LGREY);
+  lcd.fillRect(0, panel1_y, LCD_WD, 2, DGREY);
 
   // top / bottom separator
-  tft.fillRect(panel3_x,   panel1_y+2, 6, LCD_HT - panel1_y + 2, LGREY);
-  tft.fillRect(panel3_x+1, panel1_y, 4, LCD_HT - panel1_y + 2, DGREY);
-  tft.fillRect(panel4_x,   panel1_y+2, 6, LCD_HT - panel1_y + 2, LGREY);
-  tft.fillRect(panel4_x+1, panel1_y, 4, LCD_HT - panel1_y + 2, DGREY);
+  lcd.fillRect(panel3_x,   panel1_y+2, 6, LCD_HT - panel1_y + 2, LGREY);
+  lcd.fillRect(panel3_x+1, panel1_y, 4, LCD_HT - panel1_y + 2, DGREY);
+  lcd.fillRect(panel4_x,   panel1_y+2, 6, LCD_HT - panel1_y + 2, LGREY);
+  lcd.fillRect(panel4_x+1, panel1_y, 4, LCD_HT - panel1_y + 2, DGREY);
 
   // top row title
   drawRGBBitmap(0, 0, bitmap[main_display_state], BITMAP_WIDTH, BITMAP_HEIGHT);
@@ -319,7 +409,7 @@ void displayNum(int n, int font_width, int x_pos, int y_pos) {
 void drawRGBBitmap(int16_t x, int16_t y, const uint16_t bitmap[], int16_t w, int16_t h) {
   for (int16_t j = 0; j < h; j++, y++) {
     for (int16_t i = 0; i < w; i++) {
-      tft.drawPixel(x + i, y, pgm_read_word(&bitmap[j * w + i]));
+      lcd.drawPixel(x + i, y, pgm_read_word(&bitmap[j * w + i]));
     }
   }
 }
