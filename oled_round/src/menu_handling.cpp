@@ -17,8 +17,11 @@ void MyRenderer::render(Menu const& menu) const {
 
   Serial.println(menu.get_type());
 
-  int x = 4;
-  int y = LCD_CHAR_HEIGHT;
+  _lcd->setTextColor(WHITE);
+  int x = 50;
+  int y = LCD_CHAR_HEIGHT + 20;
+
+  _lcd->setTextSize(LCD_TEXT_SIZE);
 
   for (int i = 0; i < menu.get_num_components(); ++i) {
     MenuComponent const* cp_m_comp = menu.get_menu_component(i);
@@ -30,7 +33,7 @@ void MyRenderer::render(Menu const& menu) const {
 
       size_t length = strlen(cp_m_comp->get_name());
 
-      _lcd->drawRect(x-2, y - 2, strlen(cp_m_comp->get_name()) * 7, LCD_CHAR_HEIGHT + 4, WHITE);
+      _lcd->drawRect(x-2, y - 2, strlen(cp_m_comp->get_name()) * LCD_CHAR_WIDTH, LCD_CHAR_HEIGHT + 4, WHITE);
       _lcd->print(cp_m_comp->get_name());
       Serial.print("<<< ");
     }

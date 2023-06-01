@@ -15,7 +15,9 @@
 
 
 #define	BLACK   0x0000
-#define LCD_CHAR_HEIGHT 8
+#define LCD_TEXT_SIZE 2
+#define LCD_CHAR_HEIGHT LCD_TEXT_SIZE * 8
+#define LCD_CHAR_WIDTH  LCD_TEXT_SIZE * 7
 
 #ifndef _MY_RENDERER_H
 #define _MY_RENDERER_H

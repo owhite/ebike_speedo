@@ -4,12 +4,10 @@
 #include "Adafruit_GC9A01A.h"
 #include <Adafruit_NeoPixel.h>
 #include <DigiFont.h>
-#include "serial_setup.h"
 #include "menu_handling.h"
 #include "bitmaps.h" 
 #include "MESCerror.h"
 #include "states.h"
-// MESC_Firmware/MESC_RTOS/Tasks/can_ids.h
 #include "can_ids.h" 
 
 
@@ -106,6 +104,9 @@ int count = 0;
 int pixelCount = 0;
 bool screen_was_reset = false;
 
+float level_old = 0.0;
+float vbat = 0.8;
+
 // Menu setup
 MyRenderer my_renderer;
 MenuSystem ms(my_renderer);
@@ -130,6 +131,7 @@ void changeState(int val) {
 
   lcd.setTextSize(1);
   lcd.setCursor(0, 6 * LCD_CHAR_HEIGHT);
+  lcd.setTextColor(WHITE);
   lcd.print("state change: ");
   lcd.print(val);
   delay(500); // pause to look at LCD
@@ -143,6 +145,7 @@ void updateMainDisplay(int val) {
 
   lcd.setTextSize(1);
   lcd.setCursor(0, 6 * LCD_CHAR_HEIGHT);
+  lcd.setTextColor(WHITE);
   lcd.print("display change: ");
   lcd.print(val);
   delay(500); // pause to look at LCD
@@ -156,6 +159,7 @@ void updateMainDisplay(int val) {
 void errorReset(MenuComponent* p_menu_component) {
   lcd.setTextSize(1);
   lcd.setCursor(0, 6 * LCD_CHAR_HEIGHT);
+  lcd.setTextColor(WHITE);
   lcd.print("Error codes reset");
   Serial.println("Error reset selected");
   state = IDLE_MENU;
@@ -173,6 +177,7 @@ void setup() {
   lcd.setRotation(0);
   lcd.fillScreen(BLACK);
   lcd.setTextSize(1);
+  delay(100);
 
   setupFrame();
 
@@ -189,18 +194,16 @@ void setup() {
 
   ms.get_root_menu().add_item(&mu3);
 
-  ms.display();
+  // ms.display();
 }
 
 void loop() {
-  serial_input(ms, state, input_state, brightness_val);
+  serial_input();
 
-  if ( (millis() - ms.get_last_menu_time() ) > dataInterval) {
-    if (! screen_was_reset ) { setupFrame(); }
-    state = IDLE_DISPLAY;
+   if ( (millis() - ms.get_last_menu_time() ) > dataInterval) {
+     if (! screen_was_reset ) { setupFrame(); }
+     state = IDLE_DISPLAY;
   }
-
-  updateBattery(0.8);
 
   canFlag = false;
   if ((millis() - canReceiveTime ) > canInterval) {  
@@ -221,18 +224,23 @@ void loop() {
   case SET_BRIGHTNESS:
     lcd.setTextSize(1);
     lcd.setCursor(0, 10);
+    lcd.setTextColor(WHITE);
     lcd.print("brightness");
     lcd.setCursor(0, 20);
     lcd.print(brightness_val);
     state = SET_BRIGHTNESS;
     break;
   case IDLE_DISPLAY:
-    displayNum( sine256[count], 20, 0, 30);
-    displayNum( 255 - sine256[count], 9, 0, (2 * LCD_HT / 3) + 18);
-    displayNum( 255 - sine256[count], 9, (2 * LCD_WD / 3) + 8, (2 * LCD_HT / 3) + 18);
+    // (int n, int font_width, int x_pos, int y_pos)
+    displayNum( sine256[count], 36, 30, 60);
+    displayNum( 255 - sine256[count], 9, 30, (2 * LCD_HT / 3) + 18);
+    displayNum( 255 - sine256[count], 9, (1 * LCD_WD / 3) + 8, (2 * LCD_HT / 3) + 18);
     int range = ring.numPixels() - 5;
     int x = map(sine256[count], 0, 255, 0, BIKE_SPEED_MAX);
     int y = map(x, 0, BIKE_SPEED_MAX, 0, range);
+
+    updateBattery(vbat);
+
     ring.clear();
     ring.setPixelColor(0, ring.Color(0, 0, 240)); 
     ring.setPixelColor(1, ring.Color(0, 0, 240)); 
@@ -244,6 +252,7 @@ void loop() {
     lcd.fillScreen(BLACK);
     lcd.setTextSize(1);
     lcd.setCursor(0, 10);
+    lcd.setTextColor(WHITE);
     lcd.print("MESC ERRORS:");
     Serial.println("errors...");
     int error_val = 10;
@@ -266,8 +275,131 @@ void loop() {
     break;
   }
 
+  delay(10);
   count++;
   if (count > 255) {count = 0;};
+}
+
+void updateBattery(float level) {
+  if (abs(level - level_old) < .02) {
+    return;
+    level_old = level;
+  }
+  level_old = level;
+
+  uint8_t battery_x = (LCD_WD / 2) + 20;
+  uint8_t battery_y = 30;
+
+  uint16_t color1 = GREEN;
+  uint16_t color2 = RED;
+  uint8_t b_width = 65;
+  uint8_t tab_width = 6;
+  uint8_t b_height = 30;
+  uint8_t tab_height = 20;
+
+  lcd.fillRect(battery_x-(b_width/2),
+	       battery_y-(b_height/2),
+	       b_width, b_height, color1);
+
+  lcd.fillRect(battery_x-(b_width/2)-tab_width, 
+	       battery_y - (tab_height / 2),
+  	       tab_width, tab_height, color1);
+
+  uint8_t pad = 3;
+  uint8_t x1 = battery_x-(b_width/2) + pad;
+  uint8_t y1 = battery_y-(b_height/2) + pad;
+  uint8_t x2 = b_width - (2 * pad);
+  uint8_t y2 = b_height - (2 * pad);
+  lcd.drawRect(x1, y1, x2, y2, color2);
+
+  x2 = x2 * (1 - level);
+
+  lcd.fillRect(x1, y1, x2, y2, color2);
+
+  lcd.setTextSize(4);
+  lcd.setCursor(battery_x + (b_width/2), battery_y - 12);
+  lcd.setTextColor(BLACK);
+  if (level < 0.2) {
+    lcd.setTextColor(WHITE);
+  }
+  lcd.print("!");
+}
+
+void serial_input() {
+  switch (input_state) {
+  case INPUT_MENU:
+    serial_menu_input();
+    break;
+  case INPUT_NUMBER:
+    serial_brightness_input();
+    break;
+  default:
+    break;
+  }
+}
+
+void serial_brightness_input() {
+  char inChar;
+  if((inChar = Serial.read())>0) {
+    switch (inChar) {
+    case 'w': // Previus item
+      lcd.fillScreen(BLACK);
+      brightness_val++;
+      break;
+    case 's': // Next item
+      lcd.fillScreen(BLACK);
+      brightness_val--;
+      break;
+    case 'a': // Back pressed
+      state = INIT_MENU;
+      input_state = INPUT_MENU;
+      ms.back();
+      break;
+    case 'd': // Select pressed
+      break;
+    case '?':
+
+    default:
+      break;
+    }
+  }
+}
+
+void serial_menu_input() {
+  char inChar;
+  if((inChar = Serial.read())>0) {
+    switch (inChar) {
+    case 'w': // Previus item
+      state = INIT_MENU;
+      ms.prev();
+      break;
+    case 's': // Next item
+      state = INIT_MENU;
+      ms.next();
+      break;
+    case 'a': // Back pressed
+      state = INIT_MENU;
+      ms.back();
+      break;
+    case 'd': // Select pressed
+      state = INIT_MENU;
+      ms.select();
+      break;
+    case '?':
+    case 'h': // Display help
+      Serial.println("***************");
+      Serial.println("w: go to previus item (up)");
+      Serial.println("s: go to next item (down)");
+      Serial.println("a: go back (right)");
+      Serial.println("d: select \"selected\" item");
+      Serial.println("?: print this help");
+      Serial.println("h: print this help");
+      Serial.println("***************");
+      break;
+    default:
+      break;
+    }
+  }
 }
 
 uint16_t extract_id(uint32_t ext_id) {
@@ -318,60 +450,28 @@ void onReceive(int packetSize) {
   }
 }
 
-void updateBattery(float level) {
-  uint8_t battery_center_x = (2 * LCD_WD / 3) + 10 + (((LCD_WD / 3) - 20) / 2);
-  uint8_t battery_center_y = 18 + (((2 * LCD_HT / 3) - 30) / 2);
-
-  uint16_t color1 = GREEN;
-  uint16_t color2 = RED;
-  uint8_t b_width = 30;
-  uint8_t tab_width = 10;
-  uint8_t b_height = 55;
-  uint8_t tab_height = 5;
-
-  lcd.fillRect(battery_center_x-(tab_width/2), battery_center_y-(b_height/2)-tab_height, tab_width, tab_height, color1);
-  lcd.fillRect(battery_center_x-(b_width/2), battery_center_y-(b_height/2), b_width, b_height, color1);
-
-  uint8_t pad = 3;
-  uint8_t x1 = battery_center_x-(b_width/2) + pad;
-  uint8_t y1 = battery_center_y-(b_height/2) + pad;
-  uint8_t x2 = b_width - (2 * pad);
-  uint8_t y2 = b_height - (2 * pad);
-  lcd.drawRect(x1, y1, x2, y2, color2);
-
-  y2 = y2 * (1 - level);
-
-  lcd.fillRect(x1, y1, x2, y2, color2);
-
-  if (level < 0.2) {
-    lcd.setTextSize(4);
-    lcd.setCursor(battery_center_x - 10, battery_center_y - 12);
-    lcd.print("!");
-  }
-}
-
 void setupFrame() {
   lcd.fillScreen(BLACK);
   uint8_t panel1_y = 2 * LCD_HT / 3;
-  uint8_t panel3_x = 1 * LCD_WD / 3;
-  uint8_t panel4_x = 2 * LCD_WD / 3;
+  uint8_t panel1_x = 1 * LCD_WD / 3;
+  uint8_t panel2_x = 2 * LCD_WD / 3;
 
-  // top / bottom separator
+  // left to right separator
   lcd.fillRect(0, panel1_y - 2, LCD_WD, 6, LGREY);
   lcd.fillRect(0, panel1_y, LCD_WD, 2, DGREY);
 
-  // top / bottom separator
-  lcd.fillRect(panel3_x,   panel1_y+2, 6, LCD_HT - panel1_y + 2, LGREY);
-  lcd.fillRect(panel3_x+1, panel1_y, 4, LCD_HT - panel1_y + 2, DGREY);
-  lcd.fillRect(panel4_x,   panel1_y+2, 6, LCD_HT - panel1_y + 2, LGREY);
-  lcd.fillRect(panel4_x+1, panel1_y, 4, LCD_HT - panel1_y + 2, DGREY);
+  // bottom separators
+  lcd.fillRect(panel1_x,   panel1_y+2, 6, LCD_HT - panel1_y + 2, LGREY);
+  lcd.fillRect(panel1_x+1, panel1_y, 4, LCD_HT - panel1_y + 2, DGREY);
+  lcd.fillRect(panel2_x,   panel1_y+2, 6, LCD_HT - panel1_y + 2, LGREY);
+  lcd.fillRect(panel2_x+1, panel1_y, 4, LCD_HT - panel1_y + 2, DGREY);
 
   // top row title
-  drawRGBBitmap(0, 0, bitmap[main_display_state], BITMAP_WIDTH, BITMAP_HEIGHT);
+  drawRGBBitmap(28, 34, bitmap[main_display_state], BITMAP_WIDTH, BITMAP_HEIGHT);
   // lower left title
   drawRGBBitmap(20, panel1_y+4, trip, TRIP_WIDTH, TRIP_HEIGHT);
   // lower right title
-  drawRGBBitmap(panel4_x+6, panel1_y+4, temp, TEMP_WIDTH, TEMP_HEIGHT);
+  drawRGBBitmap(panel1_x+6, panel1_y+4, temp, TEMP_WIDTH, TEMP_HEIGHT);
 
   screen_was_reset = true;
 }
