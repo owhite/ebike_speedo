@@ -372,6 +372,7 @@ public:
   void select(bool reset=false);
   bool back();
   uint32_t get_last_menu_time();
+  void touch();
 
   Menu& get_root_menu() const;
   Menu const* get_current_menu() const;

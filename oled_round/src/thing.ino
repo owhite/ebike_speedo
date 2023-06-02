@@ -10,7 +10,6 @@
 #include "states.h"
 #include "can_ids.h" 
 
-
 // LCD setup
 #define LCD_SCLK 13  // SCL
 #define LCD_MOSI 11  // SDA
@@ -19,7 +18,7 @@
 #define LCD_RST   8  // RST can use any pin
 #define LCD_WD 240
 #define LCD_HT 240
-#define  LCD_BL 20
+#define LCD_BL 20
 #define pgm_read_word(addr) (*(const unsigned short *)(addr))
 
 PROGMEM const int sine256[] = {127,130,133,136,139,143,146,149,152,155,158,161,164,167,170,173,176,178,181,184,187,190,192,195,198,200,203,205,208,210,212,215,217,219,221,223,225,227,229,231,233,234,236,238,239,240, 242,243,244,245,247,248,249,249,250,251,252,252,253,253,253,254,254,254,254,254,254,254,253,253,253,252,252,251,250,249,249,248,247,245,244,243,242,240,239,238,236,234,233,231,229,227,225,223, 221,219,217,215,212,210,208,205,203,200,198,195,192,190,187,184,181,178,176,173,170,167,164,161,158,155,152,149,146,143,139,136,133,130,127,124,121,118,115,111,108,105,102,99,96,93,90,87,84,81,78, 76,73,70,67,64,62,59,56,54,51,49,46,44,42,39,37,35,33,31,29,27,25,23,21,20,18,16,15,14,12,11,10,9,7,6,5,5,4,3,2,2,1,1,1,0,0,0,0,0,0,0,1,1,1,2,2,3,4,5,5,6,7,9,10,11,12,14,15,16,18,20,21,23,25,27,29,31, 33,35,37,39,42,44,46,49,51,54,56,59,62,64,67,70,73,76,78,81,84,87,90,93,96,99,102,105,108,111,115,118,121,124 };
@@ -33,6 +32,8 @@ const unsigned long canlInterval = 600;
 uint8_t canBuf[8] = {};
 uint16_t packetId;
 bool canFlag = false;
+
+bool errorFlag = false;
 
 union {
   uint8_t b[4];
@@ -118,8 +119,10 @@ MenuItem   mu3    ("Brightness",   [] { changeState(INIT_BRIGHTNESS); });
 MenuItem   mu1_mi1("Amps" , [] { updateMainDisplay(MAIN_DISPLAY_AMPS);  });
 MenuItem   mu1_mi2("Volts", [] { updateMainDisplay(MAIN_DISPLAY_VOLTS); });
 MenuItem   mu1_mi3("ehz"  , [] { updateMainDisplay(MAIN_DISPLAY_EHZ);   });
-MenuItem   mu1_mi4("MPH"  , [] { updateMainDisplay(MAIN_DISPLAY_MPH);   });
-MenuItem   mu1_mi5("TEMP" , [] { updateMainDisplay(MAIN_DISPLAY_TEMP);  });
+MenuItem   mu1_mi4("TEMP" , [] { updateMainDisplay(MAIN_DISPLAY_TEMP);  });
+MenuItem   mu1_mi5("MPH"  , [] { updateMainDisplay(MAIN_DISPLAY_MPH);   });
+MenuItem   mu1_mi6("KPH"  , [] { updateMainDisplay(MAIN_DISPLAY_KPH);   });
+MenuItem   mu1_mi7("FW"   , [] { updateMainDisplay(MAIN_DISPLAY_FW);   });
 
 MenuItem   mu2_mi1("View errors",  [] { changeState(SHOW_ERRORS); });
 MenuItem   mu2_mi2("Reset errors", &errorReset);
@@ -187,6 +190,9 @@ void setup() {
   mu1.add_item(&mu1_mi2);
   mu1.add_item(&mu1_mi3);
   mu1.add_item(&mu1_mi4);
+  mu1.add_item(&mu1_mi5);
+  mu1.add_item(&mu1_mi6);
+  mu1.add_item(&mu1_mi7);
 
   ms.get_root_menu().add_menu(&mu2, RENDER_BOTTOM);
   mu2.add_item(&mu2_mi1);
@@ -201,8 +207,16 @@ void loop() {
   serial_input();
 
    if ( (millis() - ms.get_last_menu_time() ) > dataInterval) {
+     // keeping this call to a minimum
+     //   it creates the outer bounding boxes on the diplay
+     //   plus some text
      if (! screen_was_reset ) { setupFrame(); }
      state = IDLE_DISPLAY;
+
+     // this was a tough call -- if the user lets the display restart
+     //   should the menu get reset to the top?
+     input_state = INPUT_MENU;
+     ms.reset(); 
   }
 
   canFlag = false;
@@ -218,16 +232,17 @@ void loop() {
     break;
   case INIT_BRIGHTNESS:
     input_state = INPUT_NUMBER;
-    state = SET_BRIGHTNESS;
     lcd.fillScreen(BLACK);
+    lcd.setTextSize(2);
+    lcd.setTextColor(WHITE);
+    lcd.setCursor(20, 6 * LCD_CHAR_HEIGHT);
+    lcd.print("brightness");
+    lcd.setCursor(20, 8 * LCD_CHAR_HEIGHT);
+    lcd.print("use up/down/back");
+    state = SET_BRIGHTNESS;
     break;
   case SET_BRIGHTNESS:
-    lcd.setTextSize(1);
-    lcd.setCursor(0, 10);
-    lcd.setTextColor(WHITE);
-    lcd.print("brightness");
-    lcd.setCursor(0, 20);
-    lcd.print(brightness_val);
+    screen_was_reset = false;
     state = SET_BRIGHTNESS;
     break;
   case IDLE_DISPLAY:
@@ -240,6 +255,7 @@ void loop() {
     int y = map(x, 0, BIKE_SPEED_MAX, 0, range);
 
     updateBattery(vbat);
+    updateCANErrorFlags();
 
     ring.clear();
     ring.setPixelColor(0, ring.Color(0, 0, 240)); 
@@ -278,6 +294,22 @@ void loop() {
   delay(10);
   count++;
   if (count > 255) {count = 0;};
+}
+
+void updateCANErrorFlags() { // update CAN or error flags
+  uint8_t panel1_y = 2 * LCD_HT / 3;
+  uint8_t panel2_x = 2 * LCD_WD / 3;
+
+  if (canFlag) {
+    drawRGBBitmap(panel2_x + 8, panel1_y+8, can_bitmap, CAN_BITMAP_WIDTH, CAN_BITMAP_HEIGHT);
+    return;
+  }
+  else if (errorFlag) {
+    drawRGBBitmap(panel2_x + 8, panel1_y+8, error_bitmap, ERROR_BITMAP_WIDTH, ERROR_BITMAP_HEIGHT);
+  }
+  else {
+    lcd.fillRect(panel2_x + 8, panel1_y+8, CAN_BITMAP_WIDTH, CAN_BITMAP_HEIGHT, BLACK);
+  }
 }
 
 void updateBattery(float level) {
@@ -343,12 +375,21 @@ void serial_brightness_input() {
   if((inChar = Serial.read())>0) {
     switch (inChar) {
     case 'w': // Previus item
-      lcd.fillScreen(BLACK);
+      Serial.println("up");
+      ms.touch();
       brightness_val++;
+      if (brightness_val > 255) {brightness_val = 255;}
+
+      show_brightness();
       break;
     case 's': // Next item
       lcd.fillScreen(BLACK);
+      Serial.println("down");
+      ms.touch();
       brightness_val--;
+      if (brightness_val <= 0) {brightness_val = 0;}
+
+      show_brightness();
       break;
     case 'a': // Back pressed
       state = INIT_MENU;
@@ -363,6 +404,16 @@ void serial_brightness_input() {
       break;
     }
   }
+}
+
+void show_brightness() {
+  lcd.fillScreen(BLACK);
+  lcd.setTextSize(2);
+  lcd.setTextColor(WHITE);
+  lcd.setCursor(20, 6 * LCD_CHAR_HEIGHT);
+  lcd.print("brightness: ");
+  lcd.setCursor(20, 8 * LCD_CHAR_HEIGHT);
+  lcd.print(brightness_val);
 }
 
 void serial_menu_input() {

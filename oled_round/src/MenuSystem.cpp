@@ -427,3 +427,7 @@ uint32_t MenuSystem::get_last_menu_time() {
   return _last_menu_time;
 }
 
+void MenuSystem::touch() {
+  _last_menu_time = millis(); // just does this. 
+}
+

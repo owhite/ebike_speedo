@@ -1,18 +1,8 @@
-/*
- * An example of a custom NumericMenuItem.
- * It tries to display some ASCII graphics in edit mode.
- * This can be useful if you want to give the end user an overview of the value limits.
- * 
- * Copyright (c) 2016 arduino-menusystem
- * Licensed under the MIT license (see LICENSE)
- */
-
 #include "Adafruit_GC9A01A.h"
 #include <MenuSystem.h>
 
 #define	RENDER_LIST    0
 #define	RENDER_BOTTOM  1
-
 
 #define	BLACK   0x0000
 #define LCD_TEXT_SIZE 2
