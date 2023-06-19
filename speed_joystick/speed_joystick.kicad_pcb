@@ -5286,7 +5286,7 @@
       (stroke (width 0.1) (type solid)) (layer "F.Fab") (tstamp 39b9e89f-b5e7-43e1-9b9d-330192259a3c))
     (fp_line (start 1.27 1.27) (end -1.27 1.27)
       (stroke (width 0.1) (type solid)) (layer "F.Fab") (tstamp b9ee8dd7-3f4d-4076-9b4b-4cda29f53ebb))
-    (pad "1" thru_hole rect (at 0 0) (size 1.7 1.7) (drill 1) (layers "*.Cu" "*.Mask") (tstamp 8d216b2e-91f0-440a-b0b8-aed8c08e77ed))
+    (pad "1" thru_hole rect (at 0 0) (size 1.7 1.7) (drill 1) (layers "*.Cu" "*.Mask") (tstamp 0e1677b5-0b52-41d1-aea8-ff49b2465eaf))
     (model "${KICAD6_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.wrl"
       (offset (xyz 0 0 0))
       (scale (xyz 1 1 1))
@@ -6378,10 +6378,6 @@
       (net 68 "+5V") (pinfunction "Vin") (pintype "power_in") (tstamp f4006be6-22a3-42f0-be62-c2686c10d7c3))
   )
 
-  (gr_line (start -98.425 -17.145) (end -95.25 -10.16)
-    (stroke (width 0.2) (type default)) (layer "F.Cu") (tstamp 4867af7f-19b7-4723-adcf-b87c333a896f))
-  (gr_line (start -95.25 -10.16) (end -88.9 -13.335)
-    (stroke (width 0.2) (type default)) (layer "F.Cu") (tstamp 6489524b-2f4e-4fb1-8784-7aa5ffc4bfaa))
   (gr_line (start -55.037543 -24.730311) (end -54.079709 -24.381696)
     (stroke (width 0.2) (type solid)) (layer "Edge.Cuts") (tstamp 0149cba4-fb35-476d-a0a5-78e0452b8897))
   (gr_line (start -88.242455 -8.852796) (end -87.875425 -9.803645)
@@ -6683,6 +6679,10 @@
     (effects (font (size 1 1) (thickness 0.15)) (justify left bottom))
   )
 
+  (segment (start -98.425 -13.97) (end -98.425 -10.795) (width 0.25) (layer "B.Cu") (net 0) (tstamp 2f752b64-1ba4-440c-8a83-a78e47450ec4))
+  (segment (start -92.71 -12.7) (end -92.71 -15.875) (width 0.25) (layer "B.Cu") (net 0) (tstamp 3f94a98d-1e74-4b83-9aef-b72388faccb2))
+  (segment (start -96.52 -8.89) (end -92.71 -12.7) (width 0.25) (layer "B.Cu") (net 0) (tstamp e9c845ff-c4ed-4ba0-b7a5-7d077a3009aa))
+  (segment (start -98.425 -10.795) (end -96.52 -8.89) (width 0.25) (layer "B.Cu") (net 0) (tstamp f376aae6-a733-47be-8fa4-6c9fe822fd9e))
   (segment (start -95.568 30.29) (end -95.504 30.226) (width 0.5) (layer "F.Cu") (net 1) (tstamp 4822b9f4-bfad-4d3b-8080-973dc6dc2f13))
   (segment (start -48.38 42.2275) (end -48.38 35.934) (width 0.5) (layer "F.Cu") (net 1) (tstamp 52243865-fd90-4b44-b8b6-b50bdd4db3fb))
   (segment (start -44.444879 -11.6078) (end -46.707379 -11.6078) (width 0.5) (layer "F.Cu") (net 1) (tstamp 5298340b-106f-467e-8625-434f3f0015c5))
