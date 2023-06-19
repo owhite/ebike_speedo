@@ -1,0 +1,1382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="E">
+  <design>
+    <source>/Users/owhite/kicad/ebike_speedo/speed_joystick/speed_joystick.kicad_sch</source>
+    <date>2023 June 19, Monday 12:13:11</date>
+    <tool>Eeschema 7.0.2-0</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>speed_joystick.kicad_sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+    <sheet number="2" name="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/">
+      <title_block>
+        <title/>
+        <company/>
+        <rev/>
+        <date/>
+        <source>untitled.kicad_sch</source>
+        <comment number="1" value=""/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="C1">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>dbce31c7-b8b6-4fb1-bb19-3220168fcd01</tstamps>
+    </comp>
+    <comp ref="C2">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>a14413e3-a9b5-4c6c-8d98-787f2a9ab7ee</tstamps>
+    </comp>
+    <comp ref="C3">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>97777d5f-eb83-40e8-9aa1-a730379ed8fc</tstamps>
+    </comp>
+    <comp ref="C4">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>bf33ba40-5776-4487-a167-c1c460ab3d94</tstamps>
+    </comp>
+    <comp ref="C5">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>de6b612d-7805-435d-bafd-eaef092153c0</tstamps>
+    </comp>
+    <comp ref="C6">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>a1ef17bd-57ca-4c0e-a2a1-839eb8f15497</tstamps>
+    </comp>
+    <comp ref="C7">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>4d4f7e6a-e0b4-4084-8cc6-732ca58ca7e6</tstamps>
+    </comp>
+    <comp ref="C8">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>aaadf724-18b1-4481-9532-ba6ed3c4acb6</tstamps>
+    </comp>
+    <comp ref="C9">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>5aa64b3d-0d1c-48ce-a44b-a8e0474590f2</tstamps>
+    </comp>
+    <comp ref="C10">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>1c0ebe6e-9ec2-42ec-9f33-bb0388077757</tstamps>
+    </comp>
+    <comp ref="C11">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>13be8b19-5448-4c29-bd38-8a72d920a603</tstamps>
+    </comp>
+    <comp ref="C12">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>8a6445db-dd7d-427b-8e54-8fb38a65526e</tstamps>
+    </comp>
+    <comp ref="C13">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>7bb7753b-51e2-47b1-86db-259e717f64c2</tstamps>
+    </comp>
+    <comp ref="C14">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>f59d24f5-436d-42da-b00a-78f399eb5335</tstamps>
+    </comp>
+    <comp ref="C15">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>f330b086-65e5-48a5-b2e4-713d3440b14c</tstamps>
+    </comp>
+    <comp ref="C16">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>2f3c1228-aa5b-4986-85f9-519d5b85e6b9</tstamps>
+    </comp>
+    <comp ref="C17">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>8294d54e-9dc6-4537-9d0c-d18406f171cd</tstamps>
+    </comp>
+    <comp ref="C18">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>05d3a206-f684-4e2e-ac2a-25a4fcd75625</tstamps>
+    </comp>
+    <comp ref="C19">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>4d5b2367-08b1-4362-b082-6cb4733d6cb4</tstamps>
+    </comp>
+    <comp ref="C20">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>91e0dc8e-1567-4a62-a292-3da6e45a4b0e</tstamps>
+    </comp>
+    <comp ref="C21">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>eac1f486-7a99-4df7-882b-fb8d98f47587</tstamps>
+    </comp>
+    <comp ref="C22">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>9c60051e-4aaf-48ce-a5bb-ea45236166ad</tstamps>
+    </comp>
+    <comp ref="C23">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>1f25dd4e-e447-408f-a7d1-c79109169069</tstamps>
+    </comp>
+    <comp ref="C24">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>1f94ca22-70c2-4789-acb4-df148acb35de</tstamps>
+    </comp>
+    <comp ref="C25">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>8473ad64-7fb1-4ace-b0e8-62e95b635d8b</tstamps>
+    </comp>
+    <comp ref="C26">
+      <value>0.1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C28233</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C28233"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>10348f09-468c-46e2-bb76-b09915ba2148</tstamps>
+    </comp>
+    <comp ref="C27">
+      <value>1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C15849</field>
+      </fields>
+      <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <property name="LCSC" value="C15849"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor, small symbol"/>
+      <property name="ki_keywords" value="capacitor cap"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>b1f2a8a0-2afc-4cc8-aef3-9775f2e25c1f</tstamps>
+    </comp>
+    <comp ref="C28">
+      <value>1uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C15849</field>
+      </fields>
+      <libsource lib="Device" part="C_Small" description="Unpolarized capacitor, small symbol"/>
+      <property name="LCSC" value="C15849"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor, small symbol"/>
+      <property name="ki_keywords" value="capacitor cap"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>86c51438-9406-47c2-b34c-8fd127e630c7</tstamps>
+    </comp>
+    <comp ref="C29">
+      <value>10uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C96446</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C96446"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>9bf10783-adc7-4393-81ce-8dfbaa0d3745</tstamps>
+    </comp>
+    <comp ref="C30">
+      <value>10uF</value>
+      <footprint>Capacitor_SMD:C_0603_1608Metric</footprint>
+      <fields>
+        <field name="LCSC">C96446</field>
+      </fields>
+      <libsource lib="Device" part="C" description="Unpolarized capacitor"/>
+      <property name="LCSC" value="C96446"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Unpolarized capacitor"/>
+      <property name="ki_keywords" value="cap capacitor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>be8757ae-c0b8-4b11-aa14-138128f457b6</tstamps>
+    </comp>
+    <comp ref="D1">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>75b063a1-95fe-4bde-9bfe-a0311d0b5c8f</tstamps>
+    </comp>
+    <comp ref="D2">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>bf3a8c95-6eb3-4515-a8d5-39452d8687ae</tstamps>
+    </comp>
+    <comp ref="D3">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>511f2a75-8773-469b-8f63-334c95f984c2</tstamps>
+    </comp>
+    <comp ref="D4">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>f58164dd-bb50-4956-8550-6c2a1ae67a0a</tstamps>
+    </comp>
+    <comp ref="D5">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>7e6ff776-9539-46c7-ac80-efef2c020518</tstamps>
+    </comp>
+    <comp ref="D6">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>b94ff94b-71fd-4af3-8037-b86caa176dd6</tstamps>
+    </comp>
+    <comp ref="D7">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>a79d951b-272e-4ded-84a2-edd6cca3c19c</tstamps>
+    </comp>
+    <comp ref="D8">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>e7c85774-3b80-4285-9ea8-ce290aa0cce4</tstamps>
+    </comp>
+    <comp ref="D9">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>ed97be64-aea3-4a40-a2b1-e3bf9e0073c4</tstamps>
+    </comp>
+    <comp ref="D10">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>920c0bff-6aed-4576-9af6-85bde72fa936</tstamps>
+    </comp>
+    <comp ref="D11">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>4ec4b154-b5dd-4662-b73a-319395802b7d</tstamps>
+    </comp>
+    <comp ref="D12">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>e5eebec2-e426-4251-bf93-a030b44b0ee6</tstamps>
+    </comp>
+    <comp ref="D13">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>3b1abc5d-3843-49e5-8605-dc3872f337f2</tstamps>
+    </comp>
+    <comp ref="D14">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>88a30da6-5e65-44fa-83a4-d074a1e4d6b6</tstamps>
+    </comp>
+    <comp ref="D15">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>5ea72be8-fdc2-4e71-8d61-f593da0c042f</tstamps>
+    </comp>
+    <comp ref="D16">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>7aa2039e-1333-48b5-a3d7-04fbc13d7d3c</tstamps>
+    </comp>
+    <comp ref="D17">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>15c376ac-89dc-4317-a49e-7738b2a42b53</tstamps>
+    </comp>
+    <comp ref="D18">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>6d70e2aa-80ae-4b35-b620-b1c0bfab9e0d</tstamps>
+    </comp>
+    <comp ref="D19">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>2e04ac5e-fa9c-4298-8069-16f92b5860b1</tstamps>
+    </comp>
+    <comp ref="D20">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>c9a4b70d-9894-44e1-b629-999cd27a067d</tstamps>
+    </comp>
+    <comp ref="D21">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>bc776584-9b79-462c-b0a4-6c5734d0d82b</tstamps>
+    </comp>
+    <comp ref="D22">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>df1000a8-2ee5-4f9b-ad44-f2e0617a2ab7</tstamps>
+    </comp>
+    <comp ref="D23">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>336710fc-1f2c-47a1-9aa8-bbbdbe16b82f</tstamps>
+    </comp>
+    <comp ref="D24">
+      <value>SK6812</value>
+      <footprint>LED_SMD:LED-SMD_4P-L4.0-W1.6-L</footprint>
+      <datasheet>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C2890037</field>
+      </fields>
+      <libsource lib="LED" part="SK6812" description="RGB LED with integrated controller"/>
+      <property name="LCSC" value="C2890037"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="RGB LED with integrated controller"/>
+      <property name="ki_keywords" value="RGB LED NeoPixel addressable"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>34e41392-6b39-4c9b-be41-2e5383b09459</tstamps>
+    </comp>
+    <comp ref="R8">
+      <value>100k</value>
+      <footprint>Resistor_SMD:R_0805_2012Metric</footprint>
+      <fields>
+        <field name="LCSC">C25803</field>
+      </fields>
+      <libsource lib="Device" part="R" description="Resistor"/>
+      <property name="LCSC" value="C25803"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Resistor"/>
+      <property name="ki_keywords" value="R res resistor"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>a736497c-8c25-44e4-a554-de29cf051600</tstamps>
+    </comp>
+    <comp ref="U3">
+      <value>TXS0108E</value>
+      <footprint>Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm</footprint>
+      <datasheet>www.ti.com/lit/ds/symlink/txs0108e.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C17206</field>
+      </fields>
+      <libsource lib="Logic_LevelTranslator" part="TXS0108EPW" description="Bidirectional  level-shifting voltage translator, TSSOP-20"/>
+      <property name="LCSC" value="C17206"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Bidirectional  level-shifting voltage translator, TSSOP-20"/>
+      <property name="ki_keywords" value="8-bit"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>cb56b011-a64d-4e12-9a49-23bba7f7c1d9</tstamps>
+    </comp>
+    <comp ref="U4">
+      <value>XC6206PxxxMR</value>
+      <footprint>Package_TO_SOT_SMD:SOT-23</footprint>
+      <datasheet>https://www.torexsemi.com/file/xc6206/XC6206.pdf</datasheet>
+      <fields>
+        <field name="LCSC">C5446</field>
+      </fields>
+      <libsource lib="Regulator_Linear" part="XC6206PxxxMR" description="Positive 60-250mA Low Dropout Regulator, Fixed Output, SOT-23"/>
+      <property name="LCSC" value="C5446"/>
+      <property name="Sheetname" value="LEDs"/>
+      <property name="Sheetfile" value="untitled.kicad_sch"/>
+      <property name="ki_description" value="Positive 60-250mA Low Dropout Regulator, Fixed Output, SOT-23"/>
+      <property name="ki_keywords" value="Torex LDO Voltage Regulator Fixed Positive"/>
+      <sheetpath names="/LEDs/" tstamps="/b287394c-0133-4402-b5ab-f63ed12c804b/"/>
+      <tstamps>1e04b3cb-ab79-4f8b-a03a-342041170a8e</tstamps>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="Connector_Generic" part="Conn_01x08">
+      <description>Generic connector, single row, 01x08, script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Connector*:*_1x??_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_01x08</field>
+        <field name="Datasheet">~</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+        <pin num="3" name="Pin_3" type="passive"/>
+        <pin num="4" name="Pin_4" type="passive"/>
+        <pin num="5" name="Pin_5" type="passive"/>
+        <pin num="6" name="Pin_6" type="passive"/>
+        <pin num="7" name="Pin_7" type="passive"/>
+        <pin num="8" name="Pin_8" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Connector_Generic" part="Conn_01x09">
+      <description>Generic connector, single row, 01x09, script generated (kicad-library-utils/schlib/autogen/connector/)</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>Connector*:*_1x??_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">J</field>
+        <field name="Value">Conn_01x09</field>
+        <field name="Datasheet">~</field>
+      </fields>
+      <pins>
+        <pin num="1" name="Pin_1" type="passive"/>
+        <pin num="2" name="Pin_2" type="passive"/>
+        <pin num="3" name="Pin_3" type="passive"/>
+        <pin num="4" name="Pin_4" type="passive"/>
+        <pin num="5" name="Pin_5" type="passive"/>
+        <pin num="6" name="Pin_6" type="passive"/>
+        <pin num="7" name="Pin_7" type="passive"/>
+        <pin num="8" name="Pin_8" type="passive"/>
+        <pin num="9" name="Pin_9" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="C">
+      <description>Unpolarized capacitor</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>C_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C</field>
+        <field name="Datasheet">~</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="C_Small">
+      <description>Unpolarized capacitor, small symbol</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>C_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">C</field>
+        <field name="Value">C_Small</field>
+        <field name="Datasheet">~</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="Device" part="R">
+      <description>Resistor</description>
+      <docs>~</docs>
+      <footprints>
+        <fp>R_*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">R</field>
+        <field name="Value">R</field>
+        <field name="Datasheet">~</field>
+      </fields>
+      <pins>
+        <pin num="1" name="" type="passive"/>
+        <pin num="2" name="" type="passive"/>
+      </pins>
+    </libpart>
+    <libpart lib="LED" part="SK6812">
+      <description>RGB LED with integrated controller</description>
+      <docs>https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</docs>
+      <footprints>
+        <fp>LED*SK6812*PLCC*5.0x5.0mm*P3.2mm*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">D</field>
+        <field name="Value">SK6812</field>
+        <field name="Footprint">LED_SMD:LED_SK6812_PLCC4_5.0x5.0mm_P3.2mm</field>
+        <field name="Datasheet">https://cdn-shop.adafruit.com/product-files/1138/SK6812+LED+datasheet+.pdf</field>
+      </fields>
+      <pins>
+        <pin num="1" name="DIN" type="input"/>
+        <pin num="2" name="VDD" type="power_in"/>
+        <pin num="3" name="DOUT" type="output"/>
+        <pin num="4" name="VSS" type="power_in"/>
+      </pins>
+    </libpart>
+    <libpart lib="Logic_LevelTranslator" part="TXS0108EPW">
+      <description>Bidirectional  level-shifting voltage translator, TSSOP-20</description>
+      <docs>www.ti.com/lit/ds/symlink/txs0108e.pdf</docs>
+      <footprints>
+        <fp>*SSOP*4.4x6.5mm*P0.65mm*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">TXS0108EPW</field>
+        <field name="Footprint">Package_SO:TSSOP-20_4.4x6.5mm_P0.65mm</field>
+        <field name="Datasheet">www.ti.com/lit/ds/symlink/txs0108e.pdf</field>
+      </fields>
+      <pins>
+        <pin num="1" name="A1" type="bidirectional"/>
+        <pin num="2" name="VCCA" type="power_in"/>
+        <pin num="3" name="A2" type="bidirectional"/>
+        <pin num="4" name="A3" type="bidirectional"/>
+        <pin num="5" name="A4" type="bidirectional"/>
+        <pin num="6" name="A5" type="bidirectional"/>
+        <pin num="7" name="A6" type="bidirectional"/>
+        <pin num="8" name="A7" type="bidirectional"/>
+        <pin num="9" name="A8" type="bidirectional"/>
+        <pin num="10" name="OE" type="input"/>
+        <pin num="11" name="GND" type="power_in"/>
+        <pin num="12" name="B8" type="bidirectional"/>
+        <pin num="13" name="B7" type="bidirectional"/>
+        <pin num="14" name="B6" type="bidirectional"/>
+        <pin num="15" name="B5" type="bidirectional"/>
+        <pin num="16" name="B4" type="bidirectional"/>
+        <pin num="17" name="B3" type="bidirectional"/>
+        <pin num="18" name="B2" type="bidirectional"/>
+        <pin num="19" name="VCCB" type="power_in"/>
+        <pin num="20" name="B1" type="bidirectional"/>
+      </pins>
+    </libpart>
+    <libpart lib="Regulator_Linear" part="XC6206PxxxMR">
+      <description>Positive 60-250mA Low Dropout Regulator, Fixed Output, SOT-23</description>
+      <docs>https://www.torexsemi.com/file/xc6206/XC6206.pdf</docs>
+      <footprints>
+        <fp>SOT?23*</fp>
+      </footprints>
+      <fields>
+        <field name="Reference">U</field>
+        <field name="Value">XC6206PxxxMR</field>
+        <field name="Footprint">Package_TO_SOT_SMD:SOT-23</field>
+        <field name="Datasheet">https://www.torexsemi.com/file/xc6206/XC6206.pdf</field>
+      </fields>
+      <pins>
+        <pin num="1" name="GND" type="power_in"/>
+        <pin num="2" name="VO" type="power_out"/>
+        <pin num="3" name="VI" type="power_in"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries>
+    <library logical="Connector_Generic">
+      <uri>/Applications/KiCad.app/Contents/SharedSupport/symbols//Connector_Generic.kicad_sym</uri>
+    </library>
+    <library logical="Device">
+      <uri>/Applications/KiCad.app/Contents/SharedSupport/symbols//Device.kicad_sym</uri>
+    </library>
+    <library logical="LED">
+      <uri>/Applications/KiCad.app/Contents/SharedSupport/symbols//LED.kicad_sym</uri>
+    </library>
+    <library logical="Logic_LevelTranslator">
+      <uri>/Applications/KiCad.app/Contents/SharedSupport/symbols//Logic_LevelTranslator.kicad_sym</uri>
+    </library>
+    <library logical="Regulator_Linear">
+      <uri>/Applications/KiCad.app/Contents/SharedSupport/symbols//Regulator_Linear.kicad_sym</uri>
+    </library>
+  </libraries>
+  <nets>
+    <net code="1" name="DIN_SIG">
+      <node ref="D24" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="U3" pin="13" pinfunction="B7" pintype="bidirectional"/>
+    </net>
+    <net code="2" name="Net-(D1-DIN)">
+      <node ref="D1" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D2" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="3" name="Net-(D2-DIN)">
+      <node ref="D2" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D3" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="4" name="Net-(D3-DIN)">
+      <node ref="D3" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D4" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="5" name="Net-(D4-DIN)">
+      <node ref="D4" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D5" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="6" name="Net-(D5-DIN)">
+      <node ref="D5" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D6" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="7" name="Net-(D6-DIN)">
+      <node ref="D6" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D7" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="8" name="Net-(D7-DIN)">
+      <node ref="D7" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D8" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="9" name="Net-(D8-DIN)">
+      <node ref="D8" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D9" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="10" name="Net-(D10-DIN)">
+      <node ref="D10" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D11" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="11" name="Net-(D10-DOUT)">
+      <node ref="D10" pin="3" pinfunction="DOUT" pintype="output"/>
+      <node ref="D9" pin="1" pinfunction="DIN" pintype="input"/>
+    </net>
+    <net code="12" name="Net-(D11-DIN)">
+      <node ref="D11" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D12" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="13" name="Net-(D12-DIN)">
+      <node ref="D12" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D13" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="14" name="Net-(D13-DIN)">
+      <node ref="D13" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D14" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="15" name="Net-(D14-DIN)">
+      <node ref="D14" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D15" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="16" name="Net-(D15-DIN)">
+      <node ref="D15" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D16" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="17" name="Net-(D16-DIN)">
+      <node ref="D16" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D17" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="18" name="Net-(D17-DIN)">
+      <node ref="D17" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D18" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="19" name="Net-(D18-DIN)">
+      <node ref="D18" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D19" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="20" name="Net-(D19-DIN)">
+      <node ref="D19" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D20" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="21" name="Net-(D20-DIN)">
+      <node ref="D20" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D21" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="22" name="Net-(D21-DIN)">
+      <node ref="D21" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D22" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="23" name="Net-(D22-DIN)">
+      <node ref="D22" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D23" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="24" name="Net-(D23-DIN)">
+      <node ref="D23" pin="1" pinfunction="DIN" pintype="input"/>
+      <node ref="D24" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="25" name="Net-(J1-Pin_3)">
+      <node ref="U3" pin="20" pinfunction="B1" pintype="bidirectional"/>
+    </net>
+    <net code="26" name="Net-(J1-Pin_4)">
+      <node ref="U3" pin="18" pinfunction="B2" pintype="bidirectional"/>
+    </net>
+    <net code="27" name="Net-(J1-Pin_5)">
+      <node ref="U3" pin="17" pinfunction="B3" pintype="bidirectional"/>
+    </net>
+    <net code="28" name="Net-(J1-Pin_6)">
+      <node ref="U3" pin="16" pinfunction="B4" pintype="bidirectional"/>
+    </net>
+    <net code="29" name="Net-(J1-Pin_7)">
+      <node ref="U3" pin="15" pinfunction="B5" pintype="bidirectional"/>
+    </net>
+    <net code="30" name="Net-(J1-Pin_8)">
+      <node ref="U3" pin="14" pinfunction="B6" pintype="bidirectional"/>
+    </net>
+    <net code="31" name="Net-(U3-OE)">
+      <node ref="R8" pin="2" pintype="passive"/>
+      <node ref="U3" pin="10" pinfunction="OE" pintype="input"/>
+    </net>
+    <net code="32" name="R_+3.3V">
+      <node ref="C25" pin="1" pintype="passive"/>
+      <node ref="C27" pin="1" pintype="passive"/>
+      <node ref="C30" pin="1" pintype="passive"/>
+      <node ref="R8" pin="1" pintype="passive"/>
+      <node ref="U3" pin="2" pinfunction="VCCA" pintype="power_in"/>
+      <node ref="U4" pin="2" pinfunction="VO" pintype="power_out"/>
+    </net>
+    <net code="33" name="R_+5V">
+      <node ref="C1" pin="1" pintype="passive"/>
+      <node ref="C10" pin="1" pintype="passive"/>
+      <node ref="C11" pin="1" pintype="passive"/>
+      <node ref="C12" pin="1" pintype="passive"/>
+      <node ref="C13" pin="1" pintype="passive"/>
+      <node ref="C14" pin="1" pintype="passive"/>
+      <node ref="C15" pin="1" pintype="passive"/>
+      <node ref="C16" pin="1" pintype="passive"/>
+      <node ref="C17" pin="1" pintype="passive"/>
+      <node ref="C18" pin="1" pintype="passive"/>
+      <node ref="C19" pin="1" pintype="passive"/>
+      <node ref="C2" pin="1" pintype="passive"/>
+      <node ref="C20" pin="1" pintype="passive"/>
+      <node ref="C21" pin="1" pintype="passive"/>
+      <node ref="C22" pin="1" pintype="passive"/>
+      <node ref="C23" pin="1" pintype="passive"/>
+      <node ref="C24" pin="1" pintype="passive"/>
+      <node ref="C26" pin="1" pintype="passive"/>
+      <node ref="C28" pin="1" pintype="passive"/>
+      <node ref="C29" pin="1" pintype="passive"/>
+      <node ref="C3" pin="1" pintype="passive"/>
+      <node ref="C4" pin="1" pintype="passive"/>
+      <node ref="C5" pin="1" pintype="passive"/>
+      <node ref="C6" pin="1" pintype="passive"/>
+      <node ref="C7" pin="1" pintype="passive"/>
+      <node ref="C8" pin="1" pintype="passive"/>
+      <node ref="C9" pin="1" pintype="passive"/>
+      <node ref="D1" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D10" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D11" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D12" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D13" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D14" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D15" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D16" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D17" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D18" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D19" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D2" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D20" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D21" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D22" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D23" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D24" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D3" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D4" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D5" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D6" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D7" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D8" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="D9" pin="2" pinfunction="VDD" pintype="power_in"/>
+      <node ref="U3" pin="19" pinfunction="VCCB" pintype="power_in"/>
+      <node ref="U4" pin="3" pinfunction="VI" pintype="power_in"/>
+    </net>
+    <net code="34" name="R_BL">
+      <node ref="U3" pin="7" pinfunction="A6" pintype="bidirectional"/>
+    </net>
+    <net code="35" name="R_CS">
+      <node ref="U3" pin="4" pinfunction="A3" pintype="bidirectional"/>
+    </net>
+    <net code="36" name="R_DC">
+      <node ref="U3" pin="5" pinfunction="A4" pintype="bidirectional"/>
+    </net>
+    <net code="37" name="R_DIN">
+      <node ref="U3" pin="8" pinfunction="A7" pintype="bidirectional"/>
+    </net>
+    <net code="38" name="R_GND">
+      <node ref="C1" pin="2" pintype="passive"/>
+      <node ref="C10" pin="2" pintype="passive"/>
+      <node ref="C11" pin="2" pintype="passive"/>
+      <node ref="C12" pin="2" pintype="passive"/>
+      <node ref="C13" pin="2" pintype="passive"/>
+      <node ref="C14" pin="2" pintype="passive"/>
+      <node ref="C15" pin="2" pintype="passive"/>
+      <node ref="C16" pin="2" pintype="passive"/>
+      <node ref="C17" pin="2" pintype="passive"/>
+      <node ref="C18" pin="2" pintype="passive"/>
+      <node ref="C19" pin="2" pintype="passive"/>
+      <node ref="C2" pin="2" pintype="passive"/>
+      <node ref="C20" pin="2" pintype="passive"/>
+      <node ref="C21" pin="2" pintype="passive"/>
+      <node ref="C22" pin="2" pintype="passive"/>
+      <node ref="C23" pin="2" pintype="passive"/>
+      <node ref="C24" pin="2" pintype="passive"/>
+      <node ref="C25" pin="2" pintype="passive"/>
+      <node ref="C26" pin="2" pintype="passive"/>
+      <node ref="C27" pin="2" pintype="passive"/>
+      <node ref="C28" pin="2" pintype="passive"/>
+      <node ref="C29" pin="2" pintype="passive"/>
+      <node ref="C3" pin="2" pintype="passive"/>
+      <node ref="C30" pin="2" pintype="passive"/>
+      <node ref="C4" pin="2" pintype="passive"/>
+      <node ref="C5" pin="2" pintype="passive"/>
+      <node ref="C6" pin="2" pintype="passive"/>
+      <node ref="C7" pin="2" pintype="passive"/>
+      <node ref="C8" pin="2" pintype="passive"/>
+      <node ref="C9" pin="2" pintype="passive"/>
+      <node ref="D1" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D10" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D11" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D12" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D13" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D14" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D15" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D16" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D17" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D18" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D19" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D2" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D20" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D21" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D22" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D23" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D24" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D3" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D4" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D5" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D6" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D7" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D8" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="D9" pin="4" pinfunction="VSS" pintype="power_in"/>
+      <node ref="U3" pin="11" pinfunction="GND" pintype="power_in"/>
+      <node ref="U4" pin="1" pinfunction="GND" pintype="power_in"/>
+    </net>
+    <net code="39" name="R_MOSI">
+      <node ref="U3" pin="1" pinfunction="A1" pintype="bidirectional"/>
+    </net>
+    <net code="40" name="R_RES">
+      <node ref="U3" pin="6" pinfunction="A5" pintype="bidirectional"/>
+    </net>
+    <net code="41" name="R_SCLK">
+      <node ref="U3" pin="3" pinfunction="A2" pintype="bidirectional"/>
+    </net>
+    <net code="42" name="unconnected-(D1-DOUT-Pad3)">
+      <node ref="D1" pin="3" pinfunction="DOUT" pintype="output"/>
+    </net>
+    <net code="43" name="unconnected-(U3-A8-Pad9)">
+      <node ref="U3" pin="9" pinfunction="A8" pintype="bidirectional"/>
+    </net>
+    <net code="44" name="unconnected-(U3-B8-Pad12)">
+      <node ref="U3" pin="12" pinfunction="B8" pintype="bidirectional"/>
+    </net>
+  </nets>
+</export>

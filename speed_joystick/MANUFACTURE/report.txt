@@ -1,0 +1,3 @@
+Info: Placement file: '/Users/owhite/kicad/ebike_speedo/speed_joystick/speed_joystick-all-pos.csv'.
+Info: Component count: 20.
+Info: File generation successful.
