@@ -38,6 +38,7 @@
       9,
       10,
       11,
+      12,
       13,
       15,
       16,
@@ -63,11 +64,11 @@
       39,
       40
     ],
-    "visible_layers": "000b0bc_80000001",
+    "visible_layers": "000ffff_80000001",
     "zone_display_mode": 0
   },
   "meta": {
-    "filename": "speed_joystick.kicad_prl",
+    "filename": "PCB_NEW_PCB_2023-06-19.kicad_prl",
     "version": 3
   },
   "project": {

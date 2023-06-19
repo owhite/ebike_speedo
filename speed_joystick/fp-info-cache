@@ -1,4 +1,4 @@
-21677590938067815
+21680977342730278
 4pin
 my_4_tab_edge
 Through hole straight pin header, 1x04, 2.54mm pitch, single row
@@ -8126,6 +8126,13 @@ sd card
 0
 15
 12
+Connector_Card
+TF-SMD_TF-115
+
+
+0
+13
+13
 Connector_Card
 microSD_HC_Hirose_DM3AT-SF-PEJM5
 Micro SD, SMD, right-angle, push-pull (https://www.hirose.com/product/en/download_file/key_name/DM3AT-SF-PEJM5/category/Drawing%20(2D)/doc_file_id/44099/?file_category_id=6&item_id=06090031000&is_series=)
@@ -59674,6 +59681,13 @@ LUMILEDS LUXEON TX L1T2 LED
 0
 3
 3
+LED_SMD
+LED-SMD_4P-L4.0-W1.6-L
+
+
+0
+4
+4
 LED_SMD
 LED_1W_3W_R8
 https://www.gme.cz/data/attachments/dsh.518-234.1.pdf
