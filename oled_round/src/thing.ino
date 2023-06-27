@@ -226,11 +226,14 @@ void loop() {
 
   switch (state) {
   case INIT_MENU:
+    {
     screen_was_reset = false;
     ms.display();
     state = IDLE_MENU;
+    }
     break;
   case INIT_BRIGHTNESS:
+    {
     input_state = INPUT_NUMBER;
     lcd.fillScreen(BLACK);
     lcd.setTextSize(2);
@@ -240,13 +243,17 @@ void loop() {
     lcd.setCursor(20, 8 * LCD_CHAR_HEIGHT);
     lcd.print("use up/down/back");
     state = SET_BRIGHTNESS;
+    }
     break;
   case SET_BRIGHTNESS:
+    {
     screen_was_reset = false;
     state = SET_BRIGHTNESS;
+    }
     break;
   case IDLE_DISPLAY:
     // (int n, int font_width, int x_pos, int y_pos)
+    {
     displayNum( sine256[count], 36, 30, 60);
     displayNum( 255 - sine256[count], 9, 30, (2 * LCD_HT / 3) + 18);
     displayNum( 255 - sine256[count], 9, (1 * LCD_WD / 3) + 8, (2 * LCD_HT / 3) + 18);
@@ -263,8 +270,10 @@ void loop() {
     ring.setPixelColor(23, ring.Color(0, 0, 240)); 
     ring.setPixelColor(y+2, ring.Color(0,   240,   0)); 
     ring.show(); 
+    }
     break;
   case SHOW_ERRORS:
+    {
     lcd.fillScreen(BLACK);
     lcd.setTextSize(1);
     lcd.setCursor(0, 10);
@@ -284,8 +293,10 @@ void loop() {
       error_val = error_val >> 1;
     }
     state = IDLE_MENU;
+    }
     break;
   case IDLE_MENU:
+    {}
     break;
   default:
     break;
