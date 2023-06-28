@@ -3,8 +3,6 @@
 
 #define WHITE   0xFFFF
 
-Adafruit_GC9A01A *_lcd;
-
 void MyRenderer::initLCD(Adafruit_GC9A01A *l) {
   _lcd = l;
 }

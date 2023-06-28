@@ -1,6 +1,7 @@
 #include "Adafruit_GC9A01A.h"
 #include <MenuSystem.h>
 
+// didnt get these to work
 #define	RENDER_LIST    0
 #define	RENDER_BOTTOM  1
 
@@ -21,6 +22,9 @@ public:
   void render_numeric_menu_item(NumericMenuItem const& menu_item) const;
   void render_menu(Menu const& menu) const;
   void menu_setup(Menu const& menu, MenuItem const& menu_item) const;
+
+private:
+  Adafruit_GC9A01A *_lcd;
 
 };
 

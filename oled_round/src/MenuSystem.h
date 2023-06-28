@@ -1,7 +1,14 @@
 /*
+ * Code adapted from https://github.com/jonblack/arduino-menusystem/
+ *
  * Copyright (c) 2015, 2016 arduino-menusystem
  * Licensed under the MIT license (see LICENSE)
- */
+ *
+ * Minor additions include:
+ * get_last_menu_time()
+ * touch()
+ * and layout items in menu_handling.h
+ */ 
 
 #ifndef MENUSYSTEM_H
 #define MENUSYSTEM_H
@@ -16,19 +23,6 @@ class Menu;
 class MenuComponentRenderer;
 class MenuSystem;
 
-//! \brief Abstract base class that represents a component in the menu
-//!
-//! This is the abstract base class for the main components used to build a
-//! menu structure: Menu and MenuItem.
-//!
-//! MenuComponent should not be used as a base class in clients. Instead use
-//! either Menu or MenuItem.
-//!
-//! MenuComponent is the `Component` part of the composite design pattern (see:
-//! https://en.wikipedia.org/wiki/Composite_pattern).
-//!
-//! \see Menu
-//! \see MenuItem
 class MenuComponent {
   friend class MenuSystem;
   friend class Menu;

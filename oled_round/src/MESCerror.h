@@ -1,3 +1,8 @@
+/*
+ * Adapted from https://github.com/davidmolony/MESC_Firmware
+ *  and very likely to go out of date
+ */ 
+
 #define ERROR_CODES 27
 
 char *error_codes[] = {

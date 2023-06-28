@@ -92,11 +92,11 @@ uint32_t dataInterval = 4000;
 uint32_t dataNow;
 
 // Neopixel setup
-#define PIXELPIN   7 
+#define PIXELPIN   2
 #define NUMPIXELS 24 
-int BRIGHTVAL = 6; 
-
+int BRIGHTVAL = 100; 
 Adafruit_NeoPixel ring(NUMPIXELS, PIXELPIN, NEO_GRB + NEO_KHZ800);
+
 int main_display_state = MAIN_DISPLAY_VOLTS;
 int input_state = INPUT_MENU;
 int state = IDLE_DISPLAY;
@@ -184,6 +184,11 @@ void setup() {
 
   setupFrame();
 
+  ring.setBrightness(BRIGHTVAL);
+  ring.begin();
+  ring.clear();
+  ring.show();
+
   my_renderer.initLCD(&lcd);
   ms.get_root_menu().add_menu(&mu1, RENDER_LIST);
   mu1.add_item(&mu1_mi1);
@@ -200,13 +205,25 @@ void setup() {
 
   ms.get_root_menu().add_item(&mu3);
 
+  int pixelCount = 0;
+
   // ms.display();
 }
 
 void loop() {
   serial_input();
 
-   if ( (millis() - ms.get_last_menu_time() ) > dataInterval) {
+  ring.clear();
+  ring.setPixelColor(pixelCount, ring.Color(50,   50,   50)); 
+  ring.show(); 
+
+  pixelCount++;
+  if (pixelCount > NUMPIXELS) {
+    pixelCount = 0;
+  }
+  
+
+  if ( (millis() - ms.get_last_menu_time() ) > dataInterval) {
      // keeping this call to a minimum
      //   it creates the outer bounding boxes on the diplay
      //   plus some text
@@ -264,12 +281,6 @@ void loop() {
     updateBattery(vbat);
     updateCANErrorFlags();
 
-    ring.clear();
-    ring.setPixelColor(0, ring.Color(0, 0, 240)); 
-    ring.setPixelColor(1, ring.Color(0, 0, 240)); 
-    ring.setPixelColor(23, ring.Color(0, 0, 240)); 
-    ring.setPixelColor(y+2, ring.Color(0,   240,   0)); 
-    ring.show(); 
     }
     break;
   case SHOW_ERRORS:
