@@ -2,7 +2,6 @@
 #define INIT_DISPLAY     1
 #define SHOW_MENU        2
 #define INIT_BRIGHTNESS  3
-#define SET_BRIGHTNESS   4
 #define INIT_ERRORS      5
 #define SHOW_ERRORS      6
 #define IDLE_MENU        7

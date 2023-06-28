@@ -85,8 +85,10 @@ void displayHandler::showBrightness(uint8_t val) {
   _lcd->setTextSize(2);
   _lcd->setTextColor(WHITE);
   _lcd->setCursor(20, 6 * LCD_CHAR_HEIGHT);
-  _lcd->print("brightness: ");
+  _lcd->print("brightness:");
   _lcd->setCursor(20, 8 * LCD_CHAR_HEIGHT);
+  _lcd->print("(max 250)");
+  _lcd->setCursor(20, 10 * LCD_CHAR_HEIGHT);
   _lcd->print(val);
 }
 
