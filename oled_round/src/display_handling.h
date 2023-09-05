@@ -1,5 +1,6 @@
-#include "Adafruit_GC9A01A.h"
 #include "Arduino.h"
+#include <Adafruit_GC9A01A.h>
+#include <Adafruit_NeoPixel.h>
 #include <DigiFont.h>
 
 #ifndef display_handling_h
@@ -27,23 +28,34 @@
 
 #define pgm_read_word(addr) (*(const unsigned short *)(addr))
 
+// star field stuff
 class displayHandler
 {
   public:
+
   displayHandler();
-  void begin(Adafruit_GC9A01A *l, DigiFont *f);
+  void begin(Adafruit_GC9A01A *l, DigiFont *f, Adafruit_NeoPixel *ring);
   void updateCANErrorFlags(bool canFlag, bool errorFlag);
-  void updateBattery(float level);
+  void updateBattery(float level, float min, float max);
   void displayNum(int n, int font_width, int x_pos, int y_pos);
   void drawRGBBitmap(int16_t x, int16_t y, const uint16_t bitmap[], int16_t w, int16_t h);
   void showBrightness(uint8_t val);
   void setupFrame(int display_state);
+  int starRandom(int lower, int upper);
+  void starDisplay();
+  void showStarField();
+
 
   private:
+  bool _canFlag_old;
+  bool _errorFlag_old;
   int _pin;
   Adafruit_GC9A01A *_lcd;
   DigiFont *_font;
-
+  Adafruit_NeoPixel *_ring;
+  constexpr static  int _starCount = 512;
+  int _maxDepth = 32; 
+  double _stars[_starCount][3]; // x, y and z co-ordinates
 };
 
 #endif

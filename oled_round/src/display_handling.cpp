@@ -5,9 +5,60 @@
 displayHandler::displayHandler() {
 }
 
-void displayHandler::begin(Adafruit_GC9A01A *l,   DigiFont *f) {
+void displayHandler::begin(Adafruit_GC9A01A *l, DigiFont *f, Adafruit_NeoPixel *r) {
     _lcd = l;
     _font = f;
+    _ring = r;
+}
+
+int displayHandler::starRandom(int lower, int upper) { return lower + static_cast<int>(rand() % (upper - lower + 1)); }
+
+void displayHandler::starDisplay() {
+  int origin_x = LCD_WD/2;
+  int origin_y = LCD_HT/2;
+
+  // Iterate through the stars reducing the z co-ordinate in order to move the
+  // star closer.
+  for (int i = 0; i < _starCount; ++i) {
+    _stars[i][2] -= 0.4;
+    // if the star has moved past the screen (z < 0) reposition it far away
+    // with random x and y positions.
+    if (_stars[i][2] <= 0) {
+      _stars[i][0] = displayHandler::starRandom(-25, 25);
+      _stars[i][1] = displayHandler::starRandom(-25, 25);
+      _stars[i][2] = _maxDepth;
+    }
+
+    // Convert the 3D coordinates to 2D using perspective projection.
+    double k = LCD_WD / _stars[i][2];
+    int x = static_cast<int>(_stars[i][0] * k + origin_x);
+    int y = static_cast<int>(_stars[i][1] * k + origin_y);
+
+    //  Draw the star (if it is visible in the screen).
+    // Distant stars are smaller than closer stars.
+    if ((0 <= x and x < LCD_WD) 
+	and (0 <= y and y < LCD_HT)) {
+      int size = (1 - _stars[i][2] / _maxDepth) * 4;
+      _lcd->fillRect(x,y,size,size,WHITE);
+    }
+  }
+}
+
+void displayHandler::showStarField() {
+  // Initialise the star field with random stars
+  for (int i = 0; i < _starCount; i++) {
+    _stars[i][0] = displayHandler::starRandom(-25, 25);
+    _stars[i][1] = displayHandler::starRandom(-25, 25);
+    _stars[i][2] = displayHandler::starRandom(0, _maxDepth);
+  }
+  
+  for(int i = 0; i<100; i++) {
+    starDisplay();
+    _ring->clear();
+    _ring->setPixelColor(i % 24, _ring->Color(0, 255, 0));
+    _ring->show(); 
+    delay(50);
+  }
 }
 
 // right justifies digit uses the hideous arduino String() function
@@ -41,7 +92,7 @@ void displayHandler::displayNum(int n, int font_width, int x_pos, int y_pos) {
 
 }
 
-void displayHandler::updateBattery(float level) {
+void displayHandler::updateBattery(float level, float min, float max) {
   uint8_t battery_x = (LCD_WD / 2) + 20;
   uint8_t battery_y = 30;
 
@@ -51,6 +102,9 @@ void displayHandler::updateBattery(float level) {
   uint8_t tab_width = 6;
   uint8_t b_height = 30;
   uint8_t tab_height = 20;
+
+  level = (level < min) ? min : level;
+  level = map(level, min, max, 0, 1);
 
   _lcd->fillRect(battery_x-(b_width/2),
 	       battery_y-(b_height/2),
@@ -122,16 +176,24 @@ void displayHandler::updateCANErrorFlags(bool canFlag, bool errorFlag) {
   uint8_t panel1_y = 2 * LCD_HT / 3;
   uint8_t panel2_x = 2 * LCD_WD / 3;
 
-  if (canFlag) {
-    displayHandler::drawRGBBitmap(panel2_x + 8, panel1_y+8, can_bitmap, CAN_BITMAP_WIDTH, CAN_BITMAP_HEIGHT);
-    return;
+
+  if (_canFlag_old != canFlag || _errorFlag_old != errorFlag) {
+
+    _lcd->fillRect(panel2_x + 6, panel1_y + 6, CAN_BITMAP_WIDTH + 4, CAN_BITMAP_HEIGHT * 4, BLACK);
+
+    if (errorFlag) {
+      displayHandler::drawRGBBitmap(panel2_x + 8, panel1_y+8, error_bitmap, ERROR_BITMAP_WIDTH, ERROR_BITMAP_HEIGHT);
+    }
+    else if (canFlag) {
+      displayHandler::drawRGBBitmap(panel2_x + 8, panel1_y+8, can_bitmap, CAN_BITMAP_WIDTH, CAN_BITMAP_HEIGHT);
+    }
+    else {
+      _lcd->fillCircle(panel2_x + 12 + CAN_BITMAP_WIDTH/2, panel1_y+24, 12, GREEN);
+    }
+    _canFlag_old = canFlag;
+    _errorFlag_old = errorFlag;
   }
-  else if (errorFlag) {
-    displayHandler::drawRGBBitmap(panel2_x + 8, panel1_y+8, error_bitmap, ERROR_BITMAP_WIDTH, ERROR_BITMAP_HEIGHT);
-  }
-  else {
-    _lcd->fillRect(panel2_x + 8, panel1_y+8, CAN_BITMAP_WIDTH, CAN_BITMAP_HEIGHT, BLACK);
-  }
+
 }
 
 

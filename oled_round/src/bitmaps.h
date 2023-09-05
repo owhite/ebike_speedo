@@ -11,7 +11,7 @@
 #define BITMAP_HEIGHT 20
 
 #define MAIN_DISPLAY_AMPS    0
-#define MAIN_DISPLAY_VOLTS   1
+#define MAIN_DISPLAY_BAT     1
 #define MAIN_DISPLAY_EHZ     2
 #define MAIN_DISPLAY_TEMP    3
 #define MAIN_DISPLAY_MPH     4

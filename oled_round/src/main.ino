@@ -1,6 +1,6 @@
 // Libraries required to make this thing run.
 //  respect all licensing associated with these libraries:
-#include <CAN.h>
+#include <FlexCAN_T4.h>
 #include <MenuSystem.h> 
 #include <Adafruit_GFX.h>
 #include <Adafruit_GC9A01A.h>
@@ -8,12 +8,12 @@
 #include <DigiFont.h>
 #include <EEPROM.h>
 // Other custom code blocks
-#include <display_handling.h> 
+#include <display_handling.h> // my collection of stupid things
 #include <menu_handling.h>
 #include <bitmaps.h>
 #include <MESCerror.h>
 #include <states.h>
-#include <can_ids.h> // these will eventually be out of date 
+#include <can_ids.h> // from Jens' code
 
 // BIKE setup, no I'm not storing all this in eeprom
 #define BIKE_SPEED_MAX 50
@@ -21,17 +21,19 @@
 #define CIRCUMFERENCE 219.5 
 #define GEAR_RATIO 9.82
 #define CM_IN_MILE 160900
-#define MINVOLTAGE 58
-#define MAXVOLTAGE 75 
+#define MINVOLTAGE 40.0
+#define MAXVOLTAGE 60.0
 #define MAXTEMP 70
 #define MAXSPEED 50
-float EHZ_scale = (CIRCUMFERENCE * 60 * 60) / (CM_IN_MILE * GEAR_RATIO * POLEPAIRS);
+float EHZ_SCALE_M = (CIRCUMFERENCE * 60 * 60) / (CM_IN_MILE * GEAR_RATIO * POLEPAIRS);
+float EHZ_SCALE_K = (CIRCUMFERENCE * 60 * 60) / (100000 * GEAR_RATIO * POLEPAIRS);
 
 // eeprom storage positions
 #define RESET_STORED_VALUES 0x0000 // change to 1 if store new values
 #define PIX_BRIGHTNESS_ADDR 0x0011
 #define PIX_COLOR_ADDR      0x0012
-#define METRIC_PREF_ADDR    0x0013
+#define DISPLAY_STATE_ADDR  0x0013
+#define METRIC_PREF_ADDR    0x0014
 
 // joystick button setup
 const uint8_t btnMax = 5;
@@ -41,12 +43,7 @@ boolean btnPressed[] = {false, false, false, false, false};
 uint8_t btnPin[5] = {19, 21, 18, 17, 16};
 uint8_t btnNum = 0;
 
-// Display things
-
-int input_state = INPUT_MENU;
-int state = IDLE_DISPLAY;
-
-// Neopixel setup
+// neopixel setup
 #define PIXELPIN   2
 #define NUMPIXELS 24
 Adafruit_NeoPixel ring(NUMPIXELS, PIXELPIN, NEO_GRB + NEO_KHZ800);
@@ -58,36 +55,31 @@ const uint8_t PIX_WHITE = 3;
 
 uint32_t colorArray[] = {ring.Color(255, 0, 0), ring.Color(0, 255, 0), ring.Color(0, 0, 255), ring.Color(255, 255, 255)};
 
-// gets changed later by getDefaultValues();
+// gets changed later by eepromDefaultValues();
 uint8_t metric_pref = 0;
 uint8_t pixelColor = PIX_WHITE;
 uint8_t neoBrightVal = 5;
 
-// Round LCD setup
+// round oled setup
 //  see Adafruit_GC9A01A github for pin usage
 #define LCD_BL_PIN 5 // pin used for brightness
 Adafruit_GC9A01A lcd(10, 9, 11, 13, 8, 12);
 
-// CAN Variables
+// CAN stuff
 #define CAN_PACKET_SIZE  8
-#define CAN_DEBUG        0
+
+FlexCAN_T4<CAN2, RX_SIZE_256, TX_SIZE_16> can;
+CAN_message_t msg;
 unsigned long canReceiveTime;
 const unsigned long canInterval = 2000;
 uint8_t canBuf[8] = {};
-uint16_t packetId;
-
+const uint8_t userRequestMax = 5; 
+float reportedValue; 
+float reportValues[userRequestMax] = {};
 bool canFlag = false;
 bool errorFlag = false;
-
-union {
-  uint8_t b[4];
-  float f;
-} canData1;
-
-union {
-  uint8_t b[4];
-  float f;
-} canData2;
+bool canFlag_old = false;
+bool errorFlag_old = false;
 
 // Digifont setup, set up here but used in displayHandlder object. 
 void customLineH(int x0,int x1, int y, int c)    { lcd.drawFastHLine(x0,y,x1-x0+1,c); }
@@ -95,27 +87,31 @@ void customLineV(int x, int y0,int y1, int c)    { lcd.drawFastVLine(x,y0,y1-y0+
 void customRect(int x, int y,int w,int h, int c) { lcd.fillRect(x,y,w,h,c); } 
 DigiFont font(customLineH, customLineV, customRect);
 
+// display things
+int input_state = INPUT_MENU;
+int state = IDLE_DISPLAY;
+
 displayHandler display;
 
 uint32_t dataInterval = 4000; 
-int main_display_state = MAIN_DISPLAY_VOLTS;
+int main_display_state = MAIN_DISPLAY_BAT;
 uint8_t brightness_val = 10;
 int count = 0;
 bool entered_menu = true;
 float level_old = 0.0;
 float level = 0.8;
 
-// Menu setup
+// menu setup
 MyRenderer my_renderer;
 MenuSystem ms(my_renderer);
 
 Menu       mu1    ("Display");
 Menu       mu2    ("Errors");
 MenuItem   mu3    ("Brightness",   [] { changeState(INIT_BRIGHTNESS); });
-Menu       mu4    ("Speedo Colors");
+Menu       mu4    ("Ring Colors");
 
 MenuItem   mu1_mi1("Amps" , [] { updateMainDisplay(MAIN_DISPLAY_AMPS);  });
-MenuItem   mu1_mi2("Volts", [] { updateMainDisplay(MAIN_DISPLAY_VOLTS); });
+MenuItem   mu1_mi2("BAT  ", [] { updateMainDisplay(MAIN_DISPLAY_BAT); });
 MenuItem   mu1_mi3("ehz"  , [] { updateMainDisplay(MAIN_DISPLAY_EHZ);   });
 MenuItem   mu1_mi4("TEMP" , [] { updateMainDisplay(MAIN_DISPLAY_TEMP);  });
 MenuItem   mu1_mi5("MPH"  , [] { updateMainDisplay(MAIN_DISPLAY_MPH);   });
@@ -130,7 +126,7 @@ MenuItem   mu4_mi2("GREEN", [] { changeLEDColor(PIX_GREEN, "green"); });
 MenuItem   mu4_mi3("BLUE",  [] { changeLEDColor(PIX_BLUE, "blue"); });
 MenuItem   mu4_mi4("WHITE", [] { changeLEDColor(PIX_WHITE, "white"); });
 
-// Menu callbacks
+// menu callbacks
 void changeLEDColor(uint32_t color, char *str) {
   Serial.print("LED color :: ");
   Serial.println( color );
@@ -150,8 +146,10 @@ void changeLEDColor(uint32_t color, char *str) {
   EEPROM.write(PIX_COLOR_ADDR, color);
 
   display.setupFrame(main_display_state);
-  entered_menu = false;
-  state = IDLE_DISPLAY;
+  // this used to be false, changing this to see what happens
+  // entered_menu = false; 
+  entered_menu = true; 
+  state = INIT_DISPLAY;
 }
 
 void updateMainDisplay(int val) {
@@ -167,9 +165,13 @@ void updateMainDisplay(int val) {
   delay(1000); // pause to look at LCD
 
   main_display_state = val;
+  EEPROM.write(DISPLAY_STATE_ADDR, main_display_state);
+
   display.setupFrame(main_display_state);
-  entered_menu = false;
-  state = IDLE_DISPLAY;
+  // this used to be false, changing this to see what happens
+  // entered_menu = false; 
+  entered_menu = true;
+  state = INIT_DISPLAY;
 }
 
 void changeState(int val) {
@@ -203,8 +205,10 @@ void errorReset(MenuComponent* p_menu_component) {
 
 void setup() {
   Serial.begin(9600);
+  can.begin();
+  can.setBaudRate(500000);
 
-  getDefaultValues();
+  eepromDefaultValues();
 
   pinMode(LCD_BL_PIN, OUTPUT); // LCD brightness
   digitalWrite(LCD_BL_PIN, HIGH);
@@ -214,13 +218,20 @@ void setup() {
   lcd.fillScreen(BLACK);
   lcd.setTextSize(1);
 
-  for (int i = 0; i < 5; i++) {
-    pinMode(btnPin[i], INPUT);
-  }
+  ring.begin(); 
+  ring.setBrightness(neoBrightVal);
+  ring.clear();
+  ring.show(); // one LED flashes for some reason
+  ring.clear();
+  ring.show(); 
+
+  for (int i = 0; i < 5; i++) { pinMode(btnPin[i], INPUT); }
 
   // some parts parts of code change the LCD in the displayHandler
   //  while other parts do it here in main. not clever, but ¯\_(ツ)_/¯
-  display.begin(&lcd, &font);
+  display.begin(&lcd, &font, &ring);
+
+  display.showStarField();
 
   state = INIT_DISPLAY;
 
@@ -246,25 +257,20 @@ void setup() {
   mu4.add_item(&mu4_mi3);
   mu4.add_item(&mu4_mi4);
 
-  ring.begin(); 
-  ring.setBrightness(neoBrightVal);
-  ring.clear();
-  ring.show(); // one LED flashes for some reason
-  ring.clear();
-  ring.show(); 
+  entered_menu = true;
 }
 
 void loop() {
-  serial_input();
-
   // menu timeout
-  if ( (millis() - ms.get_last_menu_time() ) > dataInterval) { state = INIT_DISPLAY; }
+  state = ((millis() - ms.get_last_menu_time() ) > dataInterval) ? INIT_DISPLAY : state;
 
-  canFlag = false;
-  if ((millis() - canReceiveTime ) > canInterval) {  
-    canFlag = true;
-  }
+  // can timeout
+  canFlag = ((millis() - canReceiveTime ) > canInterval) ? true : false;
 
+  level = reportValues[2];
+
+  serial_input();
+  can_input();
   joystick();
 
   switch (state) {
@@ -279,9 +285,10 @@ void loop() {
     {
       if (entered_menu) {
 	display.setupFrame(main_display_state);
-	display.updateBattery(level);
+	display.updateBattery(reportValues[2], MINVOLTAGE, MAXVOLTAGE);
 	entered_menu = false;
       }
+      display.updateCANErrorFlags(canFlag, errorFlag);
       // if the user timesouts the menu, menu is reset to top
       input_state = INPUT_MENU;
       ms.reset(); 
@@ -333,28 +340,41 @@ void loop() {
     }
     break;
   case IDLE_DISPLAY:
+    // this updates the important numbers each cycle
     {
-      int speed = 0;
-      speed = scale(sine256[count], 0, 254, 0, MAXSPEED);
+      // the big number on the display
+      // this is just ehz right now
+      int x  = map(sine256[count], 0, 255, 0, 50);
+      display.displayNum(x, 36, 30, 60);
 
-      // update the important numbers each cycle
-      display.displayNum( speed, 36, 30, 60);
-      display.displayNum( 255 - sine256[count], 9, 30, (2 * LCD_HT / 3) + 18);
-      display.displayNum( 255 - sine256[count], 9, (1 * LCD_WD / 3) + 8, (2 * LCD_HT / 3) + 18);
+      // display.displayNum(reportValues[2], 36, 30, 60);
+      // miles
+      display.displayNum(0, 9, (1 * LCD_WD / 3) + 8, (2 * LCD_HT / 3) + 18);
+      // temp
+      display.displayNum(reportValues[4], 9, 30, (2 * LCD_HT / 3) + 18);
 
       // update battery icon only when needed
-      level = 0.8;
-      if (abs(level - level_old) > .02) { display.updateBattery(level); }
+      level = reportValues[2];
+      if (abs(level - level_old) > .12) { display.updateBattery(level, MINVOLTAGE, MAXVOLTAGE); }
       level_old = level;
+      
       display.updateCANErrorFlags(canFlag, errorFlag);
 
-      int pixelPos = 0;
-      pixelPos = scale(speed, 0, MAXSPEED, 0, 20);
+      int speed = (METRIC_PREF_ADDR) ? reportValues[1] * EHZ_SCALE_K : reportValues[1] * EHZ_SCALE_M;
+      int pixelPos = scale(speed, 0, MAXSPEED, 0, 20);
       
+      // foolin' around to play with pixels
+      pixelPos = map(sine256[count], 0, 255, 0, 20);
       // update outer ring
       ring.clear();
-      if (speed < MAXSPEED) {
+      if (reportValues[0] < MAXSPEED) {
 	// notice we add one to position
+	ring.setPixelColor(1, colorArray[PIX_BLUE]);
+	ring.setPixelColor(5, colorArray[PIX_BLUE]);
+	ring.setPixelColor(9, colorArray[PIX_BLUE]);
+	ring.setPixelColor(13, colorArray[PIX_BLUE]);
+	ring.setPixelColor(17, colorArray[PIX_BLUE]);
+	ring.setPixelColor(21, colorArray[PIX_BLUE]);
 	ring.setPixelColor(1 + pixelPos, colorArray[pixelColor]);
       }
       else {
@@ -372,7 +392,8 @@ void loop() {
     break;
   }
 
-  count++;
+  delay(50);
+  count += 1;
   if (count > 255) {count = 0;};
 }
 
@@ -394,13 +415,14 @@ void joystick() {
       elapsedBtnTime[i] = 0;
       btnPressed[i] = false;
       btnNum = i;
+
       switch (btnNum) {
       case 0: // back
 	Serial.println("back"); 
 	state = INIT_MENU;
 	ms.back();
 	break;
-      case 1: // select
+      case 1: // select. dont use the "pushdown" button
       case 3: // forward
 	Serial.println("select"); 
 	if (input_state == INPUT_MENU) {
@@ -560,63 +582,75 @@ void serial_brightness_input() {
   }
 }
 
-uint16_t extract_id(uint32_t ext_id) {
-  return (ext_id >> 16);
-}
+void can_input() {
+  uint16_t packetId;
+  union {
+    uint8_t b[4];
+    float f;
+  } canData1;
 
-void onReceive(int packetSize) {
-  // received a packet
-  packetId = extract_id(CAN.packetId());
-  if (packetSize == CAN_PACKET_SIZE) {
-    for (int i = 0; i < packetSize; i++) {
-      canBuf[i] = CAN.read();
-    }
-    canData1.b[0]=canBuf[0];
-    canData1.b[1]=canBuf[1];
-    canData1.b[2]=canBuf[2];
-    canData1.b[3]=canBuf[3];
-    canData2.b[0]=canBuf[4];
-    canData2.b[1]=canBuf[5];
-    canData2.b[2]=canBuf[6];
-    canData2.b[3]=canBuf[7];
+  union {
+    uint8_t b[4];
+    float f;
+  } canData2;
 
-    // hardcoded index into reportValues is kind of stupid
-    // the idx corresponds items user wants
-    // and map to: prefixes[] = {'M', 'E', 'B', 'A', 'T'}; 
-    switch (packetId) {
-    case CAN_ID_SPEED:
-      // DEBUG_PRINT(" PACKET :: ");
-      // DEBUG_PRINT(packetId);
-      // reportValues[1] = canData1.f;  // this has ehz
-      // reportValues[0] = reportValues[1] * EHZ_scale; // this has MPH
-      // DEBUG_PRINT(" :: ");
-      // DEBUG_PRINTLN(reportValues[0]);
-      canReceiveTime = millis();
-      break;
-    case CAN_ID_BUS_VOLT_CURR:
-      // reportValues[2] = canData1.f; // battery voltage
-      // reportValues[3] = canData2.f; // battery current
-      canReceiveTime = millis();
-      break;
-    case CAN_ID_TEMP_MOT_MOS1:
-      // reportValues[4] = canData2.f;
-      canReceiveTime = millis();
-      break;
-    default:
-      break;
+  if ( can.read(msg) ) {
+
+    if (msg.len == CAN_PACKET_SIZE) {
+      canData1.b[0]=msg.buf[0];
+      canData1.b[1]=msg.buf[1];
+      canData1.b[2]=msg.buf[2];
+      canData1.b[3]=msg.buf[3];
+      canData2.b[0]=msg.buf[4];
+      canData2.b[1]=msg.buf[5];
+      canData2.b[2]=msg.buf[6];
+      canData2.b[3]=msg.buf[7];
+
+      if (0) { // debug
+	Serial.print("CAN "); 
+	Serial.print("MB: "); Serial.print(msg.mb);
+	Serial.print("  ID: 0x"); Serial.print(msg.id, HEX );
+	Serial.print("  EXT: "); Serial.print(msg.flags.extended );
+	Serial.print("  LEN: "); Serial.print(msg.len);
+	Serial.print(" DATA: ");
+	Serial.print("  TS: "); Serial.println(msg.timestamp);
+      }
+
+      packetId = (msg.id >> 16);
+
+      switch (packetId) {
+      case CAN_ID_SPEED:
+	reportValues[1] = canData1.f;  // ehz
+	canReceiveTime = millis();
+	break;
+      case CAN_ID_BUS_VOLT_CURR:
+	reportValues[2] = canData1.f; // battery voltage
+	reportValues[3] = canData2.f; // battery current
+	reportValues[2] = (reportValues[2] < MINVOLTAGE) ? MINVOLTAGE : reportValues[2];
+	canReceiveTime = millis();
+	break;
+      case CAN_ID_TEMP_MOT_MOS1:
+	reportValues[4] = canData2.f;
+	canReceiveTime = millis();
+	break;
+      default:
+	break;
+      }
     }
   }
 }
 
-void getDefaultValues() {
+void eepromDefaultValues() {
   uint8_t value; 
   
   // use this to initialize the teensy or if you create new things to store
+  // main_display_state = val;
   if (RESET_STORED_VALUES) { 
     Serial.println("storing values:");
     EEPROM.write(PIX_BRIGHTNESS_ADDR, 125);
     EEPROM.write(PIX_COLOR_ADDR, 3);
     EEPROM.write(METRIC_PREF_ADDR, 0);
+    EEPROM.write(DISPLAY_STATE_ADDR, 0);
   }
 
   Serial.println("getting stored values");
@@ -634,4 +668,9 @@ void getDefaultValues() {
   Serial.print(METRIC_PREF_ADDR);
   Serial.print("\t");  Serial.print(value, DEC);  Serial.println();
   metric_pref = value;
+
+  value = EEPROM.read(DISPLAY_STATE_ADDR);
+  Serial.print(DISPLAY_STATE_ADDR);
+  Serial.print("\t");  Serial.print(value, DEC);  Serial.println();
+  main_display_state = value;
 }
