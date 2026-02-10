@@ -4,8 +4,11 @@
 #include <can_ids.h> // from: MESC_Firmware/MESC_RTOS/Tasks/can_ids.h
 #include <Adafruit_LEDBackpack.h>
 #include "debug.h"
+#include <string.h>   // memcpy, strtok
+#include <stdlib.h>   // atoi
+#include <FlashStorage_SAMD.h>
 
-Adafruit_AlphaNum4 alphaLED = Adafruit_AlphaNum4(); 
+Adafruit_AlphaNum4 alphaLED = Adafruit_AlphaNum4();
 
 #define BTN_PIN1       12
 #define BTN_PIN2       13
@@ -15,326 +18,578 @@ Adafruit_AlphaNum4 alphaLED = Adafruit_AlphaNum4();
 #define CAN_DEBUG        0
 
 /////////
-// bike variables
-#define POLEPAIRS    7
-#define CIRCUMFERENCE 219.5 // much easier to circumerence measure with tape
-#define GEAR_RATIO 9.82
-#define CM_IN_MILE 160900
+// bike constants
+static const float CIRCUMFERENCE_CM = 219.5f; // much easier to measure with tape
+static const float CM_IN_MILE       = 160900.0f;
+
 #define MINVOLTAGE 58
-#define MAXVOLTAGE 75 
-#define MAXTEMP 70
-float EHZ_scale = (CIRCUMFERENCE * 60 * 60) / (160900 * GEAR_RATIO * POLEPAIRS);
+#define MAXVOLTAGE 75
+#define MAXTEMP    70
+
+/////////
+// Persistent config (EEPROM)
+static const uint16_t CONFIG_MAGIC = 0xB17E;
+static const int DEFAULT_POLEPAIRS = 7;
+// These defaults are placeholders; update to your real sprocket tooth counts if you want.
+static const int DEFAULT_FRONT_SPROCKET = 1;
+static const int DEFAULT_BACK_SPROCKET  = 1;
+static const float DEFAULT_GEAR_RATIO   = 9.82f; // your current hardcoded value
+
+
+struct PersistConfig {
+  uint16_t magic;
+  int32_t polepairs;
+  int32_t front_sprocket;
+  int32_t back_sprocket;
+};
+
+FlashStorage(config_storage, PersistConfig);
+
+// Runtime (used by math / display)
+int   POLEPAIRS_i = DEFAULT_POLEPAIRS;
+int   FRONT_SPROCKET_i = DEFAULT_FRONT_SPROCKET;
+int   BACK_SPROCKET_i  = DEFAULT_BACK_SPROCKET;
+float GEAR_RATIO_f = DEFAULT_GEAR_RATIO;
+float EHZ_scale = 0.0f;
+
+static void recalcGearRatioAndScale();
+static void loadConfig();
+static void saveConfig();
 
 /////////
 // CAN variables
-unsigned long myTime1;
-unsigned long myTime2;
+unsigned long canReceiveTime = 0;
+const unsigned long canInterval = 2000;
 
-unsigned long canReceiveTime;
-unsigned long canInterval = 2000;
-const unsigned long canlInterval = 600;
-uint8_t canBuf[8] = {};
-uint16_t packetId;
+uint8_t  canBuf[8] = {};
+uint16_t packetId = 0;
 
-union {
-  uint8_t b[4];
-  float f;
-} canData1;
-
-union {
-  uint8_t b[4];
-  float f;
-} canData2;
+float canData1_f = 0.0f;
+float canData2_f = 0.0f;
 
 /////////
 // reporting things
-unsigned long currentTime;
-unsigned long reportLastTime;
-unsigned long reportInterval = 800;
-uint8_t prefixes[] = {'M', 'E', 'B', 'A', 'T'}; 
-const uint8_t userRequestMax = 5; 
-float reportedValue; 
-float reportValues[userRequestMax] = {};
-uint8_t userRequest = 0; // what the user wants
-uint8_t reportInc = 0; // cycles through things to display
-uint8_t lastReportInc = 0; 
-boolean flagList[] = {false, false, false}; // can, error, temp
+unsigned long currentTime = 0;
+unsigned long reportLastTime = 0;
+const unsigned long reportInterval = 800;
 
-///////// NOT USED
-// blink variables
-boolean blinkOn = false;
-uint32_t lastBlinkTime = 0;
-const uint32_t blinkInterval = 100; 
-uint32_t blinkNow;
+const uint8_t prefixes[] = {'M', 'E', 'B', 'A', 'T'};
+
+enum ReportIndex : uint8_t {
+  IDX_MPH  = 0,
+  IDX_EHZ  = 1,
+  IDX_VBUS = 2,
+  IDX_IBUS = 3,
+  IDX_TEMP = 4,
+  IDX_COUNT
+};
+
+const uint8_t userRequestMax = IDX_COUNT;
+
+float reportedValue = 0.0f;
+float reportValues[IDX_COUNT] = {0};
+
+uint8_t userRequest   = 0; // what the user wants
+uint8_t reportInc     = 0; // cycles through things to display
+uint8_t lastReportInc = 0;
+
+enum FlagIndex : uint8_t {
+  FLAG_CAN_TIMEOUT = 0,
+  FLAG_ERROR       = 1,
+  FLAG_TEMP        = 2,
+  FLAG_COUNT
+};
+
+bool flagList[FLAG_COUNT] = {false, false, false}; // can, error, temp
 
 /////////
 // button reading timers
 const int SHORT_PRESS_TIME = 600;
 const int LONG_PRESS_TIME  = 600;
-int lastState1 = LOW;
-int lastState2 = LOW;
-int currentState1;
-int currentState2;
-unsigned long pressedTime1  = 0;
-unsigned long pressedTime2  = 0;
-unsigned long releasedTime1 = 0;
-unsigned long releasedTime2 = 0;
+
+struct ButtonState {
+  uint8_t pin;
+  int lastState;
+  int currentState;
+  unsigned long pressedTime;
+  unsigned long releasedTime;
+};
+
+ButtonState btn1 = { BTN_PIN1, LOW, LOW, 0, 0 };
+ButtonState btn2 = { BTN_PIN2, LOW, LOW, 0, 0 };
+
 // control if LED is bright or dim
 bool brightnessToggle = true;
+
+static inline void setBrightnessFromToggle() {
+  alphaLED.setBrightness(brightnessToggle ? 14 : 0);
+}
+
+static inline void clampUserRequest() {
+  if (userRequest >= userRequestMax) userRequest = 0;
+}
+
+void displayNum3(int n);
+void zipDisplay(int c);
+uint16_t extract_id(uint32_t ext_id);
+
+void canStatus();
+void errorStatus();
+void tempStatus();
+
+void handleButton(ButtonState &b);
+void onShortPress();
+void onLongPress();
+
+///////
+// Serial command handling (no Arduino String)
+static const uint16_t SERIAL_LINE_MAX = 64;
+char serialLine[SERIAL_LINE_MAX];
+uint16_t serialLen = 0;
+
+static void pollSerial();
+static void handleSerialLine(char *line);
+static void printHelp();
+static void printConfig();
 
 void setup() {
   Serial.begin(9600);
 
-  pinMode(BTN_PIN1, INPUT);
-  pinMode(BTN_PIN2, INPUT);
+  // Load persistent values and recalc on boot
+  loadConfig();
+  recalcGearRatioAndScale();
+
+  pinMode(btn1.pin, INPUT);
+  pinMode(btn2.pin, INPUT);
+
   pinMode(PIN_CAN_STANDBY, OUTPUT);
   pinMode(PIN_CAN_BOOSTEN, OUTPUT);
   digitalWrite(PIN_CAN_STANDBY, false); // standby off
   digitalWrite(PIN_CAN_BOOSTEN, true);  // booster on
-  
+
   if (!CAN.begin(500000)) {
     DEBUG_PRINTLN("Starting CAN failed!");
-    while (1);
+    while (1) {}
   }
 
   CAN.onReceive(onReceive); // register CAN callback
 
   alphaLED.begin(0x70);
-  alphaLED.setBrightness(brightnessToggle * 14);
+  setBrightnessFromToggle();
+
   alphaLED.clear();
   alphaLED.writeDigitAscii(1, 'O');
   alphaLED.writeDigitAscii(2, 'F');
   alphaLED.writeDigitAscii(3, 'F');
   alphaLED.writeDisplay();
 
-  pressedTime1 = millis();
-  pressedTime2 = millis();
+  btn1.pressedTime = millis();
+  btn2.pressedTime = millis();
 
-  zipDisplay(0xBFFF); 
-  zipDisplay(0xBFFF); 
-  zipDisplay(0xBFFF); 
+  zipDisplay(0xBFFF);
+  zipDisplay(0xBFFF);
+  zipDisplay(0xBFFF);
+
+  // Quick hint at boot
+  Serial.println();
+  Serial.println("Ready. Type 'H' for help.");
+  printConfig();
 }
 
 void loop() {
+  pollSerial();
+
   canStatus();
   errorStatus();
   tempStatus();
-  // button1Status();
-  button2Status();
+
+  // If you want both buttons active, call both:
+  // handleButton(btn1);
+  handleButton(btn2);
 
   currentTime = millis();
+
   // periodic check to change display based on errors
-  if ((currentTime - reportLastTime) > reportInterval) {  
+  if ((currentTime - reportLastTime) > reportInterval) {
     lastReportInc = reportInc;
+
+    // reportInc meaning:
+    // 0: user display
+    // 1: CAN timeout
+    // 2: error
+    // 3: temp
     int i;
-    for(i=lastReportInc+1;i<4;i++) {
-      if (flagList[i-1]) {
-	reportInc = i;
-	break;
+    for (i = (int)lastReportInc + 1; i < 4; i++) {
+      if (flagList[i - 1]) { // (1..3) maps to (0..2)
+        reportInc = (uint8_t)i;
+        break;
       }
     }
     if (i == 4) { reportInc = 0; }
+
     reportLastTime = currentTime;
   }
 
   switch (reportInc) {
-  case 0: // show what the user wants
-    alphaLED.clear();
-    alphaLED.writeDigitAscii(0, prefixes[userRequest]);
-    displayNum( int( reportValues[userRequest] ) ); 
-    alphaLED.writeDisplay();
-    reportedValue = reportValues[userRequest];
-    break;
-  case 1: // show CAN has timed out
-    alphaLED.clear();
-    alphaLED.writeDigitAscii(1, 'C');
-    alphaLED.writeDigitAscii(2, 'A');
-    alphaLED.writeDigitAscii(3, 'N');
-    alphaLED.writeDisplay();
-    break;
-  case 2: // show error status
-    alphaLED.clear();
-    alphaLED.writeDigitAscii(0, 'E');
-    displayNum( int( reportValues[userRequest] ) ); 
-    alphaLED.writeDisplay();
-    break;
-  case 3: // show temp status
-    alphaLED.clear();
-    alphaLED.writeDigitAscii(0, 'T');
-    alphaLED.writeDigitAscii(1, 'E');
-    alphaLED.writeDigitAscii(2, 'M');
-    alphaLED.writeDigitAscii(3, 'P');
-    alphaLED.writeDisplay();
-    break;
-  default:
-    break;
-  }
+    case 0: // show what the user wants
+      alphaLED.clear();
+      alphaLED.writeDigitAscii(0, prefixes[userRequest]);
+      displayNum3((int)reportValues[userRequest]); // show on digits 1..3
+      alphaLED.writeDisplay();
+      reportedValue = reportValues[userRequest];
+      break;
 
+    case 1: // show CAN has timed out
+      alphaLED.clear();
+      alphaLED.writeDigitAscii(1, 'C');
+      alphaLED.writeDigitAscii(2, 'A');
+      alphaLED.writeDigitAscii(3, 'N');
+      alphaLED.writeDisplay();
+      break;
+
+    case 2: // show error status
+      alphaLED.clear();
+      alphaLED.writeDigitAscii(0, 'E');
+      displayNum3((int)reportValues[userRequest]); // placeholder until error value is real
+      alphaLED.writeDisplay();
+      break;
+
+    case 3: // show temp status
+      alphaLED.clear();
+      alphaLED.writeDigitAscii(0, 'T');
+      alphaLED.writeDigitAscii(1, 'E');
+      alphaLED.writeDigitAscii(2, 'M');
+      alphaLED.writeDigitAscii(3, 'P');
+      alphaLED.writeDisplay();
+      break;
+
+    default:
+      break;
+  }
 }
 
 void canStatus() {
-  flagList[0] = false;
+  flagList[FLAG_CAN_TIMEOUT] = false;
   currentTime = millis();
-  if ((currentTime - canReceiveTime ) > canInterval) {  
-    flagList[0] = true;
+  if ((currentTime - canReceiveTime) > canInterval) {
+    flagList[FLAG_CAN_TIMEOUT] = true;
   }
 }
 
-void errorStatus() { 
-  flagList[1] = false;
+void errorStatus() {
+  flagList[FLAG_ERROR] = false;
 }
 
 void tempStatus() {
-  flagList[2] = false;
-}
-
-void blinkLED() {
-  // non-blocking blink
-  currentTime= millis();
-  if ((currentTime - lastBlinkTime) > blinkInterval) {
-    lastBlinkTime = currentTime;
-    blinkOn = !blinkOn;
-    digitalWrite(LED_BUILTIN, blinkOn);
-  }
+  flagList[FLAG_TEMP] = false;
 }
 
 void onReceive(int packetSize) {
-  // received a packet
   packetId = extract_id(CAN.packetId());
-  if (packetSize == CAN_PACKET_SIZE) {
-    for (int i = 0; i < packetSize; i++) {
-      canBuf[i] = CAN.read();
-    }
-    canData1.b[0]=canBuf[0];
-    canData1.b[1]=canBuf[1];
-    canData1.b[2]=canBuf[2];
-    canData1.b[3]=canBuf[3];
-    canData2.b[0]=canBuf[4];
-    canData2.b[1]=canBuf[5];
-    canData2.b[2]=canBuf[6];
-    canData2.b[3]=canBuf[7];
 
-    // hardcoded index into reportValues is kind of stupid
-    // the idx corresponds items user wants
-    // and map to: prefixes[] = {'M', 'E', 'B', 'A', 'T'}; 
-    switch (packetId) {
+  if (packetSize != CAN_PACKET_SIZE) return;
+
+  for (int i = 0; i < packetSize; i++) {
+    canBuf[i] = (uint8_t)CAN.read();
+  }
+
+  // Same endianness assumption as your original union+byte assignment
+  memcpy(&canData1_f, &canBuf[0], 4);
+  memcpy(&canData2_f, &canBuf[4], 4);
+
+  switch (packetId) {
     case CAN_ID_SPEED:
-      // DEBUG_PRINT(" PACKET :: ");
-      // DEBUG_PRINT(packetId);
-      reportValues[1] = canData1.f; 
-      reportValues[0] = reportValues[1] * EHZ_scale;
-      // DEBUG_PRINT(" :: ");
-      // DEBUG_PRINTLN(reportValues[0]);
+      reportValues[IDX_EHZ] = canData1_f;
+      reportValues[IDX_MPH] = reportValues[IDX_EHZ] * EHZ_scale;
       canReceiveTime = millis();
       break;
+
     case CAN_ID_BUS_VOLT_CURR:
-      reportValues[2] = canData1.f;
-      reportValues[3] = canData2.f;
+      reportValues[IDX_VBUS] = canData1_f;
+      reportValues[IDX_IBUS] = canData2_f;
       canReceiveTime = millis();
       break;
+
     case CAN_ID_TEMP_MOT_MOS1:
-      reportValues[4] = canData2.f;
+      reportValues[IDX_TEMP] = canData2_f;
       canReceiveTime = millis();
       break;
+
     default:
       break;
-    }
   }
 }
 
-// right justifies digit on to the alpha display
-//  this uses the hideous arduino String() function
-void displayNum(int n) {
-  String str = String(n);
-  if (str.length() < 4) {
-    for(int i=0;i < int(str.length()); i++) {
-      // DEBUG_PRINTLN(str.charAt(i));
-      alphaLED.writeDigitAscii(i+(4-str.length()), str.charAt(i));
+// Writes an integer into digits 1..3 (keeps digit 0 free for a prefix).
+// Right-justified. Handles negatives. If out of range, shows "OVF".
+void displayNum3(int n) {
+  // Clear digits 1..3
+  alphaLED.writeDigitAscii(1, ' ');
+  alphaLED.writeDigitAscii(2, ' ');
+  alphaLED.writeDigitAscii(3, ' ');
+
+  // Range: -99..999 fits naturally into 3 characters with optional sign.
+  if (n > 999 || n < -99) {
+    alphaLED.writeDigitAscii(1, 'O');
+    alphaLED.writeDigitAscii(2, 'V');
+    alphaLED.writeDigitAscii(3, 'F');
+    return;
+  }
+
+  char buf[4] = {' ', ' ', ' ', '\0'}; // 3 chars + null
+
+  bool neg = (n < 0);
+  int v = neg ? -n : n;
+
+  // Build from right to left
+  int pos = 2;
+  if (v == 0) {
+    buf[pos--] = '0';
+  } else {
+    while (v > 0 && pos >= 0) {
+      buf[pos--] = char('0' + (v % 10));
+      v /= 10;
     }
   }
+
+  if (neg) {
+    if (pos >= 0) {
+      buf[pos] = '-';
+    } else {
+      buf[0] = '-';
+    }
+  }
+
+  alphaLED.writeDigitAscii(1, buf[0]);
+  alphaLED.writeDigitAscii(2, buf[1]);
+  alphaLED.writeDigitAscii(3, buf[2]);
 }
 
-void button1Status() {
-  currentState1 = digitalRead(BTN_PIN1);
-
-  if(lastState1 == HIGH && currentState1 == LOW) {// press
-    pressedTime1 = millis();
-  }
-  else if(lastState1 == LOW && currentState1 == HIGH) { // release
-    releasedTime1 = millis();
-
-    if( releasedTime1 - pressedTime1 < SHORT_PRESS_TIME ) {
-      userRequest++; if (userRequest > userRequestMax - 1) { userRequest = 0; }
-      DEBUG_PRINTLN("short press1");
-      delay(10);
-      reportInc = 0; // set to zero
-    }
-
-    if( releasedTime1 - pressedTime1 > LONG_PRESS_TIME ) {
-      DEBUG_PRINTLN("long press1");
-      brightnessToggle = !brightnessToggle;
-      alphaLED.setBrightness(brightnessToggle * 14);
-      delay(10);
-      reportInc = 0;
-    }
-  }
-
-  // save the the last state
-  lastState1 = currentState1;
+void onShortPress() {
+  userRequest++;
+  clampUserRequest();
+  DEBUG_PRINTLN("short press");
+  delay(10);
+  reportInc = 0;
 }
 
-void button2Status() {
-  currentState2 = digitalRead(BTN_PIN2);
-
-  if(lastState2 == HIGH && currentState2 == LOW) // press
-    pressedTime2 = millis();
-  else if(lastState2 == LOW && currentState2 == HIGH) { // release
-    releasedTime2 = millis();
-
-    if( releasedTime2 - pressedTime2 < SHORT_PRESS_TIME ) {
-      userRequest++; if (userRequest > userRequestMax - 1) { userRequest = 0; }
-      DEBUG_PRINTLN("short press2");
-      delay(10);
-      reportInc = 0; // set to zero
-    }
-
-    if( releasedTime2 - pressedTime2 > LONG_PRESS_TIME ) {
-      DEBUG_PRINTLN("long press2");
-      brightnessToggle = !brightnessToggle;
-      alphaLED.setBrightness(brightnessToggle * 14);
-      delay(10);
-      reportInc = 0;
-    }
-  }
-
-  // save the the last state
-  lastState2 = currentState2;
+void onLongPress() {
+  DEBUG_PRINTLN("long press");
+  brightnessToggle = !brightnessToggle;
+  setBrightnessFromToggle();
+  delay(10);
+  reportInc = 0;
 }
 
-// the delays make this blocking
-void zipDisplay(int c) { 
+void handleButton(ButtonState &b) {
+  b.currentState = digitalRead(b.pin);
+
+  if (b.lastState == HIGH && b.currentState == LOW) { // press
+    b.pressedTime = millis();
+  }
+  else if (b.lastState == LOW && b.currentState == HIGH) { // release
+    b.releasedTime = millis();
+    unsigned long dt = b.releasedTime - b.pressedTime;
+
+    if ((int)dt < SHORT_PRESS_TIME) onShortPress();
+    if ((int)dt > LONG_PRESS_TIME)  onLongPress();
+  }
+
+  b.lastState = b.currentState;
+}
+
+// the delays make this blocking (left as-is)
+void zipDisplay(int c) {
   alphaLED.writeDigitRaw(3, 0x0);
   alphaLED.writeDigitRaw(0, c);
   alphaLED.writeDisplay();
   delay(100);
+
   alphaLED.writeDigitRaw(0, 0x0);
   alphaLED.writeDigitRaw(1, c);
   alphaLED.writeDisplay();
   delay(100);
+
   alphaLED.writeDigitRaw(1, 0x0);
   alphaLED.writeDigitRaw(2, c);
   alphaLED.writeDisplay();
   delay(100);
+
   alphaLED.writeDigitRaw(2, 0x0);
   alphaLED.writeDigitRaw(3, c);
   alphaLED.writeDisplay();
   delay(100);
-  
+
   alphaLED.clear();
   alphaLED.writeDisplay();
 }
 
 uint16_t extract_id(uint32_t ext_id) {
-  return (ext_id >> 16);
+  return (uint16_t)(ext_id >> 16);
 }
 
+/////////////////////////////
+// EEPROM + config handling //
+/////////////////////////////
+
+PersistConfig cfg;
+
+
+void loadConfig() {
+  PersistConfig tmp;
+  config_storage.read(tmp);   // <-- NOTE: read into an object
+
+  if (tmp.magic != CONFIG_MAGIC) {
+    tmp.magic = CONFIG_MAGIC;
+    tmp.polepairs = DEFAULT_POLEPAIRS;
+    tmp.front_sprocket = DEFAULT_FRONT_SPROCKET;
+    tmp.back_sprocket  = DEFAULT_BACK_SPROCKET;
+
+    config_storage.write(tmp);
+  }
+
+  cfg = tmp;
+  POLEPAIRS_i = cfg.polepairs;
+  FRONT_SPROCKET_i = cfg.front_sprocket;
+  BACK_SPROCKET_i  = cfg.back_sprocket;
+}
+
+void saveConfig() {
+  cfg.magic = CONFIG_MAGIC;
+  cfg.polepairs = POLEPAIRS_i;
+  cfg.front_sprocket = FRONT_SPROCKET_i;
+  cfg.back_sprocket  = BACK_SPROCKET_i;
+
+  config_storage.write(cfg);
+}
+
+static void recalcGearRatioAndScale() {
+  // TODO: Replace this placeholder with your real gear ratio calculation later.
+  // For now, if both sprockets are valid, we use back/front as a reasonable placeholder;
+  // otherwise we keep the previous/default ratio.
+  if (FRONT_SPROCKET_i > 0 && BACK_SPROCKET_i > 0) {
+    GEAR_RATIO_f = (float)BACK_SPROCKET_i / (float)FRONT_SPROCKET_i; // PLACEHOLDER
+  } else {
+    GEAR_RATIO_f = DEFAULT_GEAR_RATIO;
+  }
+
+  // mph scaling based on polepairs and gear ratio
+  if (POLEPAIRS_i <= 0) POLEPAIRS_i = DEFAULT_POLEPAIRS;
+
+  EHZ_scale = (CIRCUMFERENCE_CM * 60.0f * 60.0f) / (CM_IN_MILE * GEAR_RATIO_f * (float)POLEPAIRS_i);
+}
+
+/////////////////////////////
+// Serial command handling  //
+/////////////////////////////
+
+static void pollSerial() {
+  while (Serial.available() > 0) {
+    char c = (char)Serial.read();
+
+    Serial.print(c);
+    // Treat CR or LF as end-of-line
+    if (c == '\n' || c == '\r') {
+      if (serialLen > 0) {
+        serialLine[serialLen] = '\0';
+        handleSerialLine(serialLine);
+        serialLen = 0;
+      }
+      continue;
+    }
+
+    // Basic line buffer (drop extra chars if too long)
+    if (serialLen < (SERIAL_LINE_MAX - 1)) {
+      serialLine[serialLen++] = c;
+    }
+  }
+}
+
+static void handleSerialLine(char *line) {
+  // Trim leading spaces
+  while (*line == ' ' || *line == '\t') line++;
+
+  if (*line == '\0') return;
+
+  // Tokenize: CMD [value]
+  char *cmdTok = strtok(line, " \t");
+  if (!cmdTok) return;
+
+  char cmd = cmdTok[0];
+  if (cmd >= 'a' && cmd <= 'z') cmd = (char)(cmd - 32); // to upper
+
+  char *valTok = strtok(NULL, " \t");
+
+  Serial.println();
+
+  switch (cmd) {
+    case 'H':
+      printHelp();
+      break;
+
+    case 'S':
+      // Save + recalc
+      saveConfig();
+      recalcGearRatioAndScale();
+      Serial.println("Saved. Recalculated (placeholder) gear ratio + scale.");
+      printConfig();
+      break;
+
+    case 'P': {
+      if (!valTok) { Serial.println("Usage: P <int>"); break; }
+      int v = atoi(valTok);
+      if (v <= 0 || v > 100) { Serial.println("Polepairs must be >0 (and reasonable)."); break; }
+      POLEPAIRS_i = v;
+      Serial.print("Set polepairs = "); Serial.println(POLEPAIRS_i);
+      Serial.println("Note: not saved until you type 'S'.");
+      break;
+    }
+
+    case 'F': {
+      if (!valTok) { Serial.println("Usage: F <int>"); break; }
+      int v = atoi(valTok);
+      if (v <= 0 || v > 200) { Serial.println("front_sprocket must be >0 (and reasonable)."); break; }
+      FRONT_SPROCKET_i = v;
+      Serial.print("Set front_sprocket = "); Serial.println(FRONT_SPROCKET_i);
+      Serial.println("Note: not saved until you type 'S'.");
+      break;
+    }
+
+    case 'B': {
+      if (!valTok) { Serial.println("Usage: B <int>"); break; }
+      int v = atoi(valTok);
+      if (v <= 0 || v > 500) { Serial.println("back_sprocket must be >0 (and reasonable)."); break; }
+      BACK_SPROCKET_i = v;
+      Serial.print("Set back_sprocket = "); Serial.println(BACK_SPROCKET_i);
+      Serial.println("Note: not saved until you type 'S'.");
+      break;
+    }
+
+    default:
+      Serial.print("Unknown command: ");
+      Serial.println(cmdTok);
+      Serial.println("Type 'H' for help.");
+      break;
+  }
+}
+
+static void printHelp() {
+  Serial.println();
+  Serial.println("Commands:");
+  Serial.println("  H              - help");
+  Serial.println("  S              - save to EEPROM and recalc gear ratio/scale");
+  Serial.println("  P <int>        - set polepairs");
+  Serial.println("  F <int>        - set front_sprocket");
+  Serial.println("  B <int>        - set back_sprocket");
+  Serial.println();
+  printConfig();
+}
+
+static void printConfig() {
+  Serial.print("polepairs      = "); Serial.println(POLEPAIRS_i);
+  Serial.print("front_sprocket = "); Serial.println(FRONT_SPROCKET_i);
+  Serial.print("back_sprocket  = "); Serial.println(BACK_SPROCKET_i);
+  Serial.print("gear_ratio     = "); Serial.println(GEAR_RATIO_f, 6);
+  Serial.print("EHZ_scale      = "); Serial.println(EHZ_scale, 9);
+  Serial.println();
+}
