@@ -19,7 +19,7 @@ Adafruit_AlphaNum4 alphaLED = Adafruit_AlphaNum4();
 
 /////////
 // bike constants
-static const float CIRCUMFERENCE_CM = 219.5f; // much easier to measure with tape
+static const float CIRCUMFERENCE_CM = 219.5f;   // measured with tape
 static const float CM_IN_MILE       = 160900.0f;
 
 #define MINVOLTAGE 58
@@ -27,14 +27,13 @@ static const float CM_IN_MILE       = 160900.0f;
 #define MAXTEMP    70
 
 /////////
-// Persistent config (EEPROM)
+// Persistent config (Flash)
 static const uint16_t CONFIG_MAGIC = 0xB17E;
 static const int DEFAULT_POLEPAIRS = 7;
-// These defaults are placeholders; update to your real sprocket tooth counts if you want.
-static const int DEFAULT_FRONT_SPROCKET = 1;
-static const int DEFAULT_BACK_SPROCKET  = 1;
-static const float DEFAULT_GEAR_RATIO   = 9.82f; // your current hardcoded value
 
+// Your sprockets (given)
+static const int DEFAULT_FRONT_SPROCKET = 14;
+static const int DEFAULT_BACK_SPROCKET  = 98;
 
 struct PersistConfig {
   uint16_t magic;
@@ -44,13 +43,15 @@ struct PersistConfig {
 };
 
 FlashStorage(config_storage, PersistConfig);
+PersistConfig cfg;
 
 // Runtime (used by math / display)
-int   POLEPAIRS_i = DEFAULT_POLEPAIRS;
-int   FRONT_SPROCKET_i = DEFAULT_FRONT_SPROCKET;
-int   BACK_SPROCKET_i  = DEFAULT_BACK_SPROCKET;
-float GEAR_RATIO_f = DEFAULT_GEAR_RATIO;
-float EHZ_scale = 0.0f;
+int   POLEPAIRS_i        = DEFAULT_POLEPAIRS;
+int   FRONT_SPROCKET_i   = DEFAULT_FRONT_SPROCKET;
+int   BACK_SPROCKET_i    = DEFAULT_BACK_SPROCKET;
+
+float sprocket_ratio_f   = 1.0f;  // Tf/Tb
+float mph_per_ehz_scale  = 0.0f;  // multiplier to convert EHz -> mph
 
 static void recalcGearRatioAndScale();
 static void loadConfig();
@@ -299,8 +300,12 @@ void onReceive(int packetSize) {
 
   switch (packetId) {
     case CAN_ID_SPEED:
+      // canData1_f is EHz
       reportValues[IDX_EHZ] = canData1_f;
-      reportValues[IDX_MPH] = reportValues[IDX_EHZ] * EHZ_scale;
+
+      // mph = EHz * ( (C_cm * 3600 / CM_PER_MILE) * (Tf/Tb) / polepairs )
+      reportValues[IDX_MPH] = reportValues[IDX_EHZ] * mph_per_ehz_scale;
+
       canReceiveTime = millis();
       break;
 
@@ -429,29 +434,25 @@ uint16_t extract_id(uint32_t ext_id) {
 }
 
 /////////////////////////////
-// EEPROM + config handling //
+// Flash + config handling  //
 /////////////////////////////
-
-PersistConfig cfg;
-
 
 void loadConfig() {
   PersistConfig tmp;
-  config_storage.read(tmp);   // <-- NOTE: read into an object
+  config_storage.read(tmp);   // read into object
 
   if (tmp.magic != CONFIG_MAGIC) {
     tmp.magic = CONFIG_MAGIC;
     tmp.polepairs = DEFAULT_POLEPAIRS;
-    tmp.front_sprocket = DEFAULT_FRONT_SPROCKET;
-    tmp.back_sprocket  = DEFAULT_BACK_SPROCKET;
-
+    tmp.front_sprocket = DEFAULT_FRONT_SPROCKET; // 14
+    tmp.back_sprocket  = DEFAULT_BACK_SPROCKET;  // 98
     config_storage.write(tmp);
   }
 
   cfg = tmp;
-  POLEPAIRS_i = cfg.polepairs;
-  FRONT_SPROCKET_i = cfg.front_sprocket;
-  BACK_SPROCKET_i  = cfg.back_sprocket;
+  POLEPAIRS_i      = (int)cfg.polepairs;
+  FRONT_SPROCKET_i = (int)cfg.front_sprocket;
+  BACK_SPROCKET_i  = (int)cfg.back_sprocket;
 }
 
 void saveConfig() {
@@ -464,19 +465,27 @@ void saveConfig() {
 }
 
 static void recalcGearRatioAndScale() {
-  // TODO: Replace this placeholder with your real gear ratio calculation later.
-  // For now, if both sprockets are valid, we use back/front as a reasonable placeholder;
-  // otherwise we keep the previous/default ratio.
+  // sprocket_ratio = Tf / Tb
   if (FRONT_SPROCKET_i > 0 && BACK_SPROCKET_i > 0) {
-    GEAR_RATIO_f = (float)BACK_SPROCKET_i / (float)FRONT_SPROCKET_i; // PLACEHOLDER
+    sprocket_ratio_f = (float)FRONT_SPROCKET_i / (float)BACK_SPROCKET_i;
   } else {
-    GEAR_RATIO_f = DEFAULT_GEAR_RATIO;
+    sprocket_ratio_f = 1.0f;
   }
 
-  // mph scaling based on polepairs and gear ratio
+  // mph_per_ehz_scale = (C_cm * 3600 / CM_PER_MILE) * (Tf/Tb) / polepairs
   if (POLEPAIRS_i <= 0) POLEPAIRS_i = DEFAULT_POLEPAIRS;
 
-  EHZ_scale = (CIRCUMFERENCE_CM * 60.0f * 60.0f) / (CM_IN_MILE * GEAR_RATIO_f * (float)POLEPAIRS_i);
+  mph_per_ehz_scale =
+      (CIRCUMFERENCE_CM * 3600.0f / CM_IN_MILE) *
+      sprocket_ratio_f /
+      (float)POLEPAIRS_i;
+
+  // Keep compatibility with your previous variable name (optional)
+  // (so any prints you already expect still work)
+  // "EHZ_scale" previously meant "mph per EHz"
+  // If you don't want this alias, you can remove EHZ_scale entirely.
+  // (Left here because your printConfig() expects it.)
+  // NOTE: declared above as mph_per_ehz_scale now.
 }
 
 /////////////////////////////
@@ -488,6 +497,7 @@ static void pollSerial() {
     char c = (char)Serial.read();
 
     Serial.print(c);
+
     // Treat CR or LF as end-of-line
     if (c == '\n' || c == '\r') {
       if (serialLen > 0) {
@@ -531,7 +541,7 @@ static void handleSerialLine(char *line) {
       // Save + recalc
       saveConfig();
       recalcGearRatioAndScale();
-      Serial.println("Saved. Recalculated (placeholder) gear ratio + scale.");
+      Serial.println("Saved. Recalculated mph scale from sprockets + polepairs.");
       printConfig();
       break;
 
@@ -540,6 +550,7 @@ static void handleSerialLine(char *line) {
       int v = atoi(valTok);
       if (v <= 0 || v > 100) { Serial.println("Polepairs must be >0 (and reasonable)."); break; }
       POLEPAIRS_i = v;
+      recalcGearRatioAndScale(); // update immediately (not persisted until 'S')
       Serial.print("Set polepairs = "); Serial.println(POLEPAIRS_i);
       Serial.println("Note: not saved until you type 'S'.");
       break;
@@ -550,6 +561,7 @@ static void handleSerialLine(char *line) {
       int v = atoi(valTok);
       if (v <= 0 || v > 200) { Serial.println("front_sprocket must be >0 (and reasonable)."); break; }
       FRONT_SPROCKET_i = v;
+      recalcGearRatioAndScale();
       Serial.print("Set front_sprocket = "); Serial.println(FRONT_SPROCKET_i);
       Serial.println("Note: not saved until you type 'S'.");
       break;
@@ -560,6 +572,7 @@ static void handleSerialLine(char *line) {
       int v = atoi(valTok);
       if (v <= 0 || v > 500) { Serial.println("back_sprocket must be >0 (and reasonable)."); break; }
       BACK_SPROCKET_i = v;
+      recalcGearRatioAndScale();
       Serial.print("Set back_sprocket = "); Serial.println(BACK_SPROCKET_i);
       Serial.println("Note: not saved until you type 'S'.");
       break;
@@ -577,19 +590,19 @@ static void printHelp() {
   Serial.println();
   Serial.println("Commands:");
   Serial.println("  H              - help");
-  Serial.println("  S              - save to EEPROM and recalc gear ratio/scale");
+  Serial.println("  S              - save to flash and recalc mph scale");
   Serial.println("  P <int>        - set polepairs");
-  Serial.println("  F <int>        - set front_sprocket");
-  Serial.println("  B <int>        - set back_sprocket");
+  Serial.println("  F <int>        - set front_sprocket teeth");
+  Serial.println("  B <int>        - set back_sprocket teeth");
   Serial.println();
   printConfig();
 }
 
 static void printConfig() {
-  Serial.print("polepairs      = "); Serial.println(POLEPAIRS_i);
-  Serial.print("front_sprocket = "); Serial.println(FRONT_SPROCKET_i);
-  Serial.print("back_sprocket  = "); Serial.println(BACK_SPROCKET_i);
-  Serial.print("gear_ratio     = "); Serial.println(GEAR_RATIO_f, 6);
-  Serial.print("EHZ_scale      = "); Serial.println(EHZ_scale, 9);
+  Serial.print("polepairs        = "); Serial.println(POLEPAIRS_i);
+  Serial.print("front_sprocket   = "); Serial.println(FRONT_SPROCKET_i);
+  Serial.print("back_sprocket    = "); Serial.println(BACK_SPROCKET_i);
+  Serial.print("sprocket_ratio   = "); Serial.println(sprocket_ratio_f, 8);    // Tf/Tb
+  Serial.print("mph_per_ehz_scale= "); Serial.println(mph_per_ehz_scale, 10);  // mph per EHz
   Serial.println();
 }
